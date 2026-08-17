@@ -4,11 +4,22 @@ const globalForDb = globalThis as unknown as {
   pool: mysql.Pool | undefined;
 };
 
+const dbUrl = process.env.DATABASE_URL || "mysql://root:Chirag30kum%40r@localhost:3306/ggmwebsite";
+const isCloudDb =
+  dbUrl.includes("aivencloud") ||
+  dbUrl.includes("sslMode") ||
+  dbUrl.includes("ssl-mode") ||
+  process.env.NODE_ENV === "production";
+
 export const pool =
   globalForDb.pool ??
-  mysql.createPool(
-    process.env.DATABASE_URL || "mysql://root:@localhost:3306/ggm_web"
-  );
+  mysql.createPool({
+    uri: dbUrl,
+    ssl: isCloudDb ? { rejectUnauthorized: false } : undefined,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+  });
 
 if (process.env.NODE_ENV !== "production") {
   globalForDb.pool = pool;
