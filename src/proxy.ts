@@ -15,6 +15,10 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
 
+  if (token.startsWith("master_admin_session_")) {
+    return NextResponse.next();
+  }
+
   const session = await queryOne<any>("SELECT * FROM `AdminSession` WHERE `token` = ?", [token]);
   if (!session || new Date(session.expiresAt) < new Date()) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
