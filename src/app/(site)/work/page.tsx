@@ -3,6 +3,7 @@ import { getWork } from "@/lib/queries";
 import Eyebrow from "@/components/ui/Eyebrow";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import WorkIllustration from "@/components/decor/WorkIllustration";
+import FormattedText from "@/components/ui/FormattedText";
 import { buildMetadata } from "@/lib/seo";
 
 const title = "Our Work & Case Studies | GGM Technologies";
@@ -49,9 +50,11 @@ export default async function WorkPage() {
                 <h2 className="mt-3 font-display text-3xl text-chalk">
                   {item.client}
                 </h2>
-                <p className="mt-4 max-w-md font-body text-body text-muted">
-                  {item.summary}
-                </p>
+                <FormattedText
+                  text={item.summary}
+                  as="p"
+                  className="mt-4 max-w-md font-body text-body text-muted leading-relaxed"
+                />
                 <span className="mt-6 inline-block rounded-full border border-flow/40 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-flow">
                   {item.resultLabel}
                 </span>

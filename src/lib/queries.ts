@@ -8,6 +8,8 @@ import type {
   SiteSettingsModel,
   ServiceLocationModel,
   BlogBlockModel,
+  LegalPage,
+  CertificateDocument,
 } from "@/types";
 
 export async function getServices(): Promise<Service[]> {
@@ -286,13 +288,78 @@ export async function getSettings(): Promise<SiteSettingsModel> {
     addressLine3: settings.addressLine3,
     gst: settings.gst,
     businessHours: settings.businessHours,
+    whatsapp: settings.whatsapp ?? "+919876543210",
+    facebook: settings.facebook ?? "https://facebook.com/ggmtechnologies",
+    twitter: settings.twitter ?? "https://x.com/ggmtechnologies",
+    instagram: settings.instagram ?? "https://instagram.com/ggmtechnologies",
+    youtube: settings.youtube ?? "https://youtube.com/@ggmtechnologies",
+    linkedin: settings.linkedin ?? "https://linkedin.com/company/ggmtechnologies",
+    msme: settings.msme ?? "UDYAM-DL-08-0098741",
+    indiamartSeal: settings.indiamartSeal ?? "Verified Trust Seal Member",
+    justdialSeal: settings.justdialSeal ?? "Justdial Verified Enterprise",
+    googleBusinessUrl: settings.googleBusinessUrl ?? "https://maps.google.com/?cid=ggmtechnologies",
     aboutEyebrow: settings.aboutEyebrow,
     aboutTitle: settings.aboutTitle,
     aboutIntro: settings.aboutIntro,
     mission: settings.mission,
     vision: settings.vision,
+    ceoName: settings.ceoName ?? "Chirag Kumar",
+    ceoTitle: settings.ceoTitle ?? "Founder & Chief Executive Officer",
+    ceoBio: settings.ceoBio ?? "",
+    companyStory: settings.companyStory ?? "",
+    qualityCompliance: settings.qualityCompliance ?? "",
     clients: parseJson<string[]>(settings.clients, []),
     whyChooseUs: whyChooseUs.map((w) => ({ title: w.title, description: w.description })),
     metricItems: metricItems.map((m) => ({ value: m.value, suffix: m.suffix, label: m.label })),
   };
 }
+
+export async function getLegalPages(): Promise<LegalPage[]> {
+  const pages = await query<any>("SELECT * FROM `LegalPage` ORDER BY `title` ASC");
+  return pages.map((p) => ({
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    subtitle: p.subtitle,
+    content: p.content,
+    lastUpdated: p.lastUpdated,
+    metaTitle: p.metaTitle,
+    metaDescription: p.metaDescription,
+    isPublished: Boolean(p.isPublished),
+    updatedAt: p.updatedAt,
+  }));
+}
+
+export async function getLegalPageBySlug(slug: string): Promise<LegalPage | null> {
+  const page = await queryOne<any>("SELECT * FROM `LegalPage` WHERE `slug` = ? OR `id` = ?", [slug, slug]);
+  if (!page) return null;
+  return {
+    id: page.id,
+    slug: page.slug,
+    title: page.title,
+    subtitle: page.subtitle,
+    content: page.content,
+    lastUpdated: page.lastUpdated,
+    metaTitle: page.metaTitle,
+    metaDescription: page.metaDescription,
+    isPublished: Boolean(page.isPublished),
+    updatedAt: page.updatedAt,
+  };
+}
+
+export async function getCertificates(): Promise<CertificateDocument[]> {
+  const certs = await query<any>("SELECT * FROM `CertificateDocument` ORDER BY `order` ASC, `createdAt` ASC");
+  return certs.map((c) => ({
+    id: c.id,
+    title: c.title,
+    issuer: c.issuer,
+    certificateNo: c.certificateNo,
+    pdfUrl: c.pdfUrl,
+    description: c.description,
+    issueDate: c.issueDate,
+    order: Number(c.order || 0),
+    createdAt: c.createdAt,
+  }));
+}
+
+

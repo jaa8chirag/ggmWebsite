@@ -11,6 +11,7 @@ import TableOfContents from "@/components/blog/TableOfContents";
 import { buildMetadata } from "@/lib/seo";
 import { articleSchema, faqSchema } from "@/lib/schema";
 import { slugify } from "@/lib/utils";
+import FormattedText from "@/components/ui/FormattedText";
 
 // Reverse of the service->category map in services/[slug]/page.tsx, so a
 // blog post can link back to the service it supports.
@@ -110,9 +111,11 @@ export default async function BlogPostPage({
 
             <h1 className="mt-4 font-display text-display-l">{post.title}</h1>
 
-            <p className="mt-6 font-body text-body-l text-muted">
-              {post.excerpt}
-            </p>
+            <FormattedText
+              text={post.excerpt}
+              as="p"
+              className="mt-6 font-body text-body-l text-muted"
+            />
 
             {post.ogImage && (
               <div className="mt-8 overflow-hidden rounded-2xl border-2 border-chalk/30 shadow-lg">
@@ -141,7 +144,7 @@ export default async function BlogPostPage({
                       id={slugify(block.text ?? "")}
                       className="scroll-mt-32 pt-6 font-display text-2xl text-chalk"
                     >
-                      {block.text}
+                      <FormattedText text={block.text} as="span" />
                     </h2>
                   );
                 }
@@ -151,7 +154,7 @@ export default async function BlogPostPage({
                       key={block.id}
                       className="pt-2 font-display text-xl text-chalk"
                     >
-                      {block.text}
+                      <FormattedText text={block.text} as="span" />
                     </h3>
                   );
                 }
@@ -168,16 +171,19 @@ export default async function BlogPostPage({
                             className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-flow"
                             aria-hidden="true"
                           />
-                          {item}
+                          <FormattedText text={item} as="span" />
                         </li>
                       ))}
                     </ul>
                   );
                 }
                 return (
-                  <p key={block.id} className="font-body text-body text-muted">
-                    {block.text}
-                  </p>
+                  <FormattedText
+                    key={block.id}
+                    text={block.text}
+                    as="p"
+                    className="font-body text-body text-muted leading-relaxed"
+                  />
                 );
               })}
             </div>

@@ -8,6 +8,7 @@ import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 import { absoluteUrl, SITE_URL } from "@/lib/site";
+import FormattedText from "@/components/ui/FormattedText";
 
 export async function generateMetadata({
   params,
@@ -74,9 +75,11 @@ export default async function ProductPage({
             <h1 className="mt-4 font-display text-display-l text-chalk">
               {product.name}
             </h1>
-            <p className="mt-6 max-w-xl font-body text-body-l text-muted">
-              {product.description}
-            </p>
+            <FormattedText
+              text={product.description}
+              as="p"
+              className="mt-6 max-w-xl font-body text-body-l text-muted leading-relaxed"
+            />
 
             <div className="mt-12">
               <h2 className="font-mono text-mono-label uppercase tracking-widest text-muted">

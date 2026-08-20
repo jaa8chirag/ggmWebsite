@@ -7,6 +7,7 @@ import { Image as ImageIcon, Sparkles, CheckCircle2 } from "lucide-react";
 import Button from "@/components/ui/Button";
 import RepeatingPairs from "@/components/admin/RepeatingPairs";
 import SeoFieldset from "@/components/admin/SeoFieldset";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { labelClass, inputClass, cardClass } from "@/components/admin/styles";
 import BlockEditor, { type InitialBlock } from "./BlockEditor";
 
@@ -75,16 +76,14 @@ export default function BlogForm({
           />
         </div>
 
-        <div className="mt-4">
-          <label className={labelClass} htmlFor="excerpt">
-            Excerpt
-          </label>
-          <textarea
+        <div className="mt-5">
+          <RichTextEditor
             id="excerpt"
             name="excerpt"
-            rows={2}
+            label="Article Summary / Excerpt"
             defaultValue={values?.excerpt ?? ""}
-            className={inputClass}
+            rows={3}
+            helpText="Short teaser displayed on search previews and cards. Formatting and links supported."
           />
         </div>
 

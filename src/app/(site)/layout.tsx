@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import Nav from "@/components/layout/Nav";
+import TrustHeader from "@/components/layout/TrustHeader";
+import FloatingSocials from "@/components/layout/FloatingSocials";
+import CookieConsent from "@/components/legal/CookieConsent";
 import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/layout/PageTransition";
 import JsonLd from "@/components/seo/JsonLd";
@@ -85,11 +88,14 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <JsonLd data={websiteSchema(company)} />
         <JsonLd data={localBusinessSchema(company)} />
         <SmoothScroll>
+          <TrustHeader settings={settings} />
           <Nav />
           <main className="flex-1">
             <PageTransition>{children}</PageTransition>
           </main>
           <Footer />
+          <FloatingSocials phoneHref={settings.phoneHref} whatsapp={settings.whatsapp} />
+          <CookieConsent />
         </SmoothScroll>
       </body>
     </html>

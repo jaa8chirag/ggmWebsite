@@ -30,11 +30,11 @@ export default function AdminLoginPage() {
       <div className="relative z-10 w-full max-w-md rounded-3xl border-2 border-chalk/30 bg-surface/95 p-8 sm:p-10 shadow-2xl backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <Image
-            src="/logo/ggm-mark.png"
+            src="/logo/ggm-logo.png"
             alt="GGM Technologies"
-            width={130}
+            width={140}
             height={50}
-            className="h-9 w-auto"
+            className="h-9 w-auto object-contain"
             priority
           />
           <span className="flex items-center gap-1.5 rounded-full border border-signal/30 bg-signal/15 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-widest text-signal font-semibold">

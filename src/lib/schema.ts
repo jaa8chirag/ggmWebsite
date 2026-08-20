@@ -15,8 +15,8 @@ export function organizationSchema(company: CompanyInfo) {
     "@id": `${SITE_URL}/#organization`,
     name: company.name,
     url: SITE_URL,
-    logo: absoluteUrl("/logo/ggm-mark.png"),
-    image: absoluteUrl("/logo/ggm-mark.png"),
+    logo: absoluteUrl("/logo/ggm-logo.png"),
+    image: absoluteUrl("/logo/ggm-logo.png"),
     email: company.email,
     telephone: company.phone,
     address: {

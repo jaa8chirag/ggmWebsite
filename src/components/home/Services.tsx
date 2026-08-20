@@ -2,56 +2,96 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Check } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight, Check, Sparkles } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import Eyebrow from "@/components/ui/Eyebrow";
 
-interface ServiceCardData {
+export interface ServiceCardData {
   slug: string;
   index: string;
   title: string;
   promise: string;
   bullets: string[];
+  ogImage?: string | null;
 }
 
-function ServiceCard({
+const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
+  seo: "/images/services/seo.jpg",
+  ppc: "/images/services/ppc.jpg",
+  "website-development": "/images/services/web-development.jpg",
+  "lead-generation": "/images/services/lead-generation.jpg",
+  "social-media-marketing": "/images/services/social-media-marketing.jpg",
+  "shopify-wordpress": "/images/services/shopify-wordpress.jpg",
+};
+
+export function ServiceCard({
   slug,
-  index,
   title,
   promise,
   bullets,
+  ogImage,
 }: ServiceCardData) {
+  const imageSrc = ogImage || DEFAULT_SERVICE_IMAGES[slug] || "/images/services/seo.jpg";
+
   return (
     <Link
       href={`/services/${slug}`}
-      className="group flex min-h-[420px] w-[320px] shrink-0 flex-col justify-between rounded-2xl border-2 border-chalk/30 bg-surface p-8 shadow-md shadow-chalk/10 transition-colors duration-300 hover:border-flow hover:shadow-lg sm:w-[360px]"
+      className="group relative flex min-h-[445px] w-[345px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-chalk/15 bg-surface/90 p-3.5 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-flow hover:shadow-2xl sm:w-[390px] sm:p-4"
     >
       <div>
-        <div className="flex items-start justify-between">
-          <span className="font-mono text-mono-label text-flow">
-            {index}
-          </span>
-          <ArrowUpRight
-            size={18}
-            className="text-muted transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-flow"
+        {/* Clean Visual Banner Header */}
+        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-ink">
+          <Image
+            src={imageSrc}
+            alt={title}
+            fill
+            sizes="(max-width: 768px) 345px, 390px"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           />
         </div>
-        <h3 className="mt-6 font-display text-2xl text-chalk">{title}</h3>
-        <p className="mt-3 font-body text-sm text-muted">{promise}</p>
+
+        {/* Title & Tagline */}
+        <div className="mt-4 px-1">
+          <h3 className="font-display text-2xl font-bold tracking-tight text-chalk transition-colors duration-300 group-hover:text-flow">
+            {title}
+          </h3>
+          <p className="mt-2 font-body text-sm leading-relaxed text-muted line-clamp-2">
+            {promise}
+          </p>
+        </div>
       </div>
 
-      <ul className="mt-8 space-y-3">
-        {bullets.map((bullet) => (
-          <li
-            key={bullet}
-            className="flex items-start gap-2 font-mono text-xs uppercase tracking-wide text-muted"
-          >
-            <Check size={14} className="mt-0.5 shrink-0 text-flow" />
-            {bullet}
-          </li>
-        ))}
-      </ul>
+      {/* Structured Key Features Checklist */}
+      <div className="mt-4 border-t border-chalk/10 pt-3.5 px-1">
+        <p className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-widest text-muted/70">
+          What&apos;s Included
+        </p>
+        <ul className="space-y-1.5">
+          {bullets.slice(0, 3).map((bullet) => (
+            <li
+              key={bullet}
+              className="flex items-center gap-2.5 font-mono text-xs uppercase tracking-wide text-muted transition-colors duration-200 group-hover:text-chalk"
+            >
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-flow/15 text-flow">
+                <Check size={11} strokeWidth={2.5} />
+              </span>
+              <span className="truncate">{bullet}</span>
+            </li>
+          ))}
+        </ul>
+
+        {/* Action Link Footer */}
+        <div className="mt-3.5 flex items-center justify-between pt-2 text-muted transition-colors duration-200 group-hover:text-flow">
+          <span className="font-mono text-xs font-medium uppercase tracking-wider">
+            Explore Details
+          </span>
+          <span className="font-mono text-sm transition-transform duration-300 group-hover:translate-x-1">
+            →
+          </span>
+        </div>
+      </div>
     </Link>
   );
 }
@@ -101,12 +141,12 @@ export default function Services({ services }: { services: ServiceCardData[] }) 
   return (
     <section ref={sectionRef} className="relative bg-ink">
       <div className="flex flex-col overflow-hidden md:h-screen md:flex-row md:items-center">
-        <div className="shrink-0 px-6 pt-24 pb-10 md:w-[380px] md:px-10 md:py-0 lg:w-[420px] lg:px-16">
+        <div className="shrink-0 px-6 pt-24 pb-10 md:w-[440px] md:px-12 md:py-0 lg:w-[490px] lg:px-16">
           <Eyebrow>What we do</Eyebrow>
-          <h2 className="mt-4 font-display text-h2 text-chalk">
+          <h2 className="mt-4 font-display text-3xl md:text-4xl lg:text-[42px] leading-tight text-chalk">
             Six services, one engagement sequence.
           </h2>
-          <p className="mt-4 max-w-sm font-body text-body text-muted">
+          <p className="mt-5 max-w-md font-body text-base text-muted">
             This is the order we actually run projects in — not a menu, a
             sequence. Each service links to what it includes.
           </p>
@@ -125,7 +165,7 @@ export default function Services({ services }: { services: ServiceCardData[] }) 
         >
           <div
             ref={trackRef}
-            className="absolute inset-y-0 left-0 flex items-center gap-6 pr-16 will-change-transform"
+            className="absolute inset-y-0 left-0 flex items-center gap-8 pr-20 will-change-transform"
           >
             {services.map((service) => (
               <ServiceCard key={service.slug} {...service} />
@@ -133,7 +173,7 @@ export default function Services({ services }: { services: ServiceCardData[] }) 
           </div>
         </div>
 
-        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-6 md:hidden">
+        <div className="flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-8 md:hidden">
           {services.map((service) => (
             <div key={service.slug} className="snap-start">
               <ServiceCard {...service} />
@@ -144,3 +184,4 @@ export default function Services({ services }: { services: ServiceCardData[] }) 
     </section>
   );
 }
+

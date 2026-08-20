@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Button from "@/components/ui/Button";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { labelClass, inputClass, cardClass } from "@/components/admin/styles";
 
 export interface TestimonialFormValues {
@@ -22,16 +23,14 @@ export default function TestimonialForm({
     <form action={action} className="max-w-lg space-y-6">
       <div className={cardClass}>
         <div>
-          <label className={labelClass} htmlFor="quote">
-            Quote
-          </label>
-          <textarea
+          <RichTextEditor
             id="quote"
             name="quote"
+            label="Client Quote / Feedback"
             required
             rows={4}
             defaultValue={values?.quote ?? ""}
-            className={inputClass}
+            helpText="Client testimonial text. Links and formatting supported."
           />
         </div>
 

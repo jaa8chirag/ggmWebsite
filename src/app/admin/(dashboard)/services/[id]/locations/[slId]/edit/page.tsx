@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { queryOne } from "@/lib/db";
 import Button from "@/components/ui/Button";
 import SeoFieldset from "@/components/admin/SeoFieldset";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { labelClass, inputClass, cardClass } from "@/components/admin/styles";
 import { updateServiceLocation } from "../../actions";
 
@@ -42,20 +43,13 @@ export default async function EditServiceLocationPage({
         className="mt-8 max-w-2xl space-y-6"
       >
         <div className={cardClass}>
-          <label className={labelClass} htmlFor="customIntro">
-            Custom intro for this location
-          </label>
-          <p className="mt-1 font-body text-xs text-muted">
-            Real, location-specific content — what makes {sl.serviceTitle}{" "}
-            for a {sl.locationName} business different. Left blank, the page
-            falls back to a generic template.
-          </p>
-          <textarea
+          <RichTextEditor
             id="customIntro"
             name="customIntro"
-            rows={6}
+            label="Custom Intro for this Location"
             defaultValue={sl.customIntro ?? ""}
-            className={inputClass}
+            rows={6}
+            helpText={`Real, location-specific content — what makes ${sl.serviceTitle} for a ${sl.locationName} business different. Hyperlinks, bold, and formatting supported.`}
           />
         </div>
 

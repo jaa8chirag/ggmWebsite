@@ -40,8 +40,9 @@ export default async function AdminDashboardLayout({
       ],
     },
     {
-      label: "Configuration & Analytics",
+      label: "Configuration & Governance",
       links: [
+        { href: "/admin/legal", label: "Legal & Policies", icon: ShieldCheck },
         { href: "/admin/seo-tools", label: "SEO & Ahrefs Hub", icon: Search },
         { href: "/admin/settings", label: "Site Settings", icon: Settings },
       ],
@@ -57,11 +58,11 @@ export default async function AdminDashboardLayout({
           <div className="flex items-center justify-between">
             <Link href="/admin" className="flex items-center gap-3">
               <Image
-                src="/logo/ggm-mark.png"
+                src="/logo/ggm-logo.png"
                 alt="GGM Technologies"
-                width={120}
-                height={45}
-                className="h-8 w-auto"
+                width={140}
+                height={50}
+                className="h-8 w-auto object-contain"
               />
             </Link>
             <span className="rounded-full bg-signal/15 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-widest text-signal font-semibold border border-signal/30">

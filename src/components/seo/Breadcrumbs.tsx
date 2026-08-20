@@ -19,7 +19,7 @@ export default function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
           {trail.map((item, i) => {
             const isLast = i === trail.length - 1;
             return (
-              <li key={item.path} className="flex items-center gap-1.5">
+              <li key={`${item.path}-${i}`} className="flex items-center gap-1.5">
                 {isLast ? (
                   <span aria-current="page" className="text-chalk">
                     {item.name}

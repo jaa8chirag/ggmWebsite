@@ -5,6 +5,7 @@ import Button from "@/components/ui/Button";
 import RepeatingText from "@/components/admin/RepeatingText";
 import RepeatingPairs from "@/components/admin/RepeatingPairs";
 import SeoFieldset from "@/components/admin/SeoFieldset";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { labelClass, inputClass, cardClass } from "@/components/admin/styles";
 
 export interface ProductFormValues {
@@ -98,16 +99,14 @@ export default function ProductForm({
           </div>
         </div>
 
-        <div className="mt-4">
-          <label className={labelClass} htmlFor="description">
-            Description
-          </label>
-          <textarea
+        <div className="mt-5">
+          <RichTextEditor
             id="description"
             name="description"
-            rows={4}
+            label="Product Full Description"
             defaultValue={values?.description ?? ""}
-            className={inputClass}
+            rows={5}
+            helpText="Detailed breakdown of features, specifications, and links."
           />
         </div>
       </div>

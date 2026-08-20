@@ -37,17 +37,32 @@ export default async function AdminServicesPage() {
             key={service.id}
             className={`${cardClass} flex items-center justify-between`}
           >
-            <div>
-              <p className="font-mono text-xs text-muted">
-                {service.index} · /services/{service.slug}
-              </p>
-              <p className="mt-1 font-display text-lg text-chalk">
-                {service.title}
-              </p>
-              <p className="mt-1 font-body text-xs text-muted">
-                {service.faqCount} FAQs · {service.locationCount}{" "}
-                location pages
-              </p>
+            <div className="flex items-center gap-4">
+              <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xl border border-chalk/15 bg-ink/70">
+                {service.ogImage ? (
+                  <img
+                    src={service.ogImage}
+                    alt={service.title}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center font-mono text-[10px] text-muted">
+                    No img
+                  </div>
+                )}
+              </div>
+              <div>
+                <p className="font-mono text-xs text-muted">
+                  {service.index} · /services/{service.slug}
+                </p>
+                <p className="mt-1 font-display text-lg text-chalk">
+                  {service.title}
+                </p>
+                <p className="mt-1 font-body text-xs text-muted">
+                  {service.faqCount} FAQs · {service.locationCount}{" "}
+                  location pages
+                </p>
+              </div>
             </div>
             <div className="flex items-center gap-2">
               <Link

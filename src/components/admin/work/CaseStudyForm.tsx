@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import SeoFieldset from "@/components/admin/SeoFieldset";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { labelClass, inputClass, cardClass } from "@/components/admin/styles";
 
 export interface CaseStudyFormValues {
@@ -66,16 +67,14 @@ export default function CaseStudyForm({
           />
         </div>
 
-        <div className="mt-4">
-          <label className={labelClass} htmlFor="summary">
-            Summary
-          </label>
-          <textarea
+        <div className="mt-5">
+          <RichTextEditor
             id="summary"
             name="summary"
-            rows={3}
+            label="Case Study Summary"
             defaultValue={values?.summary ?? ""}
-            className={inputClass}
+            rows={4}
+            helpText="Brief client project background and achievements. Links and markdown supported."
           />
         </div>
 

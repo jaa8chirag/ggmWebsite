@@ -12,6 +12,18 @@ import JsonLd from "@/components/seo/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 import { serviceSchema, faqSchema } from "@/lib/schema";
 
+import Image from "next/image";
+import FormattedText from "@/components/ui/FormattedText";
+
+const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
+  seo: "/images/services/seo.jpg",
+  ppc: "/images/services/ppc.jpg",
+  "website-development": "/images/services/web-development.jpg",
+  "lead-generation": "/images/services/lead-generation.jpg",
+  "social-media-marketing": "/images/services/social-media-marketing.jpg",
+  "shopify-wordpress": "/images/services/shopify-wordpress.jpg",
+};
+
 // Maps a service to the blog category covering it, for internal linking.
 // Only services with matching published posts get a "Related reading" block.
 const SERVICE_BLOG_CATEGORY: Record<string, string> = {
@@ -46,6 +58,11 @@ export default async function ServiceDetailPage({
   const { slug } = await params;
   const service = await getServiceBySlug(slug);
   if (!service) notFound();
+
+  const imageSrc =
+    service.ogImage ||
+    DEFAULT_SERVICE_IMAGES[service.slug] ||
+    "/images/services/seo.jpg";
 
   const [allServices, posts, serviceLocations] = await Promise.all([
     getServices(),
@@ -85,22 +102,48 @@ export default async function ServiceDetailPage({
               { name: service.title, path: `/services/${service.slug}` },
             ]}
           />
-          <span className="mt-6 block font-mono text-mono-label text-signal">
-            {service.index}
-          </span>
-          <h1 className="mt-4 max-w-2xl font-display text-display-l">
-            {service.title}
-          </h1>
-          <p className="mt-6 max-w-xl font-body text-body-l text-muted">
-            {service.promise}
-          </p>
-          <p className="mt-4 max-w-xl font-body text-body text-muted">
-            {service.description}
-          </p>
-          <div className="mt-10">
-            <Button href="/contact" variant="signal">
-              Get a free audit
-            </Button>
+
+          <div className="mt-8 grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <span className="block font-mono text-mono-label text-signal">
+                {service.index}
+              </span>
+              <h1 className="mt-4 font-display text-display-l">
+                {service.title}
+              </h1>
+              <FormattedText
+                text={service.promise}
+                as="p"
+                className="mt-6 max-w-xl font-body text-body-l text-flow"
+              />
+              <FormattedText
+                text={service.description}
+                as="p"
+                className="mt-4 max-w-xl font-body text-body text-muted leading-relaxed"
+              />
+              <div className="mt-10">
+                <Button href="/contact" variant="signal">
+                  Get a free audit
+                </Button>
+              </div>
+            </div>
+
+            <div className="relative lg:col-span-5">
+              <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-flow/15 blur-3xl" />
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-3xl border border-chalk/20 bg-surface/80 p-2 shadow-2xl backdrop-blur-xl">
+                <div className="relative h-full w-full overflow-hidden rounded-2xl">
+                  <Image
+                    src={imageSrc}
+                    alt={service.title}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 

@@ -143,12 +143,57 @@ export interface SiteSettingsModel {
   addressLine3: string;
   gst: string;
   businessHours: string;
+  // Social Links
+  whatsapp?: string | null;
+  facebook?: string | null;
+  twitter?: string | null;
+  instagram?: string | null;
+  youtube?: string | null;
+  linkedin?: string | null;
+  // Registrations & Trust Seals
+  msme?: string | null;
+  indiamartSeal?: string | null;
+  justdialSeal?: string | null;
+  googleBusinessUrl?: string | null;
+  // About & Company Hub
   aboutEyebrow: string;
   aboutTitle: string;
   aboutIntro: string;
   mission: string;
   vision: string;
+  ceoName?: string | null;
+  ceoTitle?: string | null;
+  ceoBio?: string | null;
+  companyStory?: string | null;
+  qualityCompliance?: string | null;
   clients: string[];
   whyChooseUs: { title: string; description: string }[];
   metricItems: Metric[];
 }
+
+export interface LegalPage {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle?: string | null;
+  content: string;
+  lastUpdated: string;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  isPublished: boolean;
+  updatedAt?: Date;
+}
+
+export interface CertificateDocument {
+  id: string;
+  title: string;
+  issuer: string;
+  certificateNo: string;
+  pdfUrl: string;
+  description?: string | null;
+  issueDate?: string | null;
+  order: number;
+  createdAt?: Date;
+}
+
+
