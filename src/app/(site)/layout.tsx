@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import Nav from "@/components/layout/Nav";
-import TrustHeader from "@/components/layout/TrustHeader";
 import FloatingSocials from "@/components/layout/FloatingSocials";
 import CookieConsent from "@/components/legal/CookieConsent";
 import Footer from "@/components/layout/Footer";
@@ -63,9 +62,6 @@ export const metadata: Metadata = {
     : {}),
 };
 
-// Content is admin-managed via Postgres now, not static at build time — force
-// every page under this layout to render per-request so edits made in
-// /admin show up immediately instead of waiting for a rebuild.
 export const dynamic = "force-dynamic";
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
@@ -88,7 +84,6 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <JsonLd data={websiteSchema(company)} />
         <JsonLd data={localBusinessSchema(company)} />
         <SmoothScroll>
-          <TrustHeader settings={settings} />
           <Nav />
           <main className="flex-1">
             <PageTransition>{children}</PageTransition>

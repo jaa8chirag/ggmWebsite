@@ -6,15 +6,12 @@ import {
   Cookie,
   ShieldCheck,
   Settings2,
-  Check,
   X,
   Lock,
-  ChevronRight,
-  Info,
 } from "lucide-react";
 
 interface CookiePreferences {
-  essential: boolean; // Always true
+  essential: boolean;
   analytics: boolean;
   marketing: boolean;
   functional: boolean;
@@ -38,21 +35,17 @@ export default function CookieConsent() {
   });
 
   useEffect(() => {
-    // Check if user has already made a decision
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (!stored) {
-        // Small delay to ensure smooth initial page load
         const timer = setTimeout(() => setIsVisible(true), 800);
         return () => clearTimeout(timer);
       }
     } catch {
-      // Fallback if localStorage is unavailable
       setIsVisible(true);
     }
   }, []);
 
-  // Listen for custom trigger to reopen cookie preferences from footer/links
   useEffect(() => {
     const handleOpenSettings = () => {
       setShowPreferences(true);
@@ -78,7 +71,6 @@ export default function CookieConsent() {
 
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(consentRecord));
-      // Dispatch custom event for tag manager / analytics script gating
       window.dispatchEvent(
         new CustomEvent("ggm_consent_updated", { detail: consentRecord })
       );
@@ -114,72 +106,75 @@ export default function CookieConsent() {
 
   return (
     <>
-      {/* 1. Main Bottom Consent Banner (Glassmorphic & Non-intrusive) */}
+      {/* 1. Compact Bottom-Right Floating Card */}
       {!showPreferences && (
         <aside
           role="dialog"
           aria-live="polite"
-          aria-label="Cookie consent banner"
-          className="fixed inset-x-0 bottom-0 z-50 p-4 sm:p-6"
+          aria-label="Cookie consent card"
+          className="fixed bottom-4 right-4 z-50 w-[calc(100vw-2rem)] max-w-[380px] animate-in fade-in slide-in-from-bottom-4 duration-300 sm:bottom-6 sm:right-6"
         >
-          <div className="mx-auto max-w-5xl rounded-3xl border border-white/80 bg-surface/95 p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.15)] backdrop-blur-2xl">
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-              {/* Info Column */}
-              <div className="flex items-start gap-4 max-w-3xl">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-flow/10 text-flow shadow-sm">
-                  <Cookie size={24} />
+          <div className="rounded-2xl border border-white/80 bg-surface/95 p-4 sm:p-5 shadow-[0_16px_48px_rgba(0,0,0,0.18)] backdrop-blur-2xl">
+            {/* Header / Dismiss */}
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-flow/10 text-flow shadow-sm">
+                  <Cookie size={18} />
                 </div>
                 <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="font-display text-lg font-bold text-chalk">
-                      EU Cookie &amp; Privacy Consent
-                    </h3>
-                    <span className="rounded-full border border-flow/30 bg-flow/10 px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-flow">
-                      GDPR / ePrivacy Compliant
-                    </span>
-                  </div>
-                  <p className="mt-2 font-body text-xs sm:text-sm text-muted leading-relaxed">
-                    We use cookies and telemetry tools to secure our website, optimize performance, and analyze visitor traffic in accordance with EU GDPR norms. You can choose which categories to allow or adjust your choices at any time. Read our{" "}
-                    <Link
-                      href="/cookie-policy"
-                      className="font-medium text-flow underline decoration-flow/40 hover:text-signal"
-                    >
-                      Cookie Policy
-                    </Link>{" "}
-                    and{" "}
-                    <Link
-                      href="/privacy-policy"
-                      className="font-medium text-flow underline decoration-flow/40 hover:text-signal"
-                    >
-                      Privacy Policy
-                    </Link>
-                    .
-                  </p>
+                  <h3 className="font-display text-sm font-bold text-chalk">
+                    Cookie &amp; Privacy Choices
+                  </h3>
+                  <span className="font-mono text-[10px] text-muted">
+                    EU GDPR Compliant
+                  </span>
                 </div>
               </div>
+              <button
+                type="button"
+                onClick={handleRejectNonEssential}
+                className="rounded-lg p-1 text-muted/70 hover:bg-chalk/10 hover:text-chalk transition-colors"
+                aria-label="Dismiss cookie notice"
+              >
+                <X size={16} />
+              </button>
+            </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setShowPreferences(true)}
-                  className="flex items-center gap-1.5 rounded-full border border-chalk/20 bg-ink/40 px-4 py-2.5 font-mono text-xs uppercase tracking-wider text-chalk transition-colors hover:border-flow hover:text-flow"
-                >
-                  <Settings2 size={14} /> Preferences
-                </button>
+            {/* Description */}
+            <p className="mt-2.5 font-body text-xs text-muted leading-relaxed">
+              We use cookies to ensure optimal security, analyze traffic, and improve site performance. Learn more in our{" "}
+              <Link
+                href="/cookie-policy"
+                className="font-medium text-flow underline decoration-flow/40 hover:text-signal"
+              >
+                Cookie Policy
+              </Link>
+              .
+            </p>
+
+            {/* Action Buttons */}
+            <div className="mt-3.5 flex items-center justify-between gap-2 pt-2 border-t border-chalk/10">
+              <button
+                type="button"
+                onClick={() => setShowPreferences(true)}
+                className="flex items-center gap-1 font-mono text-[11px] text-muted hover:text-flow transition-colors"
+              >
+                <Settings2 size={13} /> Preferences
+              </button>
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={handleRejectNonEssential}
-                  className="rounded-full border border-chalk/25 bg-surface px-4 py-2.5 font-mono text-xs uppercase tracking-wider text-muted transition-colors hover:border-chalk/40 hover:text-chalk"
+                  className="rounded-full border border-chalk/25 bg-surface px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-muted hover:border-chalk/40 hover:text-chalk transition-colors"
                 >
-                  Reject Non-Essential
+                  Reject
                 </button>
                 <button
                   type="button"
                   onClick={handleAcceptAll}
-                  className="rounded-full bg-flow px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-white shadow-md shadow-flow/20 transition-all hover:bg-signal"
+                  className="rounded-full bg-flow px-3.5 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-white shadow-md shadow-flow/20 hover:bg-signal transition-all"
                 >
-                  Accept All Cookies
+                  Accept All
                 </button>
               </div>
             </div>
@@ -187,7 +182,7 @@ export default function CookieConsent() {
         </aside>
       )}
 
-      {/* 2. Detailed Granular Preferences Modal (EU Norms Specifics) */}
+      {/* 2. Detailed Granular Preferences Modal */}
       {showPreferences && (
         <div
           role="dialog"
@@ -195,61 +190,61 @@ export default function CookieConsent() {
           aria-labelledby="cookie-modal-title"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md"
         >
-          <div className="w-full max-w-2xl overflow-hidden rounded-3xl border border-chalk/20 bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <div className="w-full max-w-lg overflow-hidden rounded-3xl border border-chalk/20 bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-chalk/15 bg-ink/40 px-6 py-5">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-flow/10 text-flow">
-                  <ShieldCheck size={20} />
+            <div className="flex items-center justify-between border-b border-chalk/15 bg-ink/40 px-5 py-4">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-flow/10 text-flow">
+                  <ShieldCheck size={18} />
                 </div>
                 <div>
-                  <h2 id="cookie-modal-title" className="font-display text-lg font-bold text-chalk">
+                  <h2 id="cookie-modal-title" className="font-display text-base font-bold text-chalk">
                     Cookie Preferences Center
                   </h2>
-                  <p className="font-mono text-[11px] text-muted">
-                    EU GDPR Article 6 &amp; 7 Compliant Consent Management
+                  <p className="font-mono text-[10px] text-muted">
+                    EU GDPR Article 6 &amp; 7 Consent Management
                   </p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setShowPreferences(false)}
-                className="rounded-full p-2 text-muted hover:bg-chalk/10 hover:text-chalk transition-colors"
+                className="rounded-full p-1.5 text-muted hover:bg-chalk/10 hover:text-chalk transition-colors"
                 aria-label="Close modal"
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
 
             {/* Granular Cookie Toggles Container */}
-            <div className="max-h-[60vh] space-y-4 overflow-y-auto p-6 font-body">
-              {/* Category 1: Strictly Necessary (Locked ON) */}
-              <div className="rounded-2xl border border-chalk/15 bg-ink/30 p-4.5">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-2.5">
-                    <Lock size={16} className="text-flow" />
-                    <h3 className="font-display text-base font-bold text-chalk">
-                      1. Strictly Necessary &amp; Security Cookies
+            <div className="max-h-[55vh] space-y-3 overflow-y-auto p-5 font-body">
+              {/* Category 1: Strictly Necessary */}
+              <div className="rounded-xl border border-chalk/15 bg-ink/30 p-3.5">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <Lock size={14} className="text-flow" />
+                    <h3 className="font-display text-sm font-bold text-chalk">
+                      1. Strictly Necessary
                     </h3>
                   </div>
-                  <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-emerald-600">
+                  <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-emerald-600">
                     Always Active
                   </span>
                 </div>
-                <p className="mt-2 text-xs text-muted leading-relaxed">
-                  These cookies are essential for the website to function securely. They enable core services such as admin CSRF protection, secure authentication, and layout stability. These cannot be switched off under EU regulations.
+                <p className="mt-1.5 text-[11px] text-muted leading-relaxed">
+                  Essential for security, authentication, and core page rendering. Cannot be disabled.
                 </p>
               </div>
 
-              {/* Category 2: Analytics & Performance */}
-              <div className="rounded-2xl border border-chalk/15 bg-ink/30 p-4.5">
-                <div className="flex items-center justify-between gap-4">
+              {/* Category 2: Analytics */}
+              <div className="rounded-xl border border-chalk/15 bg-ink/30 p-3.5">
+                <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h3 className="font-display text-base font-bold text-chalk">
-                      2. Analytics &amp; Performance Cookies
+                    <h3 className="font-display text-sm font-bold text-chalk">
+                      2. Analytics &amp; Performance
                     </h3>
-                    <p className="text-[11px] font-mono text-muted/70">
-                      Google Analytics 4 (GA4), Core Web Vitals telemetry
+                    <p className="text-[10px] font-mono text-muted/70">
+                      GA4, Core Web Vitals telemetry
                     </p>
                   </div>
                   <label className="relative inline-flex cursor-pointer items-center">
@@ -261,23 +256,23 @@ export default function CookieConsent() {
                       }
                       className="peer sr-only"
                     />
-                    <div className="h-6 w-11 rounded-full bg-chalk/20 peer-checked:bg-flow peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full" />
+                    <div className="h-5 w-9 rounded-full bg-chalk/20 peer-checked:bg-flow peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full" />
                   </label>
                 </div>
-                <p className="mt-2 text-xs text-muted leading-relaxed">
-                  Allows us to aggregate anonymized visitor statistics, identify high-traffic services, and optimize server response times. No direct personal identifiers are stored.
+                <p className="mt-1.5 text-[11px] text-muted leading-relaxed">
+                  Anonymized visitor insights and server performance telemetry.
                 </p>
               </div>
 
-              {/* Category 3: Marketing & Conversion Pixels */}
-              <div className="rounded-2xl border border-chalk/15 bg-ink/30 p-4.5">
-                <div className="flex items-center justify-between gap-4">
+              {/* Category 3: Marketing */}
+              <div className="rounded-xl border border-chalk/15 bg-ink/30 p-3.5">
+                <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h3 className="font-display text-base font-bold text-chalk">
-                      3. Marketing &amp; Retargeting Cookies
+                    <h3 className="font-display text-sm font-bold text-chalk">
+                      3. Marketing &amp; Pixels
                     </h3>
-                    <p className="text-[11px] font-mono text-muted/70">
-                      Google Ads Conversion, Meta Pixel, LinkedIn Insight
+                    <p className="text-[10px] font-mono text-muted/70">
+                      Google Ads, Meta Pixel
                     </p>
                   </div>
                   <label className="relative inline-flex cursor-pointer items-center">
@@ -289,23 +284,23 @@ export default function CookieConsent() {
                       }
                       className="peer sr-only"
                     />
-                    <div className="h-6 w-11 rounded-full bg-chalk/20 peer-checked:bg-flow peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full" />
+                    <div className="h-5 w-9 rounded-full bg-chalk/20 peer-checked:bg-flow peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full" />
                   </label>
                 </div>
-                <p className="mt-2 text-xs text-muted leading-relaxed">
-                  Used to evaluate advertising ROI and display tailored digital growth case studies. If disabled, ads shown will be non-personalized.
+                <p className="mt-1.5 text-[11px] text-muted leading-relaxed">
+                  Measures ad campaign performance without personal profiling.
                 </p>
               </div>
 
-              {/* Category 4: Functional & User Preferences */}
-              <div className="rounded-2xl border border-chalk/15 bg-ink/30 p-4.5">
-                <div className="flex items-center justify-between gap-4">
+              {/* Category 4: Functional */}
+              <div className="rounded-xl border border-chalk/15 bg-ink/30 p-3.5">
+                <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h3 className="font-display text-base font-bold text-chalk">
-                      4. Functional &amp; Experience Cookies
+                    <h3 className="font-display text-sm font-bold text-chalk">
+                      4. Functional Preferences
                     </h3>
-                    <p className="text-[11px] font-mono text-muted/70">
-                      Form drafts, local UI state preservation
+                    <p className="text-[10px] font-mono text-muted/70">
+                      Form drafts, layout states
                     </p>
                   </div>
                   <label className="relative inline-flex cursor-pointer items-center">
@@ -317,42 +312,42 @@ export default function CookieConsent() {
                       }
                       className="peer sr-only"
                     />
-                    <div className="h-6 w-11 rounded-full bg-chalk/20 peer-checked:bg-flow peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full" />
+                    <div className="h-5 w-9 rounded-full bg-chalk/20 peer-checked:bg-flow peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full" />
                   </label>
                 </div>
-                <p className="mt-2 text-xs text-muted leading-relaxed">
-                  Enables enhanced interactive features, preserving form inputs across navigation so you do not lose audit inquiries.
+                <p className="mt-1.5 text-[11px] text-muted leading-relaxed">
+                  Preserves inquiry form draft inputs across page navigation.
                 </p>
               </div>
             </div>
 
-            {/* Modal Footer Controls */}
-            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-chalk/15 bg-ink/40 px-6 py-4">
+            {/* Modal Footer */}
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-chalk/15 bg-ink/40 px-5 py-3.5">
               <Link
                 href="/cookie-policy"
-                className="font-mono text-xs text-muted underline decoration-chalk/30 hover:text-flow"
+                className="font-mono text-[11px] text-muted underline hover:text-flow"
               >
-                Read Full Cookie Policy ↗
+                Policy Details ↗
               </Link>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={handleRejectNonEssential}
-                  className="rounded-full border border-chalk/20 bg-surface px-4 py-2 font-mono text-xs uppercase tracking-wider text-muted hover:text-chalk"
+                  className="rounded-full border border-chalk/20 bg-surface px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-muted hover:text-chalk"
                 >
                   Reject All
                 </button>
                 <button
                   type="button"
                   onClick={handleSaveCustom}
-                  className="rounded-full border border-flow/40 bg-flow/15 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-flow hover:bg-flow hover:text-white transition-colors"
+                  className="rounded-full border border-flow/40 bg-flow/15 px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-flow hover:bg-flow hover:text-white transition-colors"
                 >
-                  Save Choices
+                  Save
                 </button>
                 <button
                   type="button"
                   onClick={handleAcceptAll}
-                  className="rounded-full bg-flow px-5 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-white shadow-md hover:bg-signal transition-colors"
+                  className="rounded-full bg-flow px-4 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-white shadow-md hover:bg-signal transition-colors"
                 >
                   Accept All
                 </button>
