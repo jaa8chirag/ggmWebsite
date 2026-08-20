@@ -34,8 +34,8 @@ export default async function Footer() {
 
   return (
     <footer className="border-t border-chalk/20 bg-ink">
-      <div className="mx-auto max-w-[1440px] px-6 py-20 md:px-10">
-        <div className="grid grid-cols-2 gap-10 md:grid-cols-5 md:gap-8">
+      <div className="mx-auto max-w-[1440px] px-6 py-12 md:px-10 md:py-14">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-5 md:gap-8">
           {/* Brand & Bio */}
           <div className="col-span-2 md:col-span-2">
             <div className="flex items-center gap-2.5">
@@ -201,21 +201,21 @@ export default async function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-chalk/20 pt-8 font-mono text-xs uppercase tracking-widest text-muted/70 md:flex-row md:items-center">
+        <div className="mt-8 flex flex-col items-start justify-between gap-3 border-t border-chalk/15 pt-4 font-mono text-xs uppercase tracking-wider text-muted/70 md:flex-row md:items-center">
           <p>
             © {new Date().getFullYear()} {settings.name}. All rights reserved.
           </p>
-          <div className="flex flex-wrap items-center gap-4 text-[11px]">
-            <Link href="/privacy-policy" className="hover:text-chalk">
+          <div className="flex flex-wrap items-center gap-3 text-[11px]">
+            <Link href="/privacy-policy" className="hover:text-chalk transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/refund-policy" className="hover:text-chalk">
+            <Link href="/refund-policy" className="hover:text-chalk transition-colors">
               Refund &amp; Returns
             </Link>
-            <Link href="/cookie-policy" className="hover:text-chalk">
+            <Link href="/cookie-policy" className="hover:text-chalk transition-colors">
               Cookie Policy
             </Link>
-            <Link href="/disclaimer" className="hover:text-chalk">
+            <Link href="/disclaimer" className="hover:text-chalk transition-colors">
               Disclaimer
             </Link>
             <span className="text-chalk/20">|</span>
