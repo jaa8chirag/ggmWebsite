@@ -1,6 +1,7 @@
 import Hero from "@/components/home/Hero";
 import Climb from "@/components/home/Climb";
 import Services from "@/components/home/Services";
+import TechStack from "@/components/home/TechStack";
 import Process from "@/components/home/Process";
 import Constellation from "@/components/home/Constellation";
 import Metrics from "@/components/home/Metrics";
@@ -30,6 +31,7 @@ export default async function HomePage() {
       <Hero eyebrow={settings.eyebrow} />
       <Climb services={services} />
       <Services services={services} />
+      <TechStack />
       <Process />
       <Constellation />
       <Metrics metrics={settings.metricItems} />

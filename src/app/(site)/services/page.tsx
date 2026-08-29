@@ -5,6 +5,7 @@ import { ArrowUpRight, Check, Sparkles } from "lucide-react";
 import { getServices } from "@/lib/queries";
 import Eyebrow from "@/components/ui/Eyebrow";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import TechStack from "@/components/common/TechStack";
 import { buildMetadata } from "@/lib/seo";
 
 const title = "Digital Marketing Services in Delhi | GGM Technologies";
@@ -30,7 +31,7 @@ export default async function ServicesPage() {
   const services = await getServices();
 
   return (
-    <div className="bg-ink py-32 md:py-40">
+    <div className="bg-ink pt-32 pb-16 md:pt-40 md:pb-24">
       <div className="mx-auto max-w-[1440px] px-6 md:px-10">
         <Breadcrumbs items={[{ name: "Services", path: "/services" }]} />
         <div className="mt-6">
@@ -113,6 +114,9 @@ export default async function ServicesPage() {
           })}
         </div>
       </div>
+
+      {/* Comprehensive Tech Stack Section */}
+      <TechStack className="mt-16 md:mt-24 border-t border-chalk/15" />
     </div>
   );
 }
