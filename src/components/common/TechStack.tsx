@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Code2,
   Cpu,
@@ -284,13 +283,6 @@ export default function TechStack({
   includeDeliverables,
   deliverablesTitle = "Core Deliverables & Engineering Standards",
 }: TechStackProps) {
-  const [activeTab, setActiveTab] = useState<TechCategory>("all");
-
-  const filteredTechnologies =
-    activeTab === "all"
-      ? ALL_TECHNOLOGIES
-      : ALL_TECHNOLOGIES.filter((t) => t.category === activeTab);
-
   const prominentTechnologies = ALL_TECHNOLOGIES.filter((t) => t.isProminent);
 
   return (
@@ -400,77 +392,6 @@ export default function TechStack({
                     ))}
                   </ul>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* FULL 21 TECHNOLOGIES FILTERABLE EXPLORER */}
-        <div className="mt-16 rounded-3xl border border-chalk/15 bg-surface/70 p-6 md:p-8 shadow-sm">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-chalk/10 pb-6">
-            <div>
-              <h3 className="font-display text-2xl font-bold text-chalk">
-                Full Technology Ecosystem (21 Technologies)
-              </h3>
-              <p className="mt-1 font-body text-xs text-muted">
-                Filter by architecture domain or explore our entire engineering toolkit.
-              </p>
-            </div>
-
-            {/* Category Filter Tabs */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              {[
-                { id: "all", label: "All Technologies (21)" },
-                { id: "cms-ecommerce", label: "CMS & eCommerce" },
-                { id: "frontend", label: "Frontend & UI" },
-                { id: "backend", label: "Backend & APIs" },
-                { id: "database", label: "Databases" },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveTab(tab.id as TechCategory)}
-                  className={`rounded-full px-3.5 py-1.5 font-mono text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-                    activeTab === tab.id
-                      ? "bg-flow text-white shadow-sm scale-105"
-                      : "border border-chalk/15 bg-surface text-muted hover:border-flow hover:text-chalk"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Filtered Grid */}
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
-            {filteredTechnologies.map((tech) => (
-              <div
-                key={tech.name}
-                className="group relative flex flex-col justify-between rounded-2xl border border-chalk/10 bg-surface p-4 transition-all duration-200 hover:-translate-y-1 hover:border-flow hover:shadow-md"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span
-                      className="h-2.5 w-2.5 rounded-full"
-                      style={{ backgroundColor: tech.color }}
-                    />
-                    {tech.isProminent && (
-                      <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-signal bg-signal/10 px-1.5 py-0.5 rounded-full">
-                        Flagship
-                      </span>
-                    )}
-                  </div>
-                  <h5 className="font-display text-base font-bold text-chalk group-hover:text-flow transition-colors">
-                    {tech.name}
-                  </h5>
-                  <p className="mt-0.5 font-mono text-[10px] text-muted">
-                    {tech.categoryLabel}
-                  </p>
-                </div>
-                <p className="mt-3 font-body text-[11px] text-muted/80 line-clamp-2 leading-tight">
-                  {tech.role}
-                </p>
               </div>
             ))}
           </div>
