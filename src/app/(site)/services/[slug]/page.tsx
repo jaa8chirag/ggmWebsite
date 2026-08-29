@@ -26,6 +26,7 @@ import { buildMetadata } from "@/lib/seo";
 import { serviceSchema, faqSchema } from "@/lib/schema";
 import Image from "next/image";
 import FormattedText from "@/components/ui/FormattedText";
+import TechStack from "@/components/common/TechStack";
 import { SERVICE_DETAILS } from "@/data/serviceDetails";
 
 const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
@@ -83,6 +84,8 @@ export default async function ServiceDetailPage({
   if (!service) notFound();
 
   const details = SERVICE_DETAILS[slug];
+  const isWebDev =
+    service.slug === "website-development" || service.slug === "web-development";
 
   const imageSrc =
     service.ogImage ||
@@ -220,32 +223,43 @@ export default async function ServiceDetailPage({
         </section>
 
         {/* =================================================================== */}
-        {/* 2. WHAT'S INCLUDED (ALL DATABASE BULLETS)                           */}
+        {/* 2. WHAT'S INCLUDED / TECH STACK                                    */}
         {/* =================================================================== */}
-        {service.bullets && service.bullets.length > 0 && (
-          <section className="mx-auto max-w-[1440px] px-6 py-8 md:px-10">
-            <div className="rounded-3xl border border-chalk/20 bg-surface/70 p-6 md:p-8 shadow-sm">
-              <div className="flex items-center gap-2">
-                <Sparkles size={16} className="text-signal" />
-                <h2 className="font-mono text-mono-label uppercase tracking-widest text-muted font-bold">
-                  Core Inclusions & Deliverables (Included in {service.title})
-                </h2>
+        {isWebDev ? (
+          <TechStack
+            className="my-8 border-y border-chalk/10"
+            eyebrow="ENGINEERING & PLATFORM ECOSYSTEM"
+            title="Website Development Technologies We Master & Build"
+            description="From high-conversion eCommerce (WordPress, Shopify, WooCommerce) to mission-critical full-stack applications (Next.js, React, Node.js, Laravel & .NET) — we build fast, scalable, conversion-first digital platforms."
+            includeDeliverables={service.bullets}
+            deliverablesTitle={`Core Inclusions & Deliverables (Included in ${service.title})`}
+          />
+        ) : (
+          service.bullets && service.bullets.length > 0 && (
+            <section className="mx-auto max-w-[1440px] px-6 py-8 md:px-10">
+              <div className="rounded-3xl border border-chalk/20 bg-surface/70 p-6 md:p-8 shadow-sm">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={16} className="text-signal" />
+                  <h2 className="font-mono text-mono-label uppercase tracking-widest text-muted font-bold">
+                    Core Inclusions & Deliverables (Included in {service.title})
+                  </h2>
+                </div>
+                <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {service.bullets.map((bullet) => (
+                    <div
+                      key={bullet}
+                      className="flex items-start gap-3 rounded-2xl border border-chalk/15 bg-surface p-4 shadow-sm"
+                    >
+                      <Check size={18} className="mt-0.5 shrink-0 text-flow" />
+                      <span className="font-body text-sm font-medium text-chalk">
+                        {bullet}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {service.bullets.map((bullet) => (
-                  <div
-                    key={bullet}
-                    className="flex items-start gap-3 rounded-2xl border border-chalk/15 bg-surface p-4 shadow-sm"
-                  >
-                    <Check size={18} className="mt-0.5 shrink-0 text-flow" />
-                    <span className="font-body text-sm font-medium text-chalk">
-                      {bullet}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
+            </section>
+          )
         )}
 
         {/* =================================================================== */}
@@ -403,7 +417,7 @@ export default async function ServiceDetailPage({
         {/* =================================================================== */}
         {/* 6. ENTERPRISE TECHNOLOGY & TOOLING STACK                            */}
         {/* =================================================================== */}
-        {details?.techStackCategories && details.techStackCategories.length > 0 && (
+        {details?.techStackCategories && details.techStackCategories.length > 0 && !isWebDev && (
           <section className="mx-auto max-w-[1440px] px-6 py-16 md:px-10">
             <div className="max-w-3xl">
               <span className="font-mono text-mono-label font-bold tracking-widest text-signal uppercase">

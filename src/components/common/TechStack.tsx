@@ -267,7 +267,23 @@ export const ALL_TECHNOLOGIES: TechnologyItem[] = [
   },
 ];
 
-export default function TechStack({ className = "" }: { className?: string }) {
+export interface TechStackProps {
+  className?: string;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  includeDeliverables?: string[];
+  deliverablesTitle?: string;
+}
+
+export default function TechStack({
+  className = "",
+  eyebrow = "ENGINEERING & PLATFORM ECOSYSTEM",
+  title = "Technologies We Build, Master & Scale",
+  description = "From high-conversion eCommerce (WordPress, Shopify, WooCommerce) to mission-critical full-stack applications (Next.js, React, Node.js, Laravel & .NET) — we architect custom solutions with clean code, sub-second latency, and scalable infrastructure.",
+  includeDeliverables,
+  deliverablesTitle = "Core Deliverables & Engineering Standards",
+}: TechStackProps) {
   const [activeTab, setActiveTab] = useState<TechCategory>("all");
 
   const filteredTechnologies =
@@ -278,19 +294,44 @@ export default function TechStack({ className = "" }: { className?: string }) {
   const prominentTechnologies = ALL_TECHNOLOGIES.filter((t) => t.isProminent);
 
   return (
-    <section className={`relative overflow-hidden bg-ink py-20 md:py-28 ${className}`}>
+    <section className={`relative overflow-hidden bg-ink py-16 md:py-24 ${className}`}>
       {/* Decorative gradient blur background */}
       <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-flow/10 blur-[130px] rounded-full" />
 
       <div className="mx-auto max-w-[1440px] px-6 md:px-10 relative z-10">
+        {/* If custom deliverables are provided (e.g. from Website Development bullets) */}
+        {includeDeliverables && includeDeliverables.length > 0 && (
+          <div className="mb-12 rounded-3xl border border-chalk/20 bg-surface/90 p-6 md:p-8 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <Sparkles size={16} className="text-signal" />
+              <h3 className="font-mono text-mono-label uppercase tracking-widest text-muted font-bold">
+                {deliverablesTitle}
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {includeDeliverables.map((item) => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 rounded-2xl border border-chalk/15 bg-ink/60 px-5 py-4 shadow-sm"
+                >
+                  <CheckCircle2 size={18} className="shrink-0 text-flow" />
+                  <span className="font-body text-sm font-semibold text-chalk">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Section Header */}
         <div className="max-w-3xl">
-          <Eyebrow>ENGINEERING &amp; PLATFORM ECOSYSTEM</Eyebrow>
+          <Eyebrow>{eyebrow}</Eyebrow>
           <h2 className="mt-4 font-display text-h2 text-chalk leading-tight">
-            Technologies We Build, Master &amp; Scale
+            {title}
           </h2>
           <p className="mt-4 font-body text-body-l text-muted leading-relaxed">
-            From high-conversion eCommerce (<strong>WordPress</strong>, <strong>Shopify</strong>, <strong>WooCommerce</strong>) to mission-critical full-stack applications (<strong>Next.js</strong>, <strong>React</strong>, <strong>Node.js</strong>, <strong>Laravel</strong> &amp; <strong>.NET</strong>) — we architect custom solutions with clean code, sub-second latency, and scalable infrastructure.
+            {description}
           </p>
         </div>
 
