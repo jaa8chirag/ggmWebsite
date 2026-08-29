@@ -9,6 +9,7 @@ import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 import { serviceLocationSchema, faqSchema } from "@/lib/schema";
+import { SERVICE_DETAILS } from "@/data/serviceDetails";
 
 export async function generateMetadata({
   params,
@@ -40,6 +41,19 @@ export default async function ServiceLocationPage({
   if (!sl) notFound();
 
   const { service, location: loc } = sl;
+  const details = SERVICE_DETAILS[slug];
+
+  const combinedFaqs = details?.faqs
+    ? [
+        ...details.faqs,
+        ...service.faqs.filter(
+          (sf) =>
+            !details.faqs.some(
+              (df) => df.question.toLowerCase() === sf.question.toLowerCase()
+            )
+        ),
+      ]
+    : service.faqs;
 
   return (
     <>
@@ -51,7 +65,7 @@ export default async function ServiceLocationPage({
           path: `/services/${service.slug}/${loc.slug}`,
         })}
       />
-      {service.faqs.length > 0 && <JsonLd data={faqSchema(service.faqs)} />}
+      {combinedFaqs.length > 0 && <JsonLd data={faqSchema(combinedFaqs)} />}
 
       <div className="bg-ink text-chalk">
         <section className="mx-auto max-w-[1440px] px-6 pt-32 pb-20 md:px-10 md:pt-40">
@@ -99,13 +113,13 @@ export default async function ServiceLocationPage({
           </div>
         </section>
 
-        {service.faqs.length > 0 && (
+        {combinedFaqs.length > 0 && (
           <section className="mx-auto max-w-[1440px] px-6 pb-20 md:px-10">
             <h2 className="font-mono text-mono-label uppercase tracking-widest text-muted">
               Questions
             </h2>
             <div className="mt-6 divide-y divide-chalk/20 border-t border-b border-chalk/20">
-              {service.faqs.map((faq) => (
+              {combinedFaqs.map((faq) => (
                 <details key={faq.question} className="group py-5">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg">
                     {faq.question}
