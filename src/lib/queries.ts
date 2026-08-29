@@ -1,4 +1,13 @@
 import { query, queryOne, parseJson } from "@/lib/db";
+import {
+  DB_SERVICES,
+  DB_SETTINGS,
+  DB_PRODUCTS,
+  DB_POSTS,
+  DB_CASE_STUDIES,
+  DB_TESTIMONIALS,
+  DB_LEGAL_PAGES,
+} from "@/data/dbSeedData";
 import type {
   Service,
   Post,
@@ -12,72 +21,11 @@ import type {
   CertificateDocument,
 } from "@/types";
 
-const DEFAULT_SERVICES: Service[] = [
-  {
-    id: "srv_seo",
-    slug: "seo",
-    index: "01",
-    title: "Technical SEO & Search Dominance",
-    promise: "Engineer top rankings on high-intent commercial keywords.",
-    description: "Full-funnel organic search architecture: semantic entity graphs, programmatic SEO, Core Web Vitals optimization, and high-authority digital PR.",
-    bullets: ["Semantic entity clustering", "Core Web Vitals 100/100 scores", "Automated log file analysis", "Editorial digital PR & backlink acquisition"],
-    faqs: [
-      { question: "How quickly do SEO results show?", answer: "Technical fixes show indexing improvements within 2–4 weeks; competitive rankings typically compound over 90–120 days." }
-    ],
-    metaTitle: "Technical SEO Agency Delhi | GGM Technologies",
-    metaDescription: "Scale organic search traffic with numbers-backed Technical SEO and white-hat link acquisition.",
-    noIndex: false,
-  },
-  {
-    id: "srv_ppc",
-    slug: "ppc",
-    index: "02",
-    title: "PPC & Performance Media Buying",
-    promise: "Maximize ROAS across Google Ads, Meta, and YouTube.",
-    description: "Algorithmic bidding architectures, server-side Conversions API (CAPI), and rapid creative testing engines that scale revenue predictably.",
-    bullets: ["Google Ads Smart Bidding automation", "Meta Advantage+ funnel design", "Server-side CAPI tracking", "Custom landing page CRO"],
-    faqs: [
-      { question: "Do you charge a percentage of ad spend?", answer: "We offer transparent flat management retainers with zero hidden markups." }
-    ],
-    metaTitle: "PPC & Google Ads Agency Delhi | GGM Technologies",
-    metaDescription: "Scale revenue predictably with algorithmic PPC and performance media buying.",
-    noIndex: false,
-  },
-  {
-    id: "srv_webdev",
-    slug: "web-development",
-    index: "03",
-    title: "High-Performance Web Engineering",
-    promise: "Sub-second Next.js web applications engineered for conversions.",
-    description: "Custom web development using Next.js, React, Tailwind, and Node.js. Built for lightning-fast speeds, SEO indexability, and high conversion rates.",
-    bullets: ["Next.js App Router architectures", "Sub-second Core Web Vitals", "Headless CMS integrations", "Custom conversion funnel optimization"],
-    faqs: [
-      { question: "Do you build custom websites?", answer: "Yes, 100% custom code in Next.js and TypeScript for maximum speed and security." }
-    ],
-    metaTitle: "Web Development Agency Delhi | GGM Technologies",
-    metaDescription: "High-performance Next.js and Full-Stack web engineering engineered for revenue.",
-    noIndex: false,
-  },
-  {
-    id: "srv_leadgen",
-    slug: "lead-generation",
-    index: "04",
-    title: "B2B & High-Ticket Lead Generation",
-    promise: "Fill your sales pipeline with verified, high-intent prospects.",
-    description: "Multi-channel lead generation pipelines combining targeted LinkedIn outreach, search intent ads, and automated CRM qualification.",
-    bullets: ["Multi-channel qualification funnels", "CRM & WhatsApp Business automation", "Direct calendar booking workflows", "Verified B2B prospect targeting"],
-    faqs: [
-      { question: "How do you qualify leads?", answer: "We implement dynamic multi-step form verification and instant CRM scoring." }
-    ],
-    metaTitle: "Lead Generation Agency Delhi | GGM Technologies",
-    metaDescription: "Scale B2B sales pipelines with verified lead generation funnels.",
-    noIndex: false,
-  },
-];
+export const DEFAULT_SERVICES = DB_SERVICES;
 
 export async function getServices(): Promise<Service[]> {
   const services = await query<any>("SELECT * FROM `Service` ORDER BY `index` ASC");
-  if (!services || services.length === 0) return DEFAULT_SERVICES;
+  if (!services || services.length === 0) return DB_SERVICES;
 
   const faqs = await query<any>("SELECT * FROM `ServiceFaq` ORDER BY `order` ASC");
   const faqsByServiceId = new Map<string, any[]>();
@@ -111,7 +59,14 @@ export async function getServices(): Promise<Service[]> {
 export async function getServiceBySlug(slug: string): Promise<Service | null> {
   const s = await queryOne<any>("SELECT * FROM `Service` WHERE `slug` = ?", [slug]);
   if (!s) {
-    return DEFAULT_SERVICES.find((srv) => srv.slug === slug) || null;
+    return (
+      DB_SERVICES.find(
+        (srv) =>
+          srv.slug === slug ||
+          (slug === "website-development" && srv.slug === "web-development") ||
+          (slug === "web-development" && srv.slug === "website-development")
+      ) || null
+    );
   }
   const faqs = await query<any>("SELECT * FROM `ServiceFaq` WHERE `serviceId` = ? ORDER BY `order` ASC", [s.id]);
   return {
@@ -207,32 +162,7 @@ export async function getPublishedServiceLocations() {
 export async function getPublishedPosts(): Promise<Post[]> {
   const posts = await query<any>("SELECT * FROM `BlogPost` WHERE `status` = 'published' ORDER BY `date` DESC");
   if (!posts || posts.length === 0) {
-    return [
-      {
-        id: "post_1",
-        slug: "how-to-scale-google-ads-roas-2026",
-        title: "How to Scale Google Ads ROAS in 2026 Without Bleeding Budget",
-        excerpt: "A deep dive into Smart Bidding algorithms, server-side CAPI tracking, and first-party data architecture.",
-        date: new Date(),
-        category: "PPC Strategy",
-        status: "published",
-        blocks: [],
-        faqs: [],
-        noIndex: false,
-      },
-      {
-        id: "post_2",
-        slug: "programmatic-seo-delhi-business-guide",
-        title: "Programmatic SEO: The Secret to Dominating Local & Regional Search",
-        excerpt: "How to generate hundreds of high-intent location-specific landing pages that rank on page 1 of Google.",
-        date: new Date(),
-        category: "SEO Strategy",
-        status: "published",
-        blocks: [],
-        faqs: [],
-        noIndex: false,
-      },
-    ];
+    return DB_POSTS;
   }
   return posts.map((p) => ({
     id: p.id,
@@ -255,8 +185,7 @@ export async function getPublishedPosts(): Promise<Post[]> {
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   const post = await queryOne<any>("SELECT * FROM `BlogPost` WHERE `slug` = ? AND `status` = 'published'", [slug]);
   if (!post) {
-    const defaultPost = (await getPublishedPosts()).find((p) => p.slug === slug);
-    return defaultPost || null;
+    return DB_POSTS.find((p) => p.slug === slug) || null;
   }
 
   const blocks = await query<any>("SELECT * FROM `BlogBlock` WHERE `postId` = ? ORDER BY `order` ASC", [post.id]);
@@ -290,38 +219,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 export async function getWork(): Promise<CaseStudy[]> {
   const work = await query<any>("SELECT * FROM `CaseStudy` ORDER BY `order` ASC");
   if (!work || work.length === 0) {
-    return [
-      {
-        id: "cs_1",
-        slug: "luxury-interiors-lead-engine",
-        client: "Aura Studio Living",
-        category: "Lead Generation",
-        summary: "Generated 340+ high-ticket villa interior inquiries with sub-₹450 CPL using multi-step qualification funnels.",
-        resultLabel: "+340% Pipeline Growth",
-        variant: "interiors",
-        noIndex: false,
-      },
-      {
-        id: "cs_2",
-        slug: "national-fitness-brand-seo",
-        client: "Apex Nutrition & Gyms",
-        category: "Technical SEO",
-        summary: "Scaled organic search clicks from 15k to 180k/month across 42 commercial transactional keywords.",
-        resultLabel: "12x Organic Clicks",
-        variant: "fitness",
-        noIndex: false,
-      },
-      {
-        id: "cs_3",
-        slug: "d2c-apparel-performance-scale",
-        client: "VogueThreads Apparel",
-        category: "PPC & Performance",
-        summary: "Scaled monthly ad spend to ₹18L while maintaining 4.4x blended ROAS across Google Ads and Meta.",
-        resultLabel: "4.4x Blended ROAS",
-        variant: "ecommerce",
-        noIndex: false,
-      },
-    ];
+    return DB_CASE_STUDIES;
   }
   return work.map((w) => ({
     id: w.id,
@@ -341,7 +239,8 @@ export async function getWork(): Promise<CaseStudy[]> {
 
 export async function getProducts(): Promise<Product[]> {
   const products = await query<any>("SELECT * FROM `Product` ORDER BY `name` ASC");
-  return (products || []).map((p) => ({
+  if (!products || products.length === 0) return DB_PRODUCTS;
+  return products.map((p) => ({
     id: p.id,
     slug: p.slug,
     name: p.name,
@@ -362,7 +261,9 @@ export async function getProducts(): Promise<Product[]> {
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const p = await queryOne<any>("SELECT * FROM `Product` WHERE `slug` = ?", [slug]);
-  if (!p) return null;
+  if (!p) {
+    return DB_PRODUCTS.find((pr) => pr.slug === slug) || null;
+  }
 
   const specs = await query<any>("SELECT * FROM `ProductSpec` WHERE `productId` = ? ORDER BY `order` ASC", [p.id]);
 
@@ -388,22 +289,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 export async function getTestimonials(): Promise<Testimonial[]> {
   const testimonials = await query<any>("SELECT * FROM `Testimonial` WHERE `published` = 1 ORDER BY `order` ASC");
   if (!testimonials || testimonials.length === 0) {
-    return [
-      {
-        id: "t_1",
-        name: "Rohit Malhotra",
-        role: "Founder, Aura Studio Living",
-        quote: "GGM Technologies transformed our digital acquisition. We went from struggling for qualified leads to closing high-ticket interior projects every week.",
-        published: true,
-      },
-      {
-        id: "t_2",
-        name: "Simran Kapoor",
-        role: "Marketing Head, Apex Nutrition",
-        quote: "Their algorithmic approach to SEO and media buying is unmatched in Delhi. Transparent, accountable, and numbers-backed.",
-        published: true,
-      },
-    ];
+    return DB_TESTIMONIALS;
   }
   return testimonials.map((t) => ({
     id: t.id,
@@ -417,52 +303,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
 export async function getSettings(): Promise<SiteSettingsModel> {
   const settings = await queryOne<any>("SELECT * FROM `SiteSettings` LIMIT 1");
   if (!settings) {
-    return {
-      id: "settings_1",
-      name: "GGM Technologies",
-      tagline: "Rank higher. Spend smarter. Grow faster.",
-      eyebrow: "NEW DELHI · DIGITAL GROWTH PARTNER",
-      phone: "+91 98765 43210",
-      phoneHref: "tel:+919876543210",
-      email: "contact@ggmtechnologies.com",
-      addressLine1: "Plot 42, Okhla Industrial Area, Phase-III",
-      addressLine2: "South Delhi",
-      addressLine3: "New Delhi, Delhi 110020",
-      gst: "07AABCU9603R1ZM",
-      businessHours: "Mon–Sat, 09:30 AM – 06:30 PM IST",
-      whatsapp: "+919876543210",
-      facebook: "https://facebook.com/ggmtechnologies",
-      twitter: "https://x.com/ggmtechnologies",
-      instagram: "https://instagram.com/ggmtechnologies",
-      youtube: "https://youtube.com/@ggmtechnologies",
-      linkedin: "https://linkedin.com/company/ggmtechnologies",
-      msme: "UDYAM-DL-08-0098741",
-      indiamartSeal: "Verified Trust Seal Member",
-      justdialSeal: "Justdial Verified Enterprise",
-      googleBusinessUrl: "https://maps.google.com/?cid=ggmtechnologies",
-      aboutEyebrow: "WHO WE ARE",
-      aboutTitle: "We engineer digital dominance with numbers and code.",
-      aboutIntro: "GGM Technologies is a New Delhi digital growth partner running SEO, PPC, web development, and lead generation on accountable numbers.",
-      mission: "Transform digital marketing from speculative expense into a predictable, mathematically attributable revenue engine.",
-      vision: "To be India's premier digital performance agency trusted by high-growth brands globally.",
-      ceoName: "Chirag Kumar",
-      ceoTitle: "Founder & Chief Executive Officer",
-      ceoBio: "Driven by an uncompromising commitment to transparent, revenue-backed digital growth, Chirag Kumar founded GGM Technologies to bridge the gap between creative marketing strategy and hardcore engineering precision.",
-      companyStory: "Founded in New Delhi, GGM Technologies emerged from a single realization: vanity metrics do not pay salaries. We have engineered full-funnel digital infrastructure for over 250+ brands globally.",
-      qualityCompliance: "Quality and client accountability form the bedrock of every engagement at GGM Technologies. 100% adherence to Google Search Essentials and ISO 27001 data protection.",
-      clients: ["Shopify Plus", "Razorpay", "Zomato Partner", "Tata 1mg", "Lenskart Ecosystem", "HealthKart"],
-      whyChooseUs: [
-        { title: "Revenue Attributable", description: "Every rupee spent connects directly to qualified pipeline value and ROI." },
-        { title: "Hardcore Engineering", description: "Sub-second Next.js web applications built with 100/100 Core Web Vitals." },
-        { title: "100% Transparency", description: "Zero media markups, full client account ownership, and real-time dashboards." },
-      ],
-      metricItems: [
-        { value: 250, suffix: "+", label: "Brands Scaled" },
-        { value: 4.8, suffix: "x", label: "Average ROAS" },
-        { value: 99.4, suffix: "%", label: "Client Retention" },
-        { value: 12, suffix: "M+", label: "Organic Clicks Generated" },
-      ],
-    };
+    return DB_SETTINGS;
   }
 
   const whyChooseUs = await query<any>("SELECT * FROM `WhyChooseUs` WHERE `settingsId` = ? ORDER BY `order` ASC", [settings.id]);
@@ -509,6 +350,7 @@ export async function getSettings(): Promise<SiteSettingsModel> {
 
 export async function getLegalPages(): Promise<LegalPage[]> {
   const pages = await query<any>("SELECT * FROM `LegalPage` ORDER BY `title` ASC");
+  if (!pages || pages.length === 0) return DB_LEGAL_PAGES;
   return pages.map((p) => ({
     id: p.id,
     slug: p.slug,
@@ -574,6 +416,8 @@ const STATIC_LEGAL_FALLBACKS: Record<string, { title: string; subtitle: string; 
 export async function getLegalPageBySlug(slug: string): Promise<LegalPage | null> {
   const page = await queryOne<any>("SELECT * FROM `LegalPage` WHERE `slug` = ? OR `id` = ?", [slug, slug]);
   if (!page) {
+    const fromSeed = DB_LEGAL_PAGES.find((lp) => lp.slug === slug || lp.id === slug);
+    if (fromSeed) return fromSeed;
     const fb = STATIC_LEGAL_FALLBACKS[slug];
     if (!fb) return null;
     return {
