@@ -6,14 +6,14 @@ export const DB_SERVICES: Service[] = [
   {
     "id": "srv_1002",
     "slug": "website-development",
-    "index": "1",
+    "index": "01",
     "title": "Website Development",
-    "promise": "Custom builds on modern stacks",
-    "description": "Modern, high-performance web applications and bespoke digital platforms engineered for conversion.",
+    "promise": "Sub-second load times. Zero layout shift. Built to rank.",
+    "description": "Custom web development built on Next.js, React, Node.js, and modern TypeScript — responsive, accessible, secure, and engineered to turn visitors into paying clients.",
     "bullets": [
-      "Custom builds on modern stacks",
-      "Core Web Vitals performance",
-      "CMS handoff & training"
+      "Custom Next.js & React architecture",
+      "Sub-second Core Web Vitals performance",
+      "Mobile-first responsive design & conversion funnels"
     ],
     "faqs": [
       {
@@ -38,14 +38,14 @@ export const DB_SERVICES: Service[] = [
   {
     "id": "srv_1000",
     "slug": "seo",
-    "index": "2",
+    "index": "02",
     "title": "SEO",
-    "promise": "Rankings that convert to revenue",
-    "description": "Search engine optimization engineered to dominate high-intent keywords and build sustainable organic pipeline.",
+    "promise": "We get you found before your competitors are.",
+    "description": "Search engine optimization built on technical audits, keyword-mapped content, and authoritative editorial backlinks that actually move rankings — not just vanity traffic.",
     "bullets": [
-      "Technical audit & fixes",
-      "On-page & content architecture",
-      "Authoritative link acquisition"
+      "Technical audit & Core Web Vitals fixes",
+      "Keyword & topical authority content strategy",
+      "High DA white-hat editorial link building"
     ],
     "faqs": [
       {
@@ -70,14 +70,14 @@ export const DB_SERVICES: Service[] = [
   {
     "id": "srv_1001",
     "slug": "ppc",
-    "index": "3",
-    "title": "PPC & Google Ads",
-    "promise": "Relentless ROAS focus",
-    "description": "Performance advertising across Google Search, Performance Max, Display, and paid social with relentless ROAS focus.",
+    "index": "03",
+    "title": "Pay-Per-Click Advertising (PPC)",
+    "promise": "Every rupee of ad spend earns its place.",
+    "description": "Strategic Pay-Per-Click (PPC) campaigns focused on lowest cost-per-acquisition (CPA) and maximum ROAS across Google Search, Display, Remarketing, and Meta Ads.",
     "bullets": [
-      "Full-funnel campaign buildout",
-      "Daily bid & query sculpting",
-      "Custom attribution & reporting"
+      "Full-funnel campaign architecture & smart bidding",
+      "Negative keyword sculpting & budget optimization",
+      "Dedicated conversion-rate-optimized landing pages"
     ],
     "faqs": [
       {
@@ -100,16 +100,92 @@ export const DB_SERVICES: Service[] = [
     "noIndex": false
   },
   {
+    "id": "srv_1788107422894_an2d",
+    "slug": "google-adsense",
+    "index": "04",
+    "title": "Google AdSense Service",
+    "promise": "Turn website traffic into recurring ad revenue.",
+    "description": "End-to-end Google AdSense monetization, 100% compliant policy approval, high-yield ad placement heatmapping, programmatic header bidding, and RPM maximization.",
+    "bullets": [
+      "Fast 100% compliant Google AdSense approval",
+      "Strategic ad layout heatmapping for maximum CTR",
+      "RPM & CPM yield optimization with zero invalid traffic risk"
+    ],
+    "faqs": [
+      {
+        "question": "How do you ensure 100% compliant Google AdSense approval?",
+        "answer": "Google AdSense rejects many applications due to 'Low Value Content', poor site navigation, or missing legal pages. We conduct a complete compliance audit of your website: restructuring content architecture, fixing navigation menus, verifying privacy and disclaimer pages, removing thin content, and optimizing page load speeds so your domain meets Google's strict publisher program policies on first submission."
+      },
+      {
+        "question": "How do you increase AdSense RPM and CPM earnings without annoying visitors?",
+        "answer": "We use strategic ad placement heatmapping and lazy-loading technology. Instead of cluttering the page with intrusive popups, we place high-performing responsive ad units (in-article native ads, sticky anchor units, and high-CTR sidebar placements) that load only as visitors scroll. This maximizes ad viewability scores (over 70%) which prompts Google AdSense to bid significantly higher CPMs."
+      },
+      {
+        "question": "What is invalid traffic protection and how do you prevent AdSense account bans?",
+        "answer": "AdSense accounts frequently face ad-serving limits or bans due to click-bombing, bot traffic, or aggressive ad placements. We configure advanced Cloudflare Web Application Firewalls (WAF), rate-limiting rules, and ClickJacking protection to block malicious scrapers and click bots before they can interact with your ads, keeping your AdSense account in pristine standing."
+      },
+      {
+        "question": "Can you help integrate Google Ad Manager (GAM) and Header Bidding?",
+        "answer": "Yes. For publishers with over 50,000 monthly pageviews, relying solely on AdSense leaves money on the table. We implement Google Ad Manager (GAM) with Prebid.js header bidding, allowing premium global ad networks (AppNexus, OpenX, Amazon Publisher Services) to compete simultaneously with AdSense, typically driving a 25% to 50% increase in net ad yield."
+      }
+    ],
+    "metaTitle": null,
+    "metaDescription": null,
+    "ogImage": "/images/services/google-adsense.jpg",
+    "canonicalOverride": null,
+    "noIndex": false
+  },
+  {
+    "id": "srv_1788107422901_l2jp",
+    "slug": "mobile-app-development",
+    "index": "05",
+    "title": "Mobile Application Development",
+    "promise": "Fluid 120Hz native & cross-platform apps built to scale.",
+    "description": "High-performance iOS, Android, and cross-platform (Flutter & React Native) mobile applications with intuitive UI/UX, offline sync, robust APIs, and Play Store / App Store launch.",
+    "bullets": [
+      "Native iOS (Swift) & Android (Kotlin) development",
+      "Cross-platform Flutter & React Native mobile engineering",
+      "Secure REST/GraphQL backend APIs & App Store deployment"
+    ],
+    "faqs": [
+      {
+        "question": "Should we build native iOS/Android or a cross-platform Flutter/React Native app?",
+        "answer": "For 90% of businesses, cross-platform development (using Flutter or React Native) is the optimal choice. It reduces engineering cost and development time by nearly 40% by maintaining a single codebase that runs with native 120Hz fluid performance on both iOS and Android. Native Swift/Kotlin is recommended for apps requiring intensive 3D graphics, low-level Bluetooth hardware integrations, or specialized OS APIs."
+      },
+      {
+        "question": "Do you handle publishing to Google Play Store and Apple App Store?",
+        "answer": "Yes, 100%. We manage the entire store deployment process, including Apple Developer Program and Google Play Console setup, App Store Optimization (ASO), metadata & screenshot preparation, privacy policy disclosures, and resolving any compliance review feedback until your app is live."
+      },
+      {
+        "question": "Who owns the mobile application source code and intellectual property?",
+        "answer": "You do. Upon project completion and final handover, 100% of the proprietary source code, Git repositories, API documentation, design assets, and cloud deployment credentials are transferred directly to your organization with zero vendor lock-in."
+      },
+      {
+        "question": "How do you handle backend databases, APIs, and cloud infrastructure?",
+        "answer": "We engineer scalable backend microservices using Node.js, Next.js, Python, or Go, coupled with PostgreSQL, MongoDB, or Firebase. We build secure RESTful and GraphQL APIs hosted on AWS, Google Cloud, or DigitalOcean with automated auto-scaling and Redis caching."
+      },
+      {
+        "question": "Do you offer post-launch maintenance, OS updates, and feature additions?",
+        "answer": "Yes. Mobile operating systems (iOS and Android) release major updates annually. We provide comprehensive monthly SLA maintenance retainers covering bug fixes, OS compatibility patches, cloud server monitoring, and ongoing feature rollouts."
+      }
+    ],
+    "metaTitle": null,
+    "metaDescription": null,
+    "ogImage": "/images/services/mobile-app-development.jpg",
+    "canonicalOverride": null,
+    "noIndex": false
+  },
+  {
     "id": "srv_1003",
     "slug": "lead-generation",
-    "index": "4",
+    "index": "06",
     "title": "Lead Generation",
-    "promise": "Qualified pipeline, predictable revenue",
-    "description": "B2B and high-ticket pipeline generation using multi-channel prospecting, landing page CRO, and CRM sync.",
+    "promise": "Qualified pipeline, not just traffic spikes.",
+    "description": "High-intent multi-channel lead funnels combining targeted search capture, conversational WhatsApp bots, and CRM routing that convert cold visitors into sales-ready prospects.",
     "bullets": [
-      "Ideal Customer Profile mapping",
-      "High-converting offer & landing pages",
-      "Automated CRM lead routing"
+      "Multi-channel intent-capture landing funnels",
+      "Automated WhatsApp & CRM lead distribution",
+      "Transparent cost-per-qualified-lead reporting"
     ],
     "faqs": [
       {
@@ -134,14 +210,14 @@ export const DB_SERVICES: Service[] = [
   {
     "id": "srv_1004",
     "slug": "social-media-marketing",
-    "index": "5",
+    "index": "07",
     "title": "Social Media Marketing",
-    "promise": "Audience growth that moves the needle",
-    "description": "Organic community growth and paid social amplification across LinkedIn, Meta, and X that builds brand equity.",
+    "promise": "Consistent brand presence that drives real commercial recall.",
+    "description": "Strategic social media management across Instagram, LinkedIn, YouTube, and Facebook — bespoke creative direction, organic community growth, and viral content production.",
     "bullets": [
-      "Editorial calendar & asset creation",
-      "Community management & outreach",
-      "Performance creative testing"
+      "Editorial content calendar & creative design",
+      "Short-form video production (Reels, Shorts)",
+      "Community management & follower-to-lead nurturing"
     ],
     "faqs": [
       {
@@ -166,14 +242,14 @@ export const DB_SERVICES: Service[] = [
   {
     "id": "srv_1005",
     "slug": "shopify-development",
-    "index": "6",
+    "index": "08",
     "title": "Shopify Development",
-    "promise": "High-velocity D2C storefronts",
-    "description": "High-conversion Shopify & Shopify Plus storefronts engineered for fast checkout, seamless apps, and maximum AOV.",
+    "promise": "High-converting storefronts built for scale.",
+    "description": "Custom Shopify Liquid themes, headless Hydrogen stores, custom app integrations, checkout extensibility, and conversion rate optimization for ambitious D2C brands.",
     "bullets": [
-      "Custom Liquid & OS 2.0 themes",
-      "Checkout Extensibility & CRO",
-      "Seamless ERP, CRM & app integration"
+      "Custom Shopify Liquid theme engineering",
+      "App integration, ERP & payment gateway setup",
+      "Conversion rate & mobile checkout optimization"
     ],
     "faqs": [
       {
@@ -198,14 +274,14 @@ export const DB_SERVICES: Service[] = [
   {
     "id": "srv_1006",
     "slug": "wordpress-development",
-    "index": "7",
+    "index": "09",
     "title": "WordPress Development",
-    "promise": "Enterprise CMS & WooCommerce engines",
-    "description": "Enterprise WordPress & WooCommerce platforms engineered with bespoke PHP, Gutenberg blocks, and sub-second load times.",
+    "promise": "Fast, secure, custom Gutenberg & WooCommerce sites.",
+    "description": "Enterprise WordPress and WooCommerce platforms built on lightweight custom code — zero bloated page-builder baggage, sub-second load times, and hardened security.",
     "bullets": [
-      "Custom PHP & Gutenberg architecture",
-      "WooCommerce high-volume stores",
-      "Hardened security & Redis caching"
+      "Custom PHP themes & native Gutenberg blocks",
+      "WooCommerce high-volume store development",
+      "Enterprise security hardening & sub-second speed optimization"
     ],
     "faqs": [],
     "metaTitle": "WordPress & WooCommerce Development Company | GGM Technologies",

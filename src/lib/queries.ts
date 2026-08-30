@@ -64,6 +64,9 @@ export async function getServiceBySlug(slug: string): Promise<Service | null> {
   if (slug === "web-development") targetSlug = "website-development";
   if (slug === "shopify" || slug === "shopify-wordpress") targetSlug = "shopify-development";
   if (slug === "wordpress" || slug === "wp") targetSlug = "wordpress-development";
+  if (slug === "mobile-app" || slug === "mobile-application-development" || slug === "app-development") targetSlug = "mobile-app-development";
+  if (slug === "adsense" || slug === "google-ads") targetSlug = "google-adsense";
+  if (slug === "pay-per-click" || slug === "pay-per-click-advertising") targetSlug = "ppc";
 
   let s = await queryOne<any>("SELECT * FROM `Service` WHERE `slug` = ?", [targetSlug]);
   if (!s && targetSlug !== slug) {
