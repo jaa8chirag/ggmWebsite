@@ -21,18 +21,28 @@ export default function SmoothScroll({
     if (prefersReducedMotion) return;
 
     const lenis = new Lenis({
-      lerp: 0.1,
-      wheelMultiplier: 1,
+      duration: 0.85,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Snappy exponential ease (zero lag/drag)
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.5,
+      infinite: false,
+      syncTouch: false, // Keep native 120Hz momentum on touch devices
     });
 
     lenis.on("scroll", ScrollTrigger.update);
 
-    const tick = (time: number) => lenis.raf(time * 1000);
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
+    const updateLenis = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+
+    gsap.ticker.add(updateLenis);
+    gsap.ticker.lagSmoothing(500, 33); // Restores silky GSAP delta smoothing
 
     return () => {
-      gsap.ticker.remove(tick);
+      gsap.ticker.remove(updateLenis);
       lenis.destroy();
     };
   }, []);

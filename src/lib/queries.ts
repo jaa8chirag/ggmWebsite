@@ -19,6 +19,7 @@ import type {
   BlogBlockModel,
   LegalPage,
   CertificateDocument,
+  QuoteRequest,
 } from "@/types";
 
 export const DEFAULT_SERVICES = DB_SERVICES;
@@ -57,14 +58,23 @@ export async function getServices(): Promise<Service[]> {
 }
 
 export async function getServiceBySlug(slug: string): Promise<Service | null> {
-  const s = await queryOne<any>("SELECT * FROM `Service` WHERE `slug` = ?", [slug]);
+  // Support helpful aliases
+  let targetSlug = slug;
+  if (slug === "web-development") targetSlug = "website-development";
+  if (slug === "shopify" || slug === "shopify-wordpress") targetSlug = "shopify-development";
+  if (slug === "wordpress" || slug === "wp") targetSlug = "wordpress-development";
+
+  let s = await queryOne<any>("SELECT * FROM `Service` WHERE `slug` = ?", [targetSlug]);
+  if (!s && targetSlug !== slug) {
+    s = await queryOne<any>("SELECT * FROM `Service` WHERE `slug` = ?", [slug]);
+  }
   if (!s) {
     return (
       DB_SERVICES.find(
         (srv) =>
+          srv.slug === targetSlug ||
           srv.slug === slug ||
-          (slug === "website-development" && srv.slug === "web-development") ||
-          (slug === "web-development" && srv.slug === "website-development")
+          (targetSlug === "website-development" && srv.slug === "web-development")
       ) || null
     );
   }
@@ -491,6 +501,28 @@ export async function getCertificates(): Promise<CertificateDocument[]> {
         issueDate: "2025",
         order: 3,
       },
+      {
+        id: "cert_justdial",
+        title: "Justdial Verified Certificate of Trust & Users' Choice",
+        issuer: "Justdial Limited",
+        certificateNo: "JD-TRUST-DL-110016",
+        pdfUrl: "/uploads/certificates/justdial-verified-certificate.pdf",
+        imageUrl: null,
+        description: "Official Justdial Certified Trusted Member and Users' Choice 2026 accreditation with 5-star rating for verified Hauz Khas (New Delhi) premises, contact numbers, and trade authenticity.",
+        issueDate: "2026",
+        order: 4,
+      },
+      {
+        id: "cert_seo_sow",
+        title: "GGM SEO Scope of Work & Package Specification",
+        issuer: "GGM Technologies Commercial & Operations Wing",
+        certificateNo: "GGM-SOW-SEO-20K",
+        pdfUrl: "/uploads/certificates/ggm-seo-package-scope-of-work.pdf",
+        imageUrl: null,
+        description: "Official Scope of Work, SLA delivery metrics, On-Page & Off-Page optimization protocols, and 50-backlink monthly deliverables charter by GGM Technologies (Green Park / Yusuf Sarai, New Delhi).",
+        issueDate: "2026",
+        order: 5,
+      },
     ];
   }
   return certs.map((c) => ({
@@ -499,11 +531,57 @@ export async function getCertificates(): Promise<CertificateDocument[]> {
     issuer: c.issuer,
     certificateNo: c.certificateNo,
     pdfUrl: c.pdfUrl,
+    imageUrl: c.imageUrl || null,
     description: c.description,
     issueDate: c.issueDate,
     order: Number(c.order || 0),
     createdAt: c.createdAt,
   }));
 }
+
+export async function getQuotes(status?: string): Promise<QuoteRequest[]> {
+  try {
+    let sql = "SELECT * FROM `QuoteRequest`";
+    const params: any[] = [];
+    if (status && status !== "ALL") {
+      sql += " WHERE `status` = ?";
+      params.push(status);
+    }
+    sql += " ORDER BY `createdAt` DESC";
+    const rows = await query<any>(sql, params);
+    return (rows || []).map((r) => ({
+      id: r.id,
+      name: r.name,
+      phone: r.phone,
+      serviceSlug: r.serviceSlug,
+      serviceTitle: r.serviceTitle,
+      pageUrl: r.pageUrl,
+      status: r.status,
+      notes: r.notes || null,
+      createdAt: r.createdAt,
+    }));
+  } catch (err) {
+    console.error("Error fetching quotes:", err);
+    return [];
+  }
+}
+
+export async function getQuoteStats(): Promise<{ total: number; pending: number; contacted: number; converted: number }> {
+  try {
+    const rows = await query<any>("SELECT `status`, COUNT(*) as cnt FROM `QuoteRequest` GROUP BY `status`");
+    const stats = { total: 0, pending: 0, contacted: 0, converted: 0 };
+    for (const r of rows || []) {
+      const count = Number(r.cnt || 0);
+      stats.total += count;
+      if (r.status === "PENDING") stats.pending = count;
+      if (r.status === "CONTACTED") stats.contacted = count;
+      if (r.status === "CONVERTED") stats.converted = count;
+    }
+    return stats;
+  } catch (err) {
+    return { total: 0, pending: 0, contacted: 0, converted: 0 };
+  }
+}
+
 
 

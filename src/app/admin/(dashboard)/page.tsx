@@ -11,6 +11,7 @@ import {
   Database,
   CheckCircle2,
   Globe,
+  Zap,
 } from "lucide-react";
 import { queryOne } from "@/lib/db";
 
@@ -29,6 +30,7 @@ export default async function AdminDashboardPage() {
     workCount,
     productCount,
     testimonialCount,
+    pendingQuoteCount,
   ] = await Promise.all([
     getCount("SELECT COUNT(*) as c FROM `Service`"),
     getCount("SELECT COUNT(*) as c FROM `Location`"),
@@ -38,9 +40,18 @@ export default async function AdminDashboardPage() {
     getCount("SELECT COUNT(*) as c FROM `CaseStudy`"),
     getCount("SELECT COUNT(*) as c FROM `Product`"),
     getCount("SELECT COUNT(*) as c FROM `Testimonial`"),
+    getCount("SELECT COUNT(*) as c FROM `QuoteRequest` WHERE `status` = 'PENDING'"),
   ]);
 
   const cards = [
+    {
+      label: "15-Min Quotes",
+      value: pendingQuoteCount,
+      href: "/admin/quotes",
+      icon: Zap,
+      accent: "from-signal/30 to-signal/10 text-signal border-signal/50",
+      description: "Pending quote callbacks",
+    },
     {
       label: "Services",
       value: serviceCount,

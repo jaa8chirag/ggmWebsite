@@ -12,18 +12,26 @@ export interface ServicePillar {
 }
 
 export interface ServiceStep {
-  step: string;
-  title: string;
-  duration: string;
-  summary: string;
-  details: string[];
+  step?: string;
+  stepNumber?: string;
+  title?: string;
+  name?: string;
+  duration?: string;
+  timeline?: string;
+  summary?: string;
+  description?: string;
+  details?: string[];
+  outputs?: string[];
 }
 
 export interface ComparisonRow {
   feature: string;
-  ggmApproach: string;
-  traditionalAgency: string;
-  freelancer: string;
+  ggmApproach?: string;
+  ggm?: string;
+  traditionalAgency?: string;
+  competitor?: string;
+  freelancer?: string;
+  highlight?: boolean;
 }
 
 export interface IndustryUseCase {
@@ -48,23 +56,24 @@ export interface ServiceDetailContent {
   pillarsTitle: string;
   pillarsSubtitle: string;
   pillars: ServicePillar[];
-  frameworkTitle: string;
-  frameworkSubtitle: string;
-  frameworkSteps: ServiceStep[];
-  techStackTitle: string;
-  techStackSubtitle: string;
-  techStackCategories: {
+  frameworkTitle?: string;
+  frameworkSubtitle?: string;
+  frameworkSteps?: ServiceStep[];
+  techStackTitle?: string;
+  techStackSubtitle?: string;
+  techStackCategories?: {
     category: string;
     tools: string[];
   }[];
-  comparisonTitle: string;
-  comparisonSubtitle: string;
-  comparisonRows: ComparisonRow[];
-  industriesTitle: string;
-  industriesSubtitle: string;
-  industries: IndustryUseCase[];
+  comparisonTitle?: string;
+  comparisonSubtitle?: string;
+  comparisonHeaders?: string[];
+  comparisonRows?: ComparisonRow[];
+  industriesTitle?: string;
+  industriesSubtitle?: string;
+  industries?: IndustryUseCase[];
   faqsTitle: string;
-  faqsSubtitle: string;
+  faqsSubtitle?: string;
   faqs: ServiceFaqItem[];
   metaTitle: string;
   metaDescription: string;
@@ -1512,291 +1521,434 @@ export const SERVICE_DETAILS: Record<string, ServiceDetailContent> = {
     focusKeywords: ["social media marketing agency Delhi", "SMM company Delhi", "Instagram marketing agency", "LinkedIn growth agency", "video content production"],
   },
 
-  "shopify-wordpress": {
-    slug: "shopify-wordpress",
-    badge: "E-COMMERCE & CMS PLATFORM ENGINEERING",
-    heroH1: "Shopify & WordPress Development Company in Delhi",
+  "shopify-development": {
+    slug: "shopify-development",
+    badge: "SHOPIFY & SHOPIFY PLUS ENGINEERING",
+    heroH1: "Shopify Development Company in Delhi | High-Conversion D2C Stores",
     heroSubtitle:
-      "We engineer custom Shopify storefronts and scalable WordPress platforms built to be owned, not rented. Ultra-fast speeds, bespoke Liquid & PHP themes, and seamless third-party app integrations.",
+      "We architect bespoke Shopify storefronts, custom Liquid OS 2.0 themes, and high-velocity Shopify Plus platforms engineered for sub-second speeds, frictionless checkout, and rapid D2C scale.",
     overviewParagraphs: [
-      "Your e-commerce storefront or corporate CMS is the backbone of your digital operation. Too many businesses fall victim to bloated commercial themes, dozens of conflicting plugins, and rigid proprietary platforms that crash during flash sales or trap you in expensive agency maintenance contracts.",
-      "GGM Technologies builds clean, maintainable, and high-converting Shopify and WordPress websites. Based in Delhi, our engineering team crafts custom Shopify Liquid themes, headless Shopify storefronts, and tailored WordPress/WooCommerce platforms with sub-second speeds, frictionless checkout, and complete code handoff.",
+      "In the hyper-competitive world of e-commerce, your storefront is your flagship retail destination. Generic themes downloaded from marketplaces come weighed down with thousands of lines of unused JavaScript, broken app snippets, and rigid templates that cripple mobile loading speeds and cause prospective shoppers to bounce before your products even load.",
+      "GGM Technologies is a premier Shopify development agency based in Delhi. We build bespoke, lightning-fast Shopify and Shopify Plus storefronts tailored specifically to your brand aesthetics and commercial objectives. From custom Liquid theme engineering and Checkout Extensibility to high-volume app and logistics integrations, we engineer e-commerce platforms that convert clicks into profitable revenue.",
     ],
     metrics: [
-      { value: "< 1.5s", label: "Shopify Speed Score Index", subtext: "Optimized Liquid theme loading 3x faster than industry average" },
-      { value: "+32%", label: "Average Checkout Completion Lift", subtext: "Achieved via custom one-page checkout and frictionless UX" },
-      { value: "0", label: "Bloated Page Builder Plugins", subtext: "Engineered on clean native Liquid, Gutenberg, or Tailwind code" },
-      { value: "100%", label: "Zero-Downtime Data Migrations", subtext: "Flawless catalog, customer, and 301 SEO redirect preservation" },
+      { value: "< 1.2s", label: "Shopify Speed Index", subtext: "Native Liquid theme optimized for sub-second mobile page loads" },
+      { value: "+38%", label: "Average Checkout Lift", subtext: "Achieved through one-page checkout, Express UPI, and frictionless UX" },
+      { value: "0", label: "Bloated App Subscriptions", subtext: "Engineered with native Liquid code to save recurring monthly costs" },
+      { value: "100%", label: "Zero-Downtime Migration", subtext: "Flawless catalog, customer, order history, and SEO URL preservation" },
     ],
-    pillarsTitle: "Shopify & WordPress Development Capabilities",
+    pillarsTitle: "Full-Lifecycle Shopify Engineering Capabilities",
     pillarsSubtitle:
-      "Enterprise e-commerce and CMS solutions built for high conversion velocity and effortless maintenance.",
+      "From bespoke theme design to enterprise Shopify Plus infrastructure, our team delivers high-velocity e-commerce solutions.",
     pillars: [
       {
-        title: "Custom Shopify Liquid & Theme Development",
-        tagline: "Bespoke Shopify themes with zero bloat and lightning-fast checkout.",
+        title: "Bespoke Shopify Liquid & OS 2.0 Theme Development",
+        tagline: "Tailor-made themes built with clean code and zero theme bloat.",
         description:
-          "We reject generic multi-purpose Shopify themes packed with unused JavaScript. Our engineers develop custom Shopify themes from scratch using native Liquid, modern CSS, and Alpine.js for instantaneous mobile browsing.",
+          "We engineer custom Shopify themes from the ground up using native Liquid, modular Online Store 2.0 JSON templates, and lightweight Alpine.js. Your marketing team receives drag-and-drop flexibility without sacrificing website performance.",
         deliverables: [
-          "Bespoke Shopify theme engineered to your exact Figma brand designs",
-          "Custom product page layouts with variant selectors, bundles, and sticky add-to-cart",
-          "Mobile-first collection page filtering with AJAX dynamic loading",
-          "Shopify Online Store 2.0 (OS 2.0) modular sections for effortless marketing edits",
-          "High-speed optimization passing Shopify Speed Index benchmarks with 85+ score",
+          "Figma-to-Shopify pixel-perfect custom theme engineering",
+          "Dynamic product pages with custom swatches, size guides, and sticky add-to-cart",
+          "AJAX instant search, drawer cart, and dynamic mobile collection filters",
+          "Reusable OS 2.0 sections allowing your team to build landing pages in minutes",
+          "85+ Mobile Google PageSpeed and Shopify Speed Index optimization",
         ],
       },
       {
-        title: "WordPress & WooCommerce Custom Engineering",
-        tagline: "High-performance content and commerce platforms tailored to your workflow.",
+        title: "Shopify Plus Enterprise Architecture & Custom Checkout",
+        tagline: "Enterprise scaling for high-volume D2C brands handling thousands of orders.",
         description:
-          "We build modern WordPress websites utilizing clean custom PHP, native Gutenberg block development, and headless architectures. No sluggish page builders, no security vulnerabilities, and no plugin conflicts.",
+          "For high-growth brands on Shopify Plus, we unlock advanced features including custom Checkout Extensibility, Shopify Functions, B2B wholesale portals, multi-store architecture, and custom automated scripting.",
         deliverables: [
-          "Custom Gutenberg block creation tailored to your company design system",
-          "Custom WooCommerce store architecture for physical and digital goods",
-          "Advanced Custom Fields (ACF Pro) modeling for structured content management",
-          "Object caching (Redis) and database indexing for sub-second query speeds",
-          "Hardened WordPress security protocols blocking brute-force and SQL attacks",
+          "Checkout Extensibility customization with trust badges and progress bars",
+          "Custom Shopify Functions for tiered volume discounts and bundle logic",
+          "Shopify B2B portal setup with custom wholesale price lists and payment terms",
+          "Multi-currency, international localization, and automated tax calculations",
+          "Shopify Flow automation for fraud filtering, inventory triggers, and VIP tagging",
         ],
       },
       {
-        title: "Frictionless Checkout & Conversion Rate Optimization (CRO)",
-        tagline: "Removing friction where it matters most: the final purchase step.",
+        title: "Frictionless Indian Payment Gateways & Express Checkout",
+        tagline: "Eliminate cart abandonment with instant UPI and one-click buying.",
         description:
-          "Cart abandonment silently destroys advertising profitability. We engineer one-page checkout flows, express payment gateways (UPI, Apple Pay, Google Pay), upsell/cross-sell triggers, and automated abandoned cart recovery workflows.",
+          "Cart abandonment silently eats away at your advertising ROAS. We integrate ultra-fast checkout solutions and verified Indian payment processors to streamline every purchase into a 2-tap transaction.",
         deliverables: [
-          "Shopify Plus checkout customization with trust badges and progress meters",
-          "Express UPI & one-click checkout integration (Razorpay Magic, GoKwik, Stripe)",
-          "In-cart dynamic upsells, progress-to-free-shipping bars, and warranty add-ons",
-          "Multi-currency, international tax, and automated duties calculation",
-          "Automated WhatsApp and SMS abandoned cart recovery sequences",
+          "Direct integration of Razorpay, Cashfree, PayU, and PhonePe gateways",
+          "Express 1-click checkout options (GoKwik, Razorpay Magic, Fastrr)",
+          "COD fraud protection and address verification mechanisms",
+          "In-cart dynamic free-shipping meters and cross-sell recommendations",
+          "Automated WhatsApp & SMS abandoned checkout recovery sequences",
         ],
       },
       {
-        title: "Zero-Data-Loss Platform Migration & SEO Preservation",
-        tagline: "Moving platforms without losing historical orders, customers, or Google rankings.",
+        title: "Logistics, ERP & Marketing Stack Integrations",
+        tagline: "Flawless end-to-end synchronization with your warehouse and supply chain.",
         description:
-          "Migrating from Magento, WooCommerce, or custom platforms to Shopify requires extreme care. We handle full database migrations, customer password mapping, order history imports, and comprehensive 301 redirect architectures.",
+          "Your storefront needs to communicate seamlessly with your warehouse, accounting, and marketing tech stack. We integrate shipping aggregators, inventory ERPs, and automated retention engines with rock-solid webhooks.",
         deliverables: [
-          "Automated catalog, variant, inventory, and historical order data migration",
-          "Customer account and historical purchase record synchronization",
-          "Exhaustive 1-to-1 301 URL redirect map preserving all Google SEO rankings",
-          "Parallel staging testing ensuring zero downtime during live cutover",
-          "Post-migration Search Console indexing validation and error resolution",
+          "Automated shipping and tracking sync (Shiprocket, Delhivery, Bluedart, Pickrr)",
+          "ERP and accounting integration (Unicommerce, Vinculum, Tally, Zoho Books)",
+          "Klaviyo, Omnisend & WhatsApp retention marketing flows (Welcome series, Back-in-Stock)",
+          "Review platform integration (Judge.me, Loox, Yotpo) with Google Rich Snippets",
+          "Custom private Shopify apps built using Node.js and Shopify GraphQL APIs",
         ],
       },
       {
-        title: "Third-Party App, ERP & Logistics Integrations",
-        tagline: "Connecting your store to your warehouse, accounting, and marketing stack.",
+        title: "Zero-Downtime Platform Migration to Shopify",
+        tagline: "Migrate from WooCommerce, Magento, or custom stacks without losing SEO.",
         description:
-          "An online store cannot operate in isolation. We connect your store to leading shipping aggregators, enterprise ERPs, inventory management systems, and marketing automation platforms with custom webhook listeners.",
+          "Switching platforms is high-stakes. We perform complete database migrations of products, customers, and order history while executing meticulous 301 redirect mapping so your organic Google search rankings remain intact.",
         deliverables: [
-          "Shipping & logistics integration (Shiprocket, Delhivery, Bluedart, Pickrr)",
-          "ERP and accounting synchronization (Tally, Zoho Books, SAP, Unicommerce)",
-          "Klaviyo & WhatsApp automated marketing flows (welcome series, back-in-stock)",
-          "Review & UGC platform integration (Judge.me, Yotpo, Loox) with Google rich snippets",
-          "Custom private Shopify apps solving unique business operational requirements",
+          "Complete catalog migration including variants, meta fields, and high-res imagery",
+          "Customer account and historical order migration with password reset flows",
+          "Comprehensive 1-to-1 301 URL redirect map preserving all organic Google SEO rankings",
+          "Parallel sandbox environment testing prior to live DNS cutover",
+          "Post-migration Google Search Console indexing and technical health monitoring",
         ],
       },
       {
-        title: "Speed Hardening, Security & Core Web Vitals",
-        tagline: "Guaranteeing high performance under heavy holiday traffic spikes.",
+        title: "Ongoing Shopify Maintenance, CRO & Speed Retainers",
+        tagline: "Dedicated Shopify engineering team keeping your store fast, secure, and profitable.",
         description:
-          "Slow websites bleed conversions. We audit third-party script execution, lazy-load non-critical assets, configure Cloudflare Edge caching, and eliminate CSS/JS render-blocking bottlenecks.",
+          "We offer proactive technical support, app auditing, conversion rate optimization experiments, and flash-sale preparation so your store is always operating at peak efficiency.",
         deliverables: [
-          "App and plugin audit: pruning unused tracker scripts and bloat",
-          "Critical CSS inlining and deferred JavaScript execution",
-          "Cloudflare Enterprise CDN caching with WebP image compression",
-          "Automated daily off-site cloud backups and malware scanning",
-          "Load testing simulating 10,000+ concurrent shoppers during sale events",
+          "Pre-sale load testing ensuring 100% uptime during Diwali/Black Friday flash sales",
+          "Continuous speed audits and removal of orphan scripts left by uninstalled apps",
+          "Monthly A/B conversion testing on product pages and cart flows",
+          "Regular theme updates and compatibility maintenance with Shopify core releases",
+          "Dedicated Slack channel with priority SLA response for critical issues",
         ],
       },
     ],
-    frameworkTitle: "Our 5-Stage Store Engineering Process",
-    frameworkSubtitle:
-      "A structured deployment process delivering an enterprise e-commerce platform in 4 to 8 weeks.",
+    frameworkTitle: "Our 5-Stage Shopify Development Process",
+    frameworkSubtitle: "A proven, transparent engineering roadmap from Figma prototype to profitable live launch.",
     frameworkSteps: [
       {
-        step: "01",
-        title: "Catalog Architecture & UX Scoping",
-        duration: "Week 1",
-        summary: "Mapping product taxonomies, payment requirements, and user conversion paths.",
-        details: [
-          "Product catalog, variant, and collection hierarchy structure planning",
-          "Payment gateway, logistics provider, and tax configuration scoping",
-          "Benchmarking competitor storefronts and checkout UX flows",
-          "Compiling the 301 redirect map for all existing search URLs",
-        ],
+        stepNumber: "01",
+        name: "Discovery & UX Wireframing",
+        timeline: "Week 1",
+        description:
+          "We analyze your brand guidelines, product catalog structure, competitors, and target demographics to produce high-conversion wireframes and interactive Figma prototypes.",
+        outputs: ["Conversion-focused UI/UX design", "Catalog & taxonomy architecture", "Technical specification doc"],
       },
       {
-        step: "02",
-        title: "Bespoke UI/UX Design (Figma)",
-        duration: "Weeks 2–3",
-        summary: "Designing high-converting mobile-first product, collection, and cart layouts.",
-        details: [
-          "Figma design prototypes for homepage, collections, product pages, and cart drawer",
-          "Mobile-first responsive design tailored for thumb-friendly shopping",
-          "Micro-interactions for add-to-cart, quick view, and filter drawers",
-          "Client review and formal design milestone approval",
-        ],
+        stepNumber: "02",
+        name: "Custom Liquid Theme Development",
+        timeline: "Weeks 2–3",
+        description:
+          "Our developers code your bespoke theme using clean Liquid and OS 2.0 modular blocks, ensuring sub-second response times and complete responsive optimization across mobile devices.",
+        outputs: ["Production-ready Liquid theme code", "Custom PDP and collection filters", "Dynamic cart drawer & swatches"],
       },
       {
-        step: "03",
-        title: "Liquid / PHP Theme Development",
-        duration: "Weeks 4–6",
-        summary: "Coding clean, modular themes in native Liquid or Gutenberg code.",
-        details: [
-          "Developing custom OS 2.0 sections and blocks for drag-and-drop customization",
-          "Writing clean Liquid / PHP templates with zero reliance on heavy plugins",
-          "Integrating AJAX cart drawers, sticky add-to-cart, and swatch selectors",
-          "Live private staging store URL provided for client product upload and review",
-        ],
+        stepNumber: "03",
+        name: "Integrations & Logistics Setup",
+        timeline: "Week 4",
+        description:
+          "We configure payment gateways, shipping aggregators (Shiprocket/Delhivery), analytics pixels, WhatsApp notifications, and accounting sync with verified webhooks.",
+        outputs: ["Razorpay/UPI checkout live testing", "Shiprocket auto-sync enabled", "Meta CAPI & GA4 telemetry verified"],
       },
       {
-        step: "04",
-        title: "App Integration & End-to-End Testing",
-        duration: "Week 7",
-        summary: "Connecting shipping, payments, and running rigorous live transaction tests.",
-        details: [
-          "Configuring payment gateways (UPI, Credit Cards, Net Banking, COD)",
-          "Connecting shipping APIs (automated AWB generation and label printing)",
-          "Testing real ₹1 payment transactions, refunds, and order notification emails",
-          "Speed optimization tuning to ensure green Core Web Vitals score",
-        ],
+        stepNumber: "04",
+        name: "Speed, CRO & Rigorous QA Testing",
+        timeline: "Week 5",
+        description:
+          "We test real transactions across iOS, Android, Chrome, and Safari, validate speed benchmarks on Google PageSpeed, and stress-test checkout under simulated traffic spikes.",
+        outputs: ["Cross-browser QA pass report", "Google PageSpeed 85+ verification", "Zero console errors or broken links"],
       },
       {
-        step: "05",
-        title: "Zero-Downtime Launch & Admin Handoff",
-        duration: "Week 8",
-        summary: "Seamless live domain DNS pointing and comprehensive team training.",
-        details: [
-          "Zero-downtime domain pointing and SSL certificate verification",
-          "Executing 301 redirect map and submitting XML sitemaps to Google",
-          "Live test purchase validation under production DNS",
-          "Recorded video walkthrough and live training for your order fulfillment team",
-        ],
+        stepNumber: "05",
+        name: "Live Launch & Operations Handover",
+        timeline: "Week 6",
+        description:
+          "We execute zero-downtime DNS cutover, verify Google Search Console sitemaps, and conduct 1-on-1 video training with your team on product and inventory management.",
+        outputs: ["Zero-downtime DNS switch", "Live transaction confirmation", "Recorded admin video training tutorials"],
       },
     ],
-    techStackTitle: "E-Commerce & CMS Technology Stack",
-    techStackSubtitle:
-      "Enterprise tools we use to engineer, host, and scale modern online stores.",
-    techStackCategories: [
-      {
-        category: "E-Commerce Platforms & Frameworks",
-        tools: ["Shopify & Shopify Plus", "Shopify Liquid", "WordPress", "WooCommerce", "Headless Shopify (Next.js)", "Alpine.js"],
-      },
-      {
-        category: "Payment & Checkout Ecosystem",
-        tools: ["Razorpay", "Stripe", "Cashfree", "GoKwik", "Shopify Payments", "PayPal"],
-      },
-      {
-        category: "Shipping, ERP & Fulfillment",
-        tools: ["Shiprocket", "Delhivery", "Pickrr", "Unicommerce", "Zoho Inventory", "Tally ERP"],
-      },
-      {
-        category: "Marketing Automation & Customer Reviews",
-        tools: ["Klaviyo", "Judge.me", "Yotpo", "Gorgias Support", "WhatsApp Business API"],
-      },
-    ],
-    comparisonTitle: "GGM Technologies vs. Typical E-Commerce Agencies",
-    comparisonSubtitle:
-      "Why leading direct-to-consumer brands trust our custom engineering over generic theme setups.",
+    comparisonTitle: "GGM Custom Shopify Engineering vs. Generic Agency Themes",
+    comparisonSubtitle: "Why bespoke Shopify code drives 3x higher revenue than pre-made commercial templates.",
+    comparisonHeaders: ["Engineering Feature", "Generic Agency / Purchased Theme", "GGM Custom Shopify Build"],
     comparisonRows: [
       {
-        feature: "Theme Foundation",
-        ggmApproach: "100% custom-coded Liquid / Gutenberg theme built for your specific brand.",
-        traditionalAgency: "Installs a pirated or pre-made ThemeForest theme loaded with 40+ demo plugins.",
-        freelancer: "Free default Shopify theme with basic color tweaks.",
+        feature: "Mobile Loading Speed",
+        competitor: "3.5s - 6.0s (Loaded with unused vendor JS & CSS bloat)",
+        ggm: "Sub-1.2s (Lightweight custom Liquid with zero dead code)",
+        highlight: true,
       },
       {
-        feature: "Store Loading Speed",
-        ggmApproach: "Sub-1.5s load time with 80+ mobile speed score on Google PageSpeed.",
-        traditionalAgency: "Sluggish 5–8 second load times causing massive cart drop-offs.",
-        freelancer: "Fails basic Core Web Vitals tests with zero speed optimization.",
+        feature: "App Dependency & Cost",
+        competitor: "Requires 12+ paid apps for basic timers, swatches, and cart drawers",
+        ggm: "Native Liquid code for swatches, bundles, and sticky carts (Saves $300+/mo)",
+        highlight: true,
       },
       {
-        feature: "Third-Party App Philosophy",
-        ggmApproach: "We code custom features natively to avoid paying $500/mo in recurring app fees.",
-        traditionalAgency: "Installs a paid app for every tiny feature, driving up monthly store overhead.",
-        freelancer: "Leaves conflicting plugins installed that break mobile checkout.",
+        feature: "Checkout Flow",
+        competitor: "Standard multi-step checkout with high abandonment rate",
+        ggm: "Frictionless one-page checkout with express 1-click UPI & COD validation",
+        highlight: false,
       },
       {
-        feature: "Post-Launch Independence",
-        ggmApproach: "Complete modular admin panel. Your team updates banners and products easily.",
-        traditionalAgency: "Forces you onto high-cost monthly retainers for minor text changes.",
-        freelancer: "Disappears after launch without providing documentation or training.",
+        feature: "Platform Migration",
+        competitor: "Manual CSV exports leading to broken customer records and lost SEO",
+        ggm: "Automated database migration with 100% 301 redirect Google SEO preservation",
+        highlight: false,
+      },
+      {
+        feature: "Code Handoff & Ownership",
+        competitor: "Locked into proprietary themes or agency hosting retainers",
+        ggm: "100% complete source code ownership with no vendor lock-in",
+        highlight: false,
       },
     ],
-    industriesTitle: "E-Commerce Solutions Across High-Growth Verticals",
-    industriesSubtitle:
-      "Storefront architectures tailored to the unique purchase habits of each category.",
-    industries: [
-      {
-        industry: "D2C Apparel, Luxury Fashion & Footwear",
-        challenge: "Handling complex sizing options, fabric swatches, high returns, and impulse browsing.",
-        solution: "Interactive visual swatch selectors, dynamic size guides, and one-click UPI checkout.",
-        impact: "34% reduction in return rates and a 42% increase in mobile conversion rate.",
-      },
-      {
-        industry: "Health, Wellness & Organic Supplements",
-        challenge: "Educating skeptical consumers on ingredients while driving high repeat subscription orders.",
-        solution: "Ingredient transparency modals, recurring subscription recharge integration, and doctor review badges.",
-        impact: "Grew recurring monthly subscription revenue to 48% of total gross sales.",
-      },
-      {
-        industry: "Luxury Home Decor & Furniture",
-        challenge: "High average order value (₹15,000–₹1,50,000) requiring high customer confidence before buying.",
-        solution: "Room visualizer tool, custom freight shipping calculations, and direct WhatsApp concierge support.",
-        impact: "Scaled average order value (AOV) by 28% and processed ₹2.4Cr in monthly online sales.",
-      },
-      {
-        industry: "Industrial B2B & Wholesale Equipment",
-        challenge: "Managing custom wholesale pricing tiers, bulk quantity discounts, and GST invoicing.",
-        solution: "Shopify B2B wholesale portal with customer-specific pricing, RFQ quote forms, and auto GST invoices.",
-        impact: "Onboarded 220+ verified wholesale distributors ordering directly through the platform.",
-      },
-    ],
-    faqsTitle: "Frequently Asked Questions About Shopify & WordPress",
-    faqsSubtitle: "Honest guidance on platform selection, migration, pricing, and ownership.",
+    faqsTitle: "Frequently Asked Questions About Shopify Development",
     faqs: [
       {
-        question: "Shopify or WordPress / WooCommerce — which platform should we choose?",
+        question: "Why should we build a custom Shopify theme instead of buying a $300 theme from the Shopify Theme Store?",
         answer:
-          "If your primary focus is selling physical or digital products with high order volume, Shopify is almost always the superior choice due to its bulletproof security, 99.99% server uptime, native checkout optimization, and zero hosting maintenance. If your business is primarily content-led, a corporate service firm, or requires bespoke database logic and no transaction fees, WordPress is the ideal platform.",
+          "Commercial themes are built to cater to thousands of different businesses, which means they are overloaded with hundreds of features, scripts, and layouts that your store will never use. This bloat slows down your store significantly, increasing mobile bounce rates and damaging Google rankings. A custom GGM Shopify theme contains only the clean code your brand needs, resulting in sub-1.2 second load times, higher checkout conversion rates, and exact alignment with your brand vision.",
       },
       {
-        question: "Can you migrate our existing store without losing customer data or SEO rankings?",
+        question: "Can you build custom features without requiring expensive monthly app subscriptions?",
         answer:
-          "Yes. Migration is one of our core specialties. We run automated database scripts that transfer your complete product catalog, customer accounts, and historical order history. Crucially, we compile a 1-to-1 301 redirect map for all existing URLs, ensuring your hard-earned Google search rankings and backlinks remain 100% intact.",
-      },
-      {
-        question: "Do we have to pay recurring monthly agency fees to run our store?",
-        answer:
-          "No. We build on standard Shopify and WordPress foundations. Once your store is launched and handed over, you own it completely. You only pay your standard platform/hosting fee (to Shopify or your chosen host). While we offer optional ongoing maintenance packages, you are completely free to manage the store independently.",
-      },
-      {
-        question: "Can you build custom features without installing expensive monthly Shopify apps?",
-        answer:
-          "Yes. Our developers write native Liquid, JavaScript, and custom CSS to build features like sticky add-to-cart buttons, countdown timers, product bundles, custom swatches, and slide-out carts directly into your theme code, saving you hundreds of dollars in monthly app subscriptions.",
+          "Yes. Our engineers write native Liquid, modern JavaScript, and custom CSS to build features like sticky add-to-cart buttons, countdown timers, product bundles, custom color swatches, and slide-out carts directly into your theme codebase, saving your business hundreds of dollars in recurring monthly app fees.",
       },
       {
         question: "Which Indian payment gateways do you integrate?",
         answer:
-          "We integrate and test all leading Indian payment gateways including Razorpay, Cashfree, PayU, and PhonePe, as well as global processors like Stripe and PayPal. We also integrate one-click checkout solutions like GoKwik and Razorpay Magic Checkout to reduce COD fraud.",
+          "We integrate and test all leading Indian payment gateways including Razorpay, Cashfree, PayU, and PhonePe, as well as global processors like Stripe and PayPal. We also configure 1-click express checkout solutions like GoKwik and Razorpay Magic Checkout to reduce COD returns (RTO).",
       },
       {
-        question: "How do you optimize store loading speeds for mobile shoppers in India?",
+        question: "How do you ensure zero loss of Google SEO rankings during platform migration?",
         answer:
-          "We implement four strict speed protocols: (1) eliminating unused app scripts and render-blocking CSS; (2) lazy-loading images and utilizing modern WebP formats; (3) inlining critical CSS; and (4) utilizing Cloudflare edge caching to deliver sub-1.5 second page load speeds across 4G and 5G mobile networks.",
+          "Before taking down your old website, we crawl your entire domain to catalog every indexed URL. We then create a comprehensive 1-to-1 301 redirect map on Shopify, ensuring every historical link seamlessly passes link equity to the corresponding new Shopify page. We also configure canonical tags, microdata schemas, and submit fresh sitemaps to Google Search Console on launch day.",
       },
       {
-        question: "Do you train our team on how to manage products and fulfill orders?",
+        question: "Do you train our team on how to manage products and orders?",
         answer:
-          "Yes. Prior to launch, we conduct a live 1-on-1 video training session with your operations and marketing team. We also provide recorded, step-by-step video tutorials covering how to add products, create discount codes, manage inventory, print shipping labels, and process refunds.",
+          "Yes. Prior to launch, we conduct live 1-on-1 video training sessions with your operations and marketing team. We also provide recorded, step-by-step video tutorials covering how to add products, create discount codes, manage inventory, print shipping labels, and process customer refunds.",
       },
     ],
-    metaTitle: "Shopify & WordPress Development Company in Delhi | GGM Technologies",
+    metaTitle: "Shopify Development Company in Delhi | Shopify Plus Experts | GGM Technologies",
     metaDescription:
-      "Premier Shopify and WordPress development agency in Delhi. Custom Liquid themes, high-speed WooCommerce builds, frictionless checkout, and zero-downtime platform migrations.",
-    focusKeywords: ["Shopify development company Delhi", "WordPress development agency Delhi", "WooCommerce experts Delhi", "Shopify Plus agency India", "custom Shopify theme"],
+      "Premier Shopify and Shopify Plus development agency in Delhi. Custom Liquid themes, sub-second speed optimization, frictionless checkout, and zero-downtime platform migrations.",
+    focusKeywords: ["Shopify development company Delhi", "Shopify Plus agency India", "custom Shopify theme", "Shopify store setup Delhi", "Shopify speed optimization"],
+  },
+
+  "wordpress-development": {
+    slug: "wordpress-development",
+    badge: "ENTERPRISE WORDPRESS & WOOCOMMERCE ARCHITECTURE",
+    heroH1: "WordPress Development Company in Delhi | Custom Themes & Scalable CMS",
+    heroSubtitle:
+      "We engineer modern, secure WordPress websites and high-volume WooCommerce platforms using clean bespoke PHP, native Gutenberg blocks, and headless WP REST APIs. Zero bloat, sub-second speeds, and enterprise security.",
+    overviewParagraphs: [
+      "WordPress powers over 40% of the web, but the majority of WordPress sites suffer from the same agency mistakes: bloated drag-and-drop page builders, dozens of vulnerable plugins, and sluggish shared hosting setups that buckle under traffic surges.",
+      "At GGM Technologies, we engineer enterprise-grade WordPress platforms built for speed, security, and effortless editorial control. Based in Delhi, our software engineers develop custom PHP themes, native Gutenberg custom blocks, high-concurrency WooCommerce stores, and decoupled headless architectures that load in under 1 second and pass all Google Core Web Vitals with flying colors.",
+    ],
+    metrics: [
+      { value: "< 0.9s", label: "Core Web Vitals LCP", subtext: "Sub-second Largest Contentful Paint on mobile networks" },
+      { value: "98/100", label: "Google PageSpeed Score", subtext: "Clean native PHP and minimal JavaScript footprint" },
+      { value: "10k+", label: "Concurrent Visitors Handled", subtext: "Optimized with Redis object caching and Nginx reverse proxy" },
+      { value: "100%", label: "Bank-Grade Security", subtext: "Hardened against brute-force, SQL injection, and XSS attacks" },
+    ],
+    pillarsTitle: "Enterprise WordPress & WooCommerce Capabilities",
+    pillarsSubtitle:
+      "Clean code architecture designed for high scalability, impenetrable security, and intuitive content management.",
+    pillars: [
+      {
+        title: "Bespoke PHP Theme Development (No Page Builders)",
+        tagline: "Tailored WordPress code engineered for extreme speed and longevity.",
+        description:
+          "We strictly avoid sluggish page builders like Elementor or Divi that bloat DOM trees and load megabytes of unused styles. We write clean, modern PHP themes structured around semantic HTML5 and lightweight Tailwind CSS.",
+        deliverables: [
+          "Bespoke WordPress theme tailored to your exact Figma UI/UX designs",
+          "Advanced Custom Fields (ACF Pro) modeling for structured content management",
+          "Custom post types, taxonomies, and relational data architecture",
+          "Micro-animations and dynamic client interactions using vanilla JavaScript",
+          "Zero plugin dependencies for core layout rendering and typography",
+        ],
+      },
+      {
+        title: "Native Gutenberg Custom Block Development",
+        tagline: "Empower your marketing team with a bespoke block design system.",
+        description:
+          "We develop custom React-powered Gutenberg blocks tailored specifically to your design system. Your content editors can build rich, on-brand landing pages effortlessly without any fear of breaking the site layout.",
+        deliverables: [
+          "Custom Gutenberg blocks matching your brand components (heros, carousels, pricing)",
+          "Restricted editing permissions preventing accidental styling inconsistencies",
+          "Dynamic server-side rendered blocks with instant live admin preview",
+          "Global theme style synchronization and typography presets",
+          "Comprehensive editorial guidelines and recorded admin walkthroughs",
+        ],
+      },
+      {
+        title: "High-Volume WooCommerce Storefront Engineering",
+        tagline: "Scalable e-commerce engineered for massive catalogs and rapid checkout.",
+        description:
+          "WooCommerce offers complete data sovereignty and zero transaction fees. We optimize WooCommerce for enterprise scale with database indexing, custom checkout funnels, and optimized cart caching.",
+        deliverables: [
+          "Custom WooCommerce store architecture for physical, digital, or subscription goods",
+          "Database query indexing preventing slowdowns across 50,000+ SKU catalogs",
+          "Express Indian payment gateway integration (Razorpay, Cashfree, UPI, Stripe)",
+          "B2B wholesale pricing tiers, tax exemption rules, and custom invoicing",
+          "Automated stock synchronization with warehouse ERPs and inventory software",
+        ],
+      },
+      {
+        title: "Headless WordPress & Decoupled Next.js Frontends",
+        tagline: "Combine the world's best CMS with the speed of Next.js.",
+        description:
+          "For organizations requiring ultra-fast global performance and maximum security, we decouple WordPress into a headless CMS backend while serving your pages via high-speed Next.js or React frontends.",
+        deliverables: [
+          "WP REST API and WPGraphQL integration for lightning-fast data fetching",
+          "Modern Next.js App Router frontend with Incremental Static Regeneration (ISR)",
+          "Completely severed public frontend preventing direct attacks on WordPress admin",
+          "Sub-500ms global response times powered by Vercel edge networks",
+          "Omni-channel content distribution across web, mobile apps, and digital signage",
+        ],
+      },
+      {
+        title: "Redis Object Caching & Enterprise Speed Optimization",
+        tagline: "Handling thousands of concurrent users with zero database strain.",
+        description:
+          "We configure server-level caching layers including Redis object caching, Nginx fastcgi micro-caching, and Cloudflare enterprise edge caching to serve static pages in milliseconds.",
+        deliverables: [
+          "Redis server-side object caching eliminating redundant MySQL queries",
+          "Nginx FastCGI micro-caching delivering raw HTML in under 50 milliseconds",
+          "Image compression and WebP/AVIF automated generation via CDN",
+          "Critical CSS inlining and deferred JavaScript execution for 95+ PageSpeed score",
+          "PHP 8.3 OPcache optimization reducing server memory usage by 40%",
+        ],
+      },
+      {
+        title: "Bank-Grade Security Hardening & Malware Defense",
+        tagline: "Bulletproof defense against brute-force attacks and zero-day vulnerabilities.",
+        description:
+          "We harden your WordPress installation using multi-layer defense mechanisms: customized login endpoints, Web Application Firewalls (WAF), two-factor authentication, and continuous automated file integrity monitoring.",
+        deliverables: [
+          "Custom obfuscated login URLs blocking automated brute-force bots",
+          "Cloudflare Enterprise WAF rules filtering malicious bots and SQL injection attempts",
+          "Restricted XML-RPC and REST API endpoints preventing DDoS amplification",
+          "Automated daily off-site encrypted backups to AWS S3 / Cloud Storage",
+          "Mandatory Two-Factor Authentication (2FA) for all administrative accounts",
+        ],
+      },
+    ],
+    frameworkTitle: "Our 5-Stage WordPress Engineering Lifecycle",
+    frameworkSubtitle: "A disciplined, transparent development process delivering secure, scalable platforms on time.",
+    frameworkSteps: [
+      {
+        stepNumber: "01",
+        name: "Content Architecture & Data Modeling",
+        timeline: "Week 1",
+        description:
+          "We audit your content hierarchy, design relational data models with ACF Pro, and establish database schema guidelines to ensure future scalability.",
+        outputs: ["Content taxonomy map", "Custom post type schema", "ACF Pro field group specification"],
+      },
+      {
+        stepNumber: "02",
+        name: "Custom Theme & Block Development",
+        timeline: "Weeks 2–3",
+        description:
+          "Our developers code your bespoke theme and custom Gutenberg blocks using modern PHP and React, ensuring lightweight performance and semantic HTML5 markup.",
+        outputs: ["Bespoke WordPress theme code", "Custom Gutenberg blocks", "Responsive mobile layouts"],
+      },
+      {
+        stepNumber: "03",
+        name: "WooCommerce & API Integrations",
+        timeline: "Week 4",
+        description:
+          "We integrate payment gateways, CRM routing, ERP synchronization, and automated transactional email flows using verified REST APIs.",
+        outputs: ["Razorpay/UPI checkout live", "CRM & lead webhook synchronization", "Transactional SMTP setup"],
+      },
+      {
+        stepNumber: "04",
+        name: "Caching, Security & Speed Hardening",
+        timeline: "Week 5",
+        description:
+          "We configure Redis object caching, Cloudflare CDN rules, and security firewalls, followed by exhaustive cross-browser and load testing.",
+        outputs: ["Redis cache active", "Google PageSpeed 95+ pass", "Security audit & malware scan report"],
+      },
+      {
+        stepNumber: "05",
+        name: "Deployment & Administrative Handover",
+        timeline: "Week 6",
+        description:
+          "We execute zero-downtime server migration, submit XML sitemaps to Google Search Console, and provide comprehensive video training for your marketing team.",
+        outputs: ["Live production deployment", "SSL & DNS verification", "Recorded CMS video tutorials"],
+      },
+    ],
+    comparisonTitle: "GGM Custom WordPress vs. Off-The-Shelf Theme Builds",
+    comparisonSubtitle: "Why custom WordPress architecture outperforms marketplace templates across every metric.",
+    comparisonHeaders: ["Engineering Feature", "Marketplace Theme / Page Builder", "GGM Custom WordPress Build"],
+    comparisonRows: [
+      {
+        feature: "Page Load Speed",
+        competitor: "4.5s - 8.0s (Hundreds of CSS & JS files loaded on every page)",
+        ggm: "Sub-0.9s (Clean semantic PHP with minimal scoped CSS)",
+        highlight: true,
+      },
+      {
+        feature: "Security & Vulnerabilities",
+        competitor: "Dependent on 25+ third-party plugins with frequent security breaches",
+        ggm: "Zero-bloat architecture with hardened endpoints and WAF protection",
+        highlight: true,
+      },
+      {
+        feature: "Content Editing Experience",
+        competitor: "Laggy visual builder interface that frequently breaks styling",
+        ggm: "Intuitive native Gutenberg custom blocks tailored to your design system",
+        highlight: false,
+      },
+      {
+        feature: "SEO & Core Web Vitals",
+        competitor: "Fails Google Core Web Vitals (high CLS and LCP penalties)",
+        ggm: "100% Core Web Vitals pass rate with perfect semantic heading structure",
+        highlight: false,
+      },
+      {
+        feature: "Code Maintenance",
+        competitor: "Theme updates frequently crash existing layouts or plugin compatibility",
+        ggm: "Clean modular codebase owned 100% by your team with zero vendor lock-in",
+        highlight: false,
+      },
+    ],
+    faqsTitle: "Frequently Asked Questions About WordPress Development",
+    faqs: [
+      {
+        question: "Why do you avoid page builders like Elementor, Divi, or WPBakery?",
+        answer:
+          "While visual page builders make initial design easy for amateur developers, they generate massive amounts of nested code, bloated JavaScript files, and redundant CSS that cripple website loading times. They also lock your business into proprietary ecosystems that frequently crash when WordPress updates. We build with clean custom PHP and native Gutenberg blocks, delivering sub-second speeds, zero lock-in, and intuitive drag-and-drop editing for your marketing team.",
+      },
+      {
+        question: "Is WordPress secure for enterprise businesses?",
+        answer:
+          "Yes, provided it is engineered correctly. The vast majority of WordPress hacks occur on sites using cheap shared hosting, outdated themes, or unvetted third-party plugins. By eliminating commercial plugin bloat, implementing Cloudflare Enterprise firewalls, moving login endpoints, enforcing 2FA, and leveraging Redis object caching, our WordPress builds meet bank-grade security standards.",
+      },
+      {
+        question: "Can WooCommerce handle large catalogs and high order volumes?",
+        answer:
+          "Absolutely. When configured with proper database indexing, Redis object caching, and modern hosting infrastructure (such as AWS, DigitalOcean, or Kinsta), WooCommerce easily handles catalogs exceeding 50,000 products and thousands of concurrent shoppers during flash sales with zero performance degradation.",
+      },
+      {
+        question: "What is Headless WordPress and does my company need it?",
+        answer:
+          "Headless WordPress uses WordPress solely as a content management database backend while serving the public website through a high-performance Next.js or React frontend. This offers sub-500ms speeds, superior security (since the WordPress admin is completely severed from the public domain), and maximum developer flexibility. We recommend headless builds for large enterprise sites with high global traffic.",
+      },
+      {
+        question: "Will you provide ongoing maintenance and security monitoring?",
+        answer:
+          "Yes. We offer optional ongoing WordPress maintenance retainers that include weekly core and security updates, automated daily off-site cloud backups, continuous 24/7 uptime monitoring, malware scanning, and dedicated monthly development hours for new feature rollouts.",
+      },
+    ],
+    metaTitle: "WordPress & WooCommerce Development Company in Delhi | GGM Technologies",
+    metaDescription:
+      "Enterprise WordPress development and WooCommerce engineering in Delhi. Bespoke PHP themes, custom Gutenberg blocks, sub-second speed optimization, and hardened security.",
+    focusKeywords: ["WordPress development company Delhi", "WooCommerce agency India", "custom WordPress theme Delhi", "enterprise WordPress developers", "WordPress speed optimization"],
   },
 };
+
+// Backwards-compatible aliases
+SERVICE_DETAILS["shopify"] = SERVICE_DETAILS["shopify-development"];
+SERVICE_DETAILS["shopify-wordpress"] = SERVICE_DETAILS["shopify-development"];
+SERVICE_DETAILS["wordpress"] = SERVICE_DETAILS["wordpress-development"];
+SERVICE_DETAILS["wp"] = SERVICE_DETAILS["wordpress-development"];
+

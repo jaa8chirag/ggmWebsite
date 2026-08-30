@@ -190,10 +190,26 @@ export interface CertificateDocument {
   issuer: string;
   certificateNo: string;
   pdfUrl: string;
+  imageUrl?: string | null;
   description?: string | null;
   issueDate?: string | null;
   order: number;
   createdAt?: Date;
 }
+
+export type QuoteStatus = "PENDING" | "CONTACTED" | "CONVERTED" | "ARCHIVED";
+
+export interface QuoteRequest {
+  id: string;
+  name: string;
+  phone: string;
+  serviceSlug: string;
+  serviceTitle: string;
+  pageUrl: string;
+  status: QuoteStatus;
+  notes?: string | null;
+  createdAt: Date | string;
+}
+
 
 

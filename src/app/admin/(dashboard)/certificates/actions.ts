@@ -11,6 +11,7 @@ export async function createCertificate(formData: FormData) {
   const issuer = (formData.get("issuer") as string)?.trim();
   const certificateNo = (formData.get("certificateNo") as string)?.trim();
   const pdfUrl = (formData.get("pdfUrl") as string)?.trim();
+  const imageUrl = (formData.get("imageUrl") as string)?.trim() || null;
   const description = (formData.get("description") as string)?.trim() || null;
   const issueDate = (formData.get("issueDate") as string)?.trim() || null;
 
@@ -21,9 +22,9 @@ export async function createCertificate(formData: FormData) {
   const id = `cert_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
   await query(
-    `INSERT INTO \`CertificateDocument\` (\`id\`, \`title\`, \`issuer\`, \`certificateNo\`, \`pdfUrl\`, \`description\`, \`issueDate\`, \`order\`, \`createdAt\`)
-     VALUES (?, ?, ?, ?, ?, ?, ?, 0, NOW(3))`,
-    [id, title, issuer, certificateNo, pdfUrl, description, issueDate]
+    `INSERT INTO \`CertificateDocument\` (\`id\`, \`title\`, \`issuer\`, \`certificateNo\`, \`pdfUrl\`, \`imageUrl\`, \`description\`, \`issueDate\`, \`order\`, \`createdAt\`)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, NOW(3))`,
+    [id, title, issuer, certificateNo, pdfUrl, imageUrl, description, issueDate]
   );
 
   revalidatePath("/certifications");

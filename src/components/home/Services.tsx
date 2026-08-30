@@ -18,12 +18,15 @@ export interface ServiceCardData {
 }
 
 const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
+  "website-development": "/images/services/website-development.jpg",
+  "web-development": "/images/services/website-development.jpg",
   seo: "/images/services/seo.jpg",
   ppc: "/images/services/ppc.jpg",
-  "website-development": "/images/services/web-development.jpg",
   "lead-generation": "/images/services/lead-generation.jpg",
   "social-media-marketing": "/images/services/social-media-marketing.jpg",
-  "shopify-wordpress": "/images/services/shopify-wordpress.jpg",
+  "shopify-development": "/images/services/shopify-development.jpg",
+  "wordpress-development": "/images/services/wordpress-development.jpg",
+  "shopify-wordpress": "/images/services/shopify-development.jpg",
 };
 
 export function ServiceCard({

@@ -44,9 +44,21 @@ const SEED_CERTIFICATES = [
     issuer: "IndiaMART InterMESH Limited",
     certificateNo: "IM-TS-884710",
     pdfUrl: "/uploads/certificates/indiamart-trustseal.pdf",
+    imageUrl: null,
     description: "Verified supplier credential ensuring authentic business location, domain ownership, and trade legitimacy.",
     issueDate: "2025",
     order: 3,
+  },
+  {
+    id: "cert_justdial",
+    title: "Justdial Verified Certificate of Trust & Users' Choice",
+    issuer: "Justdial Limited",
+    certificateNo: "JD-TRUST-DL-110016",
+    pdfUrl: "/uploads/certificates/justdial-verified-certificate.pdf",
+    imageUrl: "/uploads/certificates/justdial-certificate-of-trust.png",
+    description: "Official Justdial Certified Trusted Member and Users' Choice 2026 accreditation with 5-star rating for verified Hauz Khas (New Delhi) premises, contact numbers, and trade authenticity.",
+    issueDate: "2026",
+    order: 4,
   },
 ];
 
@@ -61,6 +73,7 @@ async function main() {
       \`issuer\` VARCHAR(255) NOT NULL,
       \`certificateNo\` VARCHAR(255) NOT NULL,
       \`pdfUrl\` VARCHAR(500) NOT NULL,
+      \`imageUrl\` VARCHAR(500) NULL,
       \`description\` TEXT NULL,
       \`issueDate\` VARCHAR(100) NULL,
       \`order\` INT NOT NULL DEFAULT 0,
@@ -107,13 +120,14 @@ startxref
     }
 
     await pool.query(
-      `INSERT INTO \`CertificateDocument\` (id, title, issuer, certificateNo, pdfUrl, description, issueDate, \`order\`, createdAt)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(3))
+      `INSERT INTO \`CertificateDocument\` (id, title, issuer, certificateNo, pdfUrl, imageUrl, description, issueDate, \`order\`, createdAt)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(3))
        ON DUPLICATE KEY UPDATE
        title = VALUES(title),
        issuer = VALUES(issuer),
        certificateNo = VALUES(certificateNo),
        pdfUrl = VALUES(pdfUrl),
+       imageUrl = VALUES(imageUrl),
        description = VALUES(description),
        issueDate = VALUES(issueDate),
        \`order\` = VALUES(\`order\`);`,
@@ -123,6 +137,7 @@ startxref
         cert.issuer,
         cert.certificateNo,
         cert.pdfUrl,
+        cert.imageUrl || null,
         cert.description,
         cert.issueDate,
         cert.order,

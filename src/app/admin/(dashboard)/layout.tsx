@@ -14,6 +14,7 @@ import {
   ExternalLink,
   ShieldCheck,
   Search,
+  Zap,
 } from "lucide-react";
 import { getCurrentAdmin } from "@/lib/auth";
 import { logoutAction } from "@/app/admin/actions";
@@ -31,6 +32,7 @@ export default async function AdminDashboardLayout({
       label: "CMS Content",
       links: [
         { href: "/admin", label: "Overview", icon: LayoutDashboard },
+        { href: "/admin/quotes", label: "Quotes & Leads", icon: Zap },
         { href: "/admin/services", label: "Services", icon: Boxes },
         { href: "/admin/locations", label: "Locations", icon: MapPin },
         { href: "/admin/blog", label: "Blog Posts", icon: FileText },

@@ -27,15 +27,19 @@ import { serviceSchema, faqSchema } from "@/lib/schema";
 import Image from "next/image";
 import FormattedText from "@/components/ui/FormattedText";
 import TechStack from "@/components/common/TechStack";
+import QuickQuoteCard from "@/components/services/QuickQuoteCard";
 import { SERVICE_DETAILS } from "@/data/serviceDetails";
 
 const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
+  "website-development": "/images/services/website-development.jpg",
+  "web-development": "/images/services/website-development.jpg",
   seo: "/images/services/seo.jpg",
   ppc: "/images/services/ppc.jpg",
-  "website-development": "/images/services/web-development.jpg",
   "lead-generation": "/images/services/lead-generation.jpg",
   "social-media-marketing": "/images/services/social-media-marketing.jpg",
-  "shopify-wordpress": "/images/services/shopify-wordpress.jpg",
+  "shopify-development": "/images/services/shopify-development.jpg",
+  "wordpress-development": "/images/services/wordpress-development.jpg",
+  "shopify-wordpress": "/images/services/shopify-development.jpg",
 };
 
 // Maps a service to the blog category covering it, for internal linking.
@@ -43,6 +47,11 @@ const SERVICE_BLOG_CATEGORY: Record<string, string> = {
   seo: "SEO",
   "website-development": "Web Development",
   "lead-generation": "Lead Generation",
+  "ppc": "PPC",
+  "social-media-marketing": "Social Media",
+  "shopify-development": "Web Development",
+  "wordpress-development": "Web Development",
+  "shopify-wordpress": "Web Development",
 };
 
 export async function generateMetadata({
@@ -203,10 +212,10 @@ export default async function ServiceDetailPage({
               </div>
             </div>
 
-            <div className="relative lg:col-span-5">
+            <div className="relative lg:col-span-5 flex flex-col gap-4">
               <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-flow/15 blur-3xl" />
-              <div className="relative aspect-[16/11] w-full overflow-hidden rounded-3xl border border-chalk/20 bg-surface/80 p-2.5 shadow-2xl backdrop-blur-xl">
-                <div className="relative h-full w-full overflow-hidden rounded-2xl">
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-chalk/20 bg-surface/80 p-2 shadow-xl backdrop-blur-xl">
+                <div className="relative h-full w-full overflow-hidden rounded-xl">
                   <Image
                     src={imageSrc}
                     alt={service.title}
@@ -218,6 +227,12 @@ export default async function ServiceDetailPage({
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
                 </div>
               </div>
+
+              {/* Compact 15-Minute Quote Lead Card in Right Corner */}
+              <QuickQuoteCard
+                serviceSlug={service.slug}
+                serviceTitle={service.title}
+              />
             </div>
           </div>
         </section>
@@ -375,32 +390,32 @@ export default async function ServiceDetailPage({
             </div>
 
             <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
-              {details.frameworkSteps.map((step) => (
+              {details.frameworkSteps.map((step, idx) => (
                 <div
-                  key={step.step}
+                  key={step.step || step.stepNumber || idx}
                   className="relative flex flex-col justify-between rounded-2xl border border-chalk/20 bg-surface p-6 shadow-sm transition-all hover:border-flow"
                 >
                   <div>
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-2xl font-bold text-signal">
-                        {step.step}
+                        {step.step || step.stepNumber}
                       </span>
                       <span className="rounded-full border border-chalk/15 bg-ink px-2.5 py-0.5 font-mono text-[10px] font-semibold text-muted">
-                        {step.duration}
+                        {step.duration || step.timeline}
                       </span>
                     </div>
 
                     <h3 className="mt-3 font-display text-lg font-bold text-chalk">
-                      {step.title}
+                      {step.title || step.name}
                     </h3>
                     <p className="mt-2 font-body text-xs text-muted leading-relaxed">
-                      {step.summary}
+                      {step.summary || step.description}
                     </p>
                   </div>
 
                   <div className="mt-5 border-t border-chalk/10 pt-3">
                     <ul className="space-y-1.5 font-body text-[11px] text-muted">
-                      {step.details.map((d, dI) => (
+                      {(step.details || step.outputs || []).map((d, dI) => (
                         <li key={dI} className="flex items-start gap-1.5">
                           <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-flow" />
                           <span>{d}</span>
@@ -501,7 +516,7 @@ export default async function ServiceDetailPage({
                             size={16}
                             className="mt-0.5 shrink-0 text-flow"
                           />
-                          <span>{row.ggmApproach}</span>
+                          <span>{row.ggmApproach || row.ggm}</span>
                         </div>
                       </td>
                       <td className="p-4 sm:p-5 text-muted">
@@ -510,7 +525,7 @@ export default async function ServiceDetailPage({
                             size={16}
                             className="mt-0.5 shrink-0 text-muted/60"
                           />
-                          <span>{row.traditionalAgency}</span>
+                          <span>{row.traditionalAgency || row.competitor}</span>
                         </div>
                       </td>
                       <td className="p-4 sm:p-5 text-muted">
@@ -519,7 +534,7 @@ export default async function ServiceDetailPage({
                             size={16}
                             className="mt-0.5 shrink-0 text-muted/60"
                           />
-                          <span>{row.freelancer}</span>
+                          <span>{row.freelancer || "Ad-hoc, unmonitored execution"}</span>
                         </div>
                       </td>
                     </tr>

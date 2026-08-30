@@ -104,9 +104,17 @@ export default function CertificateManager({
                 className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-chalk/15 bg-ink/40 p-4 hover:border-chalk/30 transition-colors"
               >
                 <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-flow/10 text-flow">
-                    <FileText size={20} />
-                  </div>
+                  {cert.imageUrl ? (
+                    <img
+                      src={cert.imageUrl}
+                      alt={cert.title}
+                      className="h-10 w-10 shrink-0 rounded-xl object-cover border border-chalk/10"
+                    />
+                  ) : (
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-flow/10 text-flow">
+                      <FileText size={20} />
+                    </div>
+                  )}
                   <div>
                     <h4 className="font-display text-sm font-bold text-chalk">
                       {cert.title}

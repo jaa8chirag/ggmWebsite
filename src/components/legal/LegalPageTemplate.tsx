@@ -9,6 +9,7 @@ import {
   Download,
   ExternalLink,
   Award,
+  Eye,
 } from "lucide-react";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import FormattedText from "@/components/ui/FormattedText";
@@ -105,25 +106,31 @@ export default function LegalPageTemplate({
                             {cert.description}
                           </p>
                         )}
+
                       </div>
 
-                      <div className="mt-6 flex items-center gap-3 border-t border-chalk/10 pt-4">
+                      <div className="mt-6 grid grid-cols-2 gap-2.5 border-t border-chalk/10 pt-4">
+                        {/* View Document in Browser */}
                         <a
                           href={cert.pdfUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex-1 flex items-center justify-center gap-1.5 rounded-xl bg-flow px-3 py-2 font-mono text-xs font-semibold text-white shadow-sm hover:bg-signal transition-colors"
+                          className="flex items-center justify-center gap-1.5 rounded-xl border border-flow/40 bg-flow/10 py-2.5 px-3 font-mono text-xs font-semibold text-flow hover:bg-flow hover:text-white transition-all shadow-sm cursor-pointer"
+                          title={`View ${cert.title}`}
                         >
-                          <Download size={13} /> Download PDF
+                          <Eye size={14} />
+                          <span>View PDF</span>
                         </a>
+
+                        {/* Direct Download PDF */}
                         <a
                           href={cert.pdfUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-mono text-xs text-muted hover:text-chalk transition-colors"
-                          title="Open PDF in new tab"
+                          download
+                          className="flex items-center justify-center gap-1.5 rounded-xl bg-flow py-2.5 px-3 font-mono text-xs font-semibold text-white hover:bg-signal transition-all shadow-sm cursor-pointer"
+                          title={`Download ${cert.title}`}
                         >
-                          <ExternalLink size={13} />
+                          <Download size={14} />
+                          <span>Download</span>
                         </a>
                       </div>
                     </div>
