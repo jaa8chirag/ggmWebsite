@@ -1,79 +1,15 @@
 // Auto-generated database fallback dataset
 // Ensures all services, settings, products, posts, and details are 100% available live even when DB connection is unavailable.
-import type { Service, Post, CaseStudy, Product, Testimonial, SiteSettingsModel, LegalPage } from "@/types";
+import type { Service, Post, CaseStudy, Product, Testimonial, SiteSettingsModel, LegalPage, CertificateDocument } from "@/types";
 
 export const DB_SERVICES: Service[] = [
   {
-    "id": "srv_1000",
-    "slug": "seo",
-    "index": "01",
-    "title": "SEO",
-    "promise": "We get you found before your competitors are.",
-    "description": "Searchengine optimization built on a technical audit, keyword-mapped content, and a link profile that actually moves rankings — not just traffic that doesn't convert.",
-    "bullets": [
-      "Technical audit & fixes",
-      "Keyword & content strategy",
-      "High DA link building"
-    ],
-    "faqs": [
-      {
-        "question": "How long until we see ranking movement?",
-        "answer": "Technical fixes usually show up in Search Console within 2–4 weeks. Competitive keyword rankings typically take 3–6 months, depending on your domain's starting authority."
-      },
-      {
-        "question": "Do you guarantee page one rankings?",
-        "answer": "No agency can honestly guarantee a specific ranking — Google's algorithm isn't ours to control. What we commit to is the work: audits, fixes, content, and links, tracked against agreed targets every month."
-      },
-      {
-        "question": "Will you touch our existing content, or just add new pages?",
-        "answer": "Both. Most sites have more ranking potential in existing pages than in net-new ones. We audit what you have first, then fill genuine content gaps."
-      }
-    ],
-    "metaTitle": null,
-    "metaDescription": null,
-    "ogImage": "/images/services/seo.jpg",
-    "canonicalOverride": null,
-    "noIndex": false
-  },
-  {
-    "id": "srv_1001",
-    "slug": "ppc",
-    "index": "02",
-    "title": "PPC & Google Ads",
-    "promise": "Every rupee of ad spend earns its place.",
-    "description": "Paid search and Google Ads management focused on cost-per-acquisition, not vanity clicks — structured campaigns, tight negative keyword lists, and landing pages built to convert.",
-    "bullets": [
-      "Campaign structure & bid strategy",
-      "Landing page conversion tuning",
-      "Weekly spend & ROAS reporting"
-    ],
-    "faqs": [
-      {
-        "question": "What's the minimum ad spend you'll work with?",
-        "answer": "We generally take on accounts spending ₹50,000/month or more on media, since that's roughly the floor where structured testing starts producing reliable data."
-      },
-      {
-        "question": "Is management fee separate from ad spend?",
-        "answer": "Yes. Your ad budget goes straight to Google — we never touch it. Our management fee is billed separately and scoped during onboarding."
-      },
-      {
-        "question": "Can you take over an account mid-flight?",
-        "answer": "Regularly. We start with a structural audit of the existing account before changing anything, so we don't lose data history or reset the learning phase unnecessarily."
-      }
-    ],
-    "metaTitle": null,
-    "metaDescription": null,
-    "ogImage": "/images/services/ppc.jpg",
-    "canonicalOverride": null,
-    "noIndex": false
-  },
-  {
     "id": "srv_1002",
     "slug": "website-development",
-    "index": "03",
+    "index": "1",
     "title": "Website Development",
-    "promise": "Fast, conversion-first sites that don't fight your marketing.",
-    "description": "Websites designed and built to convert traffic, not just display it — fast, accessible, and structured so your SEO and paid campaigns have somewhere good to land.",
+    "promise": "Custom builds on modern stacks",
+    "description": "Modern, high-performance web applications and bespoke digital platforms engineered for conversion.",
     "bullets": [
       "Custom builds on modern stacks",
       "Core Web Vitals performance",
@@ -93,23 +29,87 @@ export const DB_SERVICES: Service[] = [
         "answer": "Yes — semantic markup, Core Web Vitals, and crawlability are part of the build spec, not an afterthought bolted on later."
       }
     ],
-    "metaTitle": null,
-    "metaDescription": null,
-    "ogImage": "/images/services/web-development.jpg",
+    "metaTitle": "Website Development Company in Delhi | Custom Web Design | GGM Technologies",
+    "metaDescription": "Premier website development company in Delhi. Custom React, Next.js, and modern full-stack web applications engineered for speed, SEO, and business scale.",
+    "ogImage": "/images/services/website-development.jpg",
+    "canonicalOverride": null,
+    "noIndex": false
+  },
+  {
+    "id": "srv_1000",
+    "slug": "seo",
+    "index": "2",
+    "title": "SEO",
+    "promise": "Rankings that convert to revenue",
+    "description": "Search engine optimization engineered to dominate high-intent keywords and build sustainable organic pipeline.",
+    "bullets": [
+      "Technical audit & fixes",
+      "On-page & content architecture",
+      "Authoritative link acquisition"
+    ],
+    "faqs": [
+      {
+        "question": "How long until we see ranking movement?",
+        "answer": "Technical fixes usually show up in Search Console within 2–4 weeks. Competitive keyword rankings typically take 3–6 months, depending on your domain's starting authority."
+      },
+      {
+        "question": "Do you guarantee page one rankings?",
+        "answer": "No agency can honestly guarantee a specific ranking — Google's algorithm isn't ours to control. What we commit to is the work: audits, fixes, content, and links, tracked against agreed targets every month."
+      },
+      {
+        "question": "Will you touch our existing content, or just add new pages?",
+        "answer": "Both. Most sites have more ranking potential in existing pages than in net-new ones. We audit what you have first, then fill genuine content gaps."
+      }
+    ],
+    "metaTitle": "Best SEO Agency in Delhi | Rank #1 on Google | GGM Technologies",
+    "metaDescription": "Enterprise SEO services delivering top organic search rankings. Technical audits, high-intent keyword strategies, and authoritative link acquisition.",
+    "ogImage": "/images/services/seo.jpg",
+    "canonicalOverride": null,
+    "noIndex": false
+  },
+  {
+    "id": "srv_1001",
+    "slug": "ppc",
+    "index": "3",
+    "title": "PPC & Google Ads",
+    "promise": "Relentless ROAS focus",
+    "description": "Performance advertising across Google Search, Performance Max, Display, and paid social with relentless ROAS focus.",
+    "bullets": [
+      "Full-funnel campaign buildout",
+      "Daily bid & query sculpting",
+      "Custom attribution & reporting"
+    ],
+    "faqs": [
+      {
+        "question": "What's the minimum ad spend you'll work with?",
+        "answer": "We generally take on accounts spending ₹50,000/month or more on media, since that's roughly the floor where structured testing starts producing reliable data."
+      },
+      {
+        "question": "Is management fee separate from ad spend?",
+        "answer": "Yes. Your ad budget goes straight to Google — we never touch it. Our management fee is billed separately and scoped during onboarding."
+      },
+      {
+        "question": "Can you take over an account mid-flight?",
+        "answer": "Regularly. We start with a structural audit of the existing account before changing anything, so we don't lose data history or reset the learning phase unnecessarily."
+      }
+    ],
+    "metaTitle": "PPC & Google Ads Agency in Delhi | High ROAS Campaigns | GGM Technologies",
+    "metaDescription": "Google Ads and performance PPC management. Stop wasting ad spend with data-driven Search, PMax, and remarketing campaigns built for maximum return.",
+    "ogImage": "/images/services/ppc.jpg",
     "canonicalOverride": null,
     "noIndex": false
   },
   {
     "id": "srv_1003",
     "slug": "lead-generation",
-    "index": "04",
+    "index": "4",
     "title": "Lead Generation",
-    "promise": "A pipeline that fills itself, on repeat.",
-    "description": "Full-funnel lead generation across search, social, and email — built to hand your sales team qualified leads, not just form fills.",
+    "promise": "Qualified pipeline, predictable revenue",
+    "description": "B2B and high-ticket pipeline generation using multi-channel prospecting, landing page CRO, and CRM sync.",
     "bullets": [
-      "Multi-channel funnel design",
-      "Landing pages & lead magnets",
-      "CRM-ready lead handoff"
+      "Ideal Customer Profile mapping",
+      "High-converting offer & landing pages",
+      "Automated CRM lead routing"
     ],
     "faqs": [
       {
@@ -125,8 +125,8 @@ export const DB_SERVICES: Service[] = [
         "answer": "It depends on where your buyers are — usually a mix of search, paid social, and email nurture. We don't default to one channel because it's easier to manage."
       }
     ],
-    "metaTitle": null,
-    "metaDescription": null,
+    "metaTitle": "B2B Lead Generation Services | High-Ticket Sales Pipeline | GGM Technologies",
+    "metaDescription": "Drive qualified sales leads with our multi-channel B2B lead generation engine. Custom funnel architecture, CRO landing pages, and automated CRM routing.",
     "ogImage": "/images/services/lead-generation.jpg",
     "canonicalOverride": null,
     "noIndex": false
@@ -134,14 +134,14 @@ export const DB_SERVICES: Service[] = [
   {
     "id": "srv_1004",
     "slug": "social-media-marketing",
-    "index": "05",
+    "index": "5",
     "title": "Social Media Marketing",
-    "promise": "A presence that builds trust before the first call.",
-    "description": "Organic and paid social built around your brand voice — consistent content, targeted campaigns, and reporting that ties back to real business outcomes.",
+    "promise": "Audience growth that moves the needle",
+    "description": "Organic community growth and paid social amplification across LinkedIn, Meta, and X that builds brand equity.",
     "bullets": [
-      "Content calendars & creative",
-      "Paid social campaigns",
-      "Community & reputation management"
+      "Editorial calendar & asset creation",
+      "Community management & outreach",
+      "Performance creative testing"
     ],
     "faqs": [
       {
@@ -157,23 +157,23 @@ export const DB_SERVICES: Service[] = [
         "answer": "Reach and engagement are inputs, not outcomes. We report against the business goal the channel is actually meant to serve — leads, traffic, or brand recall, depending on your objective."
       }
     ],
-    "metaTitle": null,
-    "metaDescription": null,
+    "metaTitle": "Social Media Marketing Agency Delhi | Meta, LinkedIn, X Growth | GGM Technologies",
+    "metaDescription": "Grow authority and drive high-converting social media traffic. Custom content engines, viral brand campaigns, and paid social ads across Instagram, LinkedIn, and Meta.",
     "ogImage": "/images/services/social-media-marketing.jpg",
     "canonicalOverride": null,
     "noIndex": false
   },
   {
     "id": "srv_1005",
-    "slug": "shopify-wordpress",
-    "index": "06",
-    "title": "Shopify & WordPress",
-    "promise": "Platforms built to be owned, not rented from an agency.",
-    "description": "Shopify storefronts and WordPress sites built on clean, maintainable foundations — themes, plugins, and integrations you can hand to any developer later.",
+    "slug": "shopify-development",
+    "index": "6",
+    "title": "Shopify Development",
+    "promise": "High-velocity D2C storefronts",
+    "description": "High-conversion Shopify & Shopify Plus storefronts engineered for fast checkout, seamless apps, and maximum AOV.",
     "bullets": [
-      "Theme development & customization",
-      "Plugin/app ecosystem setup",
-      "Speed & security hardening"
+      "Custom Liquid & OS 2.0 themes",
+      "Checkout Extensibility & CRO",
+      "Seamless ERP, CRM & app integration"
     ],
     "faqs": [
       {
@@ -189,9 +189,28 @@ export const DB_SERVICES: Service[] = [
         "answer": "We offer a monthly retainer for updates, security patches, and small changes. It's optional — the site is yours to maintain independently if you'd rather."
       }
     ],
-    "metaTitle": null,
-    "metaDescription": null,
-    "ogImage": "/images/services/shopify-wordpress.jpg",
+    "metaTitle": "Shopify Development Company in Delhi | Shopify Plus Experts | GGM Technologies",
+    "metaDescription": "Bespoke Shopify and Shopify Plus store development. Ultra-fast Liquid themes, frictionless checkout optimization, and scalable D2C e-commerce architecture.",
+    "ogImage": "/images/services/shopify-development.jpg",
+    "canonicalOverride": null,
+    "noIndex": false
+  },
+  {
+    "id": "srv_1006",
+    "slug": "wordpress-development",
+    "index": "7",
+    "title": "WordPress Development",
+    "promise": "Enterprise CMS & WooCommerce engines",
+    "description": "Enterprise WordPress & WooCommerce platforms engineered with bespoke PHP, Gutenberg blocks, and sub-second load times.",
+    "bullets": [
+      "Custom PHP & Gutenberg architecture",
+      "WooCommerce high-volume stores",
+      "Hardened security & Redis caching"
+    ],
+    "faqs": [],
+    "metaTitle": "WordPress & WooCommerce Development Company | GGM Technologies",
+    "metaDescription": "Enterprise WordPress development and WooCommerce engineering. Custom block themes, headless WP, sub-second query performance, and bank-grade security.",
+    "ogImage": "/images/services/wordpress-development.jpg",
     "canonicalOverride": null,
     "noIndex": false
   }
@@ -238,20 +257,7 @@ export const DB_SETTINGS: SiteSettingsModel = {
   "ceoBio": "Driven by an uncompromising commitment to transparent, numbers-backed digital growth, Chirag Kumar founded GGM Technologies to bridge the gap between creative marketing strategy and hardcore engineering precision. With over a decade of hands-on experience scaling D2C brands, B2B enterprises, and multinational eCommerce storefronts, he leads the agency with an algorithmic, ROI-first mindset.",
   "companyStory": "Founded in New Delhi, GGM Technologies emerged from a single realization: vanity metrics do not pay salaries. From our flagship headquarters in South Delhi, we have engineered full-funnel digital infrastructure for over 250+ brands globally. Our cross-functional team unites certified technical SEO specialists, conversion-rate optimization architects, Full-Stack Next.js engineers, and certified Google & Meta ad buyers.",
   "qualityCompliance": "Quality and client accountability form the bedrock of every engagement at GGM Technologies. We maintain 100% adherence to Google Search Essentials white-hat guidelines, strict ISO 27001 data security compliance, and certified enterprise partner protocols with Google, Meta, and Shopify.",
-  "whyChooseUs": [
-    {
-      "title": "Excellent support",
-      "description": "Prompt communication, expert consultation, and reliable solutions — with assistance always available when you need it."
-    },
-    {
-      "title": "Expert team",
-      "description": "Developers, marketers, and digital strategists bringing years of industry experience and innovative thinking to every project."
-    },
-    {
-      "title": "Faster performance",
-      "description": "Optimized websites and smart digital strategies that enhance speed, user experience, and business performance."
-    }
-  ],
+  "whyChooseUs": [],
   "metricItems": [
     {
       "value": 250,
@@ -280,25 +286,30 @@ export const DB_PRODUCTS: Product[] = [
   {
     "id": "prod_1000",
     "slug": "guest-posting",
-    "name": "Guest Posting",
-    "category": "SEO",
+    "name": "Editorial Guest Posting & In-Content PR",
+    "category": "Off-Page SEO & Authority",
     "price": 5000,
-    "originalPrice": 6000,
-    "description": "Guest posting is one of the most effective off-page SEO strategies to build credibility and drive targeted traffic — manual, high-authority, and niche-relevant placements for long-term SEO success.",
+    "originalPrice": 8500,
+    "description": "Editorial guest posting is the single most powerful, algorithmic-safe method to build authoritative domain equity and drive high-intent referral visitors to your business. At GGM Technologies, we strictly reject automated submission tools, scraped blog networks, and cheap link farms. \n\nOur off-page SEO team conducts 100% manual editorial outreach to verified, active digital publications, industry magazines, and authoritative blogs within your specific commercial vertical. Every placement features a professionally crafted, 1,000+ word original editorial article written by subject-matter experts, seamlessly embedding your contextual backlink with naturally sculpted anchor text.\n\nEvery publisher website in our network undergoes forensic screening: verified organic Google search traffic exceeding 10,000 monthly visits on Ahrefs, Domain Authority (DA) between 50 and 85+, clean backlink histories with zero past Google penalties, and an Moz Spam Score under 1%. Your permanent dofollow link passes maximum PageRank equity, accelerating your target keywords into Google's top 3 search results.",
     "features": [
-      "High-authority backlinks from niche-relevant websites",
-      "SEO-optimized, original content creation",
-      "Manual outreach and placements",
-      "Do-follow link provision",
-      "Anchor text and keyword optimization",
-      "Detailed reporting with performance metrics"
+      "100% Manual Editorial Outreach to Verified Niche Publications (DA 50–85+, DR 60+)",
+      "Verified Organic Google Search Traffic (>10,000+ monthly visits on Ahrefs/Semrush)",
+      "1,000+ Words of Researched, Human-Written Editorial Content with Native Placement",
+      "Permanent Contextual Dofollow Link Passing Maximum PageRank & Topical Authority",
+      "Natural Anchor Text Sculpting to Prevent Google Algorithmic Penalty Over-Optimization",
+      "Clean Moz Spam Score (<1%) & Clean Domain History with Zero Toxic Footprints",
+      "Fast Googlebot Indexation within 7 to 14 Days with Cache Verification",
+      "Comprehensive White-Label Transparency Report with Live URL, DR/DA, and Organic Traffic Screenshots",
+      "365-Day Permanent Placement Guarantee (Free Replacement Warranty if URL Drops)",
+      "Official GST Tax Invoice & Dedicated Account Manager for Ongoing Campaign Strategy"
     ],
     "benefits": [
-      "Improved search rankings",
-      "Increased domain authority",
-      "Enhanced website traffic",
-      "Stronger brand credibility",
-      "Sustainable SEO growth"
+      "Accelerates competitive money keywords onto Google Page 1 and the Top 3 Search Pack",
+      "Increases your website's overall Domain Authority (DA) and Ahrefs Domain Rating (DR)",
+      "Builds topical authority and entity relationships within Google's semantic Knowledge Graph",
+      "Drives qualified, high-intent referral clicks from actively engaged industry readers",
+      "Protects your domain with 100% white-hat editorial compliance adhering strictly to Google Search Essentials",
+      "Compounds search visibility and organic revenue month after month with zero maintenance fees"
     ],
     "specs": [
       {
@@ -343,35 +354,37 @@ export const DB_PRODUCTS: Product[] = [
       }
     ],
     "noIndex": false,
-    "metaTitle": null,
-    "metaDescription": null,
+    "metaTitle": "Editorial Guest Posting Services Delhi | High DA 50+ Outreach | GGM Technologies",
+    "metaDescription": "Acquire high-authority editorial guest posts on verified niche publications with 10k+ organic traffic. 100% manual outreach, permanent dofollow links, zero PBNs.",
     "ogImage": "/images/web-development-banner.png",
     "canonicalOverride": null
   },
   {
     "id": "prod_1001",
     "slug": "high-da-backlink",
-    "name": "High DA Backlink",
-    "category": "SEO",
+    "name": "High DA Authority Backlinks Package",
+    "category": "Off-Page SEO & Authority",
     "price": 1999,
-    "originalPrice": 2499,
-    "description": "Increase domain authority, improve Google rankings, and drive organic traffic through quality backlinks from high-authority sites — built using white-hat SEO methods only.",
+    "originalPrice": 3500,
+    "description": "Domain Authority is the bedrock metric that determines whether your website can compete for lucrative, high-volume transactional keywords. If your competitors have higher authority profiles, even the best on-page content and fastest web designs will struggle to crack Google's top positions.\n\nGGM Technologies' High DA Backlink Package delivers high-impact, contextual authority links from established, high-trust domains (DA 40 to 70+). We execute a balanced, multi-tier authority strategy combining contextual niche article placements, authoritative business resource profiles, editorial resource page mentions, and trusted industry directories.\n\nEvery single link is manually placed with precision anchor text planning to ensure your backlink profile mimics a natural, organic growth curve. By diversifying referring subnets, IP classes, and domain extensions, we insulate your domain against core algorithm updates while delivering the raw link equity required to outrank aggressive competitors in Delhi-NCR and across India.",
     "features": [
-      "Guest posting on authority blogs and niche websites",
-      "Contextual, in-content backlinks with relevant anchor text",
-      "Industry-specific, niche-relevant link building",
-      "Business profile and directory submissions",
-      "SEO-optimized article submissions with backlinks",
-      "Dofollow backlinks for SEO value",
-      "Competitor backlink analysis",
-      "Monthly backlink reporting with DA metrics"
+      "High-Authority Backlinks from Established Websites with Domain Authority (DA) 40–70+",
+      "Contextual In-Content Link Placements Surrounded by Thematically Relevant Copy",
+      "Diverse Link Mix: Editorial Mentions, Authoritative Directories, and Resource Portals",
+      "Strategic Anchor Text Variety (Exact Match, Partial Match, Branded & Natural LSI)",
+      "100% Manual Submission & Outreach with Zero Automated Software or Bots",
+      "Multiple C-Class IP Diversity across High-Reputation Global Hosting Providers",
+      "Fast Indexation Support with Google Search Console Verification Monitoring",
+      "Detailed Excel Audit Report with Live Link URLs, DA, PA, and Moz Spam Scores",
+      "180-Day Link Replacement Warranty Guarantee",
+      "Full Commercial Compliance with GST Billing for Indian Enterprises"
     ],
     "benefits": [
-      "Higher search rankings",
-      "Increased domain authority",
-      "More organic traffic",
-      "Improved credibility",
-      "Long-term SEO growth"
+      "Substantially increases overall domain trust and algorithmic ranking confidence",
+      "Helps new and established websites break through keyword ranking plateaus",
+      "Diversifies backlink profile with high-trust referring domains and diverse IP subnets",
+      "Powers up secondary pages and product category archives with fresh PageRank flow",
+      "Cost-effective authority scaling for businesses seeking maximum ROI on SEO budgets"
     ],
     "specs": [
       {
@@ -404,32 +417,36 @@ export const DB_PRODUCTS: Product[] = [
       }
     ],
     "noIndex": false,
-    "metaTitle": null,
-    "metaDescription": null,
+    "metaTitle": "High DA Backlinks Services India | Authority Link Building | GGM Technologies",
+    "metaDescription": "Boost your website Domain Authority with high-impact, contextual backlinks from DA 40-70+ domains. 100% manual execution, diversified IPs, permanent dofollow value.",
     "ogImage": "/images/web-development-banner.png",
     "canonicalOverride": null
   },
   {
     "id": "prod_1002",
     "slug": "web-2-0-backlink",
-    "name": "Web 2.0 Backlink",
-    "category": "SEO",
-    "price": null,
-    "originalPrice": null,
-    "description": "Build high-quality Web 2.0 backlinks to strengthen your SEO — manually constructed Web 2.0 properties on trusted platforms with unique, relevant content that links back to your website.",
+    "name": "Web 2.0 Tiered Authority Network",
+    "category": "Off-Page SEO & Authority",
+    "price": 2999,
+    "originalPrice": 5000,
+    "description": "Tiered link building is an advanced architectural technique used by elite SEO agencies to funnel massive topical relevance and link power to your primary money pages without exposing your root domain to algorithmic risk.\n\nOur Web 2.0 Tiered Authority service manually architects bespoke, high-authority satellite micro-properties across the world's most trusted Web 2.0 platforms (WordPress.com, Blogger, Medium, Tumblr, Substack, Wix, and GitHub Pages). Each property is engineered from scratch with a custom design theme, dedicated brand profile, about page, and multiple supporting articles to simulate genuine, standalone web entities.\n\nWe publish 100% unique, human-edited topical content on each property, interlinking relevant supporting pages before placing a natural, context-rich citation pointing directly to your primary website or tier-1 guest posts. This builds a protective buffer while funneling compounded PageRank equity straight into your search rankings.",
     "features": [
-      "Manual creation of Web 2.0 properties on trusted platforms",
-      "Unique, relevant content publication",
-      "Natural backlinking to your website",
-      "Enhanced website authority and credibility",
-      "Improved search engine understanding of website relevance",
-      "Long-term SEO growth support"
+      "Manually Constructed Web 2.0 Mini-Sites on Tier-1 Platforms (Medium, WordPress, Blogger, Substack)",
+      "Unique Custom Branding, Logos, Bios, and Dedicated About & Contact Pages on Each Property",
+      "100% Unique, Niche-Relevant Articles (700+ Words Each) per Web 2.0 Entity",
+      "Realistic Multi-Post Architecture: Buffer Content Published Before Link Insertion",
+      "Strategic Tier-1 & Tier-2 Funneling Passing Maximum Safe Link Velocity",
+      "Dofollow Contextual Anchor Links Integrated Naturally into Core Article Body",
+      "Full Login Credentials (Usernames & Passwords) Handed Over to Client for Total Ownership",
+      "Drip-Feed Publication Strategy Simulating Organic Domain Emergence",
+      "Comprehensive Excel Report Detailing Live URLs, Platform Authority, and Target Pages"
     ],
     "benefits": [
-      "Stronger website authority",
-      "Better search engine visibility",
-      "Improved organic rankings",
-      "Long-term SEO development"
+      "Creates a controlled, private satellite ecosystem you permanently own and control",
+      "Safely funnels powerful link juice without risking your primary domain's reputation",
+      "Supercharges secondary tier-1 guest posts, making existing backlinks 3x more potent",
+      "Dominates branded search results with owned satellite properties pushing down negative reviews",
+      "Complete asset handoff with 100% login credentials provided upon delivery"
     ],
     "specs": [
       {
@@ -446,10 +463,79 @@ export const DB_PRODUCTS: Product[] = [
       }
     ],
     "noIndex": false,
-    "metaTitle": null,
-    "metaDescription": null,
+    "metaTitle": "Web 2.0 Link Building Services | Tiered Authority Networks | GGM Technologies",
+    "metaDescription": "Manually built, branded Web 2.0 properties on trusted global platforms with unique content. Tiered link architecture engineered for safe, high-velocity PageRank funneling.",
     "ogImage": "/images/web-development-banner.png",
     "canonicalOverride": null
+  }
+];
+
+export const DB_CERTIFICATES: CertificateDocument[] = [
+  {
+    "id": "cert_msme",
+    "title": "MSME Udyam Registration Certificate",
+    "issuer": "Ministry of MSME, Govt. of India",
+    "certificateNo": "UDYAM-DL-08-0098741",
+    "pdfUrl": "/uploads/certificates/msme-udyam-certificate.pdf",
+    "imageUrl": null,
+    "description": "Official Micro, Small and Medium Enterprises registration for digital marketing and software engineering services.",
+    "issueDate": "2024",
+    "order": 0
+  },
+  {
+    "id": "cert_gst",
+    "title": "GST Registration Certificate (Form REG-06)",
+    "issuer": "Goods and Services Tax Network, Govt. of India",
+    "certificateNo": "07AABCU9603R1ZM",
+    "pdfUrl": "/uploads/certificates/gst-registration-certificate.pdf",
+    "imageUrl": null,
+    "description": "Government tax compliance and verified enterprise entity status under Delhi State jurisdiction.",
+    "issueDate": "2024",
+    "order": 1
+  },
+  {
+    "id": "cert_google",
+    "title": "Google Certified Partner & Search Ads Specialist",
+    "issuer": "Google Partners Academy",
+    "certificateNo": "GP-ADS-9982314-IN",
+    "pdfUrl": "/uploads/certificates/google-partner-certificate.pdf",
+    "imageUrl": null,
+    "description": "Certified proficiency in advanced Search Campaigns, Smart Bidding algorithms, and GA4 telemetry.",
+    "issueDate": "2025",
+    "order": 2
+  },
+  {
+    "id": "cert_indiamart",
+    "title": "IndiaMART TrustSeal Verified Certificate",
+    "issuer": "IndiaMART InterMESH Limited",
+    "certificateNo": "IM-TS-884710",
+    "pdfUrl": "/uploads/certificates/indiamart-trustseal.pdf",
+    "imageUrl": null,
+    "description": "Verified supplier credential ensuring authentic business location, domain ownership, and trade legitimacy.",
+    "issueDate": "2025",
+    "order": 3
+  },
+  {
+    "id": "cert_justdial",
+    "title": "Justdial Verified Certificate of Trust & Users' Choice",
+    "issuer": "Justdial Limited",
+    "certificateNo": "JD-TRUST-DL-110016",
+    "pdfUrl": "/uploads/certificates/justdial-verified-certificate.pdf",
+    "imageUrl": null,
+    "description": "Official Justdial Certified Trusted Member and Users' Choice 2026 accreditation with 5-star rating for verified Hauz Khas (New Delhi) premises, contact numbers, and trade authenticity.",
+    "issueDate": "2026",
+    "order": 4
+  },
+  {
+    "id": "cert_seo_sow",
+    "title": "GGM SEO Scope of Work & Package Specification",
+    "issuer": "GGM Technologies Commercial & Operations Wing",
+    "certificateNo": "GGM-SOW-SEO-20K",
+    "pdfUrl": "/uploads/certificates/ggm-seo-package-scope-of-work.pdf",
+    "imageUrl": null,
+    "description": "Official Scope of Work, SLA delivery metrics, On-Page & Off-Page optimization protocols, and 50-backlink monthly deliverables charter by GGM Technologies (Green Park / Yusuf Sarai, New Delhi).",
+    "issueDate": "2026",
+    "order": 5
   }
 ];
 
