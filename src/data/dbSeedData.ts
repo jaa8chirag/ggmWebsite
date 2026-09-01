@@ -548,6 +548,17 @@ export const DB_PRODUCTS: Product[] = [
 
 export const DB_CERTIFICATES: CertificateDocument[] = [
   {
+    "id": "cert_iit_delhi",
+    "title": "IIT Delhi Rendezvous 2024 & World Technocon - Digital Marketing Mastery",
+    "issuer": "Indian Institute of Technology (IIT Delhi) & World Technocon",
+    "certificateNo": "Y62QJHREPCM2FXD",
+    "pdfUrl": "/uploads/certificates/iit-delhi-digital-marketing-certificate.pdf",
+    "imageUrl": null,
+    "description": "Official certification awarded to Guru Govind Maheesh (GGM) at IIT Delhi (Rendezvous 2024) in association with World Technocon, verifying advanced professional mastery in Google Ads, Search Engine Optimization (SEO), and Digital Marketing.",
+    "issueDate": "August 2024",
+    "order": 0
+  },
+  {
     "id": "cert_justdial",
     "title": "Justdial Verified Certificate of Trust & Users' Choice",
     "issuer": "Justdial Limited",
@@ -556,7 +567,7 @@ export const DB_CERTIFICATES: CertificateDocument[] = [
     "imageUrl": null,
     "description": "Official Justdial Certified Trusted Member and Users' Choice 2026 accreditation with 5-star rating for verified Green Park & Hauz Khas (New Delhi) premises, contact numbers, and trade authenticity.",
     "issueDate": "2026",
-    "order": 0
+    "order": 1
   },
   {
     "id": "cert_seo_sow",
@@ -567,7 +578,7 @@ export const DB_CERTIFICATES: CertificateDocument[] = [
     "imageUrl": null,
     "description": "Official Scope of Work, SLA delivery metrics, On-Page & Off-Page optimization protocols, and comprehensive deliverables charter by GGM Technologies (Green Park / Yusuf Sarai, New Delhi).",
     "issueDate": "2026",
-    "order": 1
+    "order": 2
   },
   {
     "id": "cert_msme",
@@ -578,7 +589,7 @@ export const DB_CERTIFICATES: CertificateDocument[] = [
     "imageUrl": null,
     "description": "Official Government of India Micro Enterprise registration confirming verified operations in Software Development, Digital Marketing, and IT Services under South Delhi jurisdiction.",
     "issueDate": "2024",
-    "order": 2
+    "order": 3
   },
   {
     "id": "cert_gst",
@@ -589,7 +600,18 @@ export const DB_CERTIFICATES: CertificateDocument[] = [
     "imageUrl": null,
     "description": "Statutory tax compliance registration under Rule 10(1) verifying active regular taxpayer standing for GGM Technologies at Yusuf Sarai Commercial Complex, Green Park, New Delhi.",
     "issueDate": "2024",
-    "order": 3
+    "order": 4
+  },
+  {
+    "id": "cert_google",
+    "title": "Google Certified Partner & Search Ads Specialist",
+    "issuer": "Google Partners Academy",
+    "certificateNo": "GP-ADS-9982314-IN",
+    "pdfUrl": "/uploads/certificates/google-partner-certificate.pdf",
+    "imageUrl": null,
+    "description": "Certified partner credential in Google Search Advertising, Smart Bidding algorithms, and Google Analytics 4 (GA4) telemetry.",
+    "issueDate": "2025",
+    "order": 5
   }
 ];
 
