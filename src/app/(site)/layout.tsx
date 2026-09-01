@@ -57,9 +57,15 @@ export const metadata: Metadata = {
     title,
     description,
   },
-  ...(process.env.GOOGLE_SITE_VERIFICATION
-    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
-    : {}),
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || "google37f47672baefed8c",
+    other: {
+      "google-site-verification": [
+        "google37f47672baefed8c",
+        "google37f47672baefed8c.html",
+      ],
+    },
+  },
 };
 
 export const dynamic = "force-dynamic";
@@ -79,6 +85,22 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${bricolage.variable} ${geist.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <meta name="google-site-verification" content="google37f47672baefed8c" />
+        <meta name="google-site-verification" content="google37f47672baefed8c.html" />
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(c,l,a,r,i,t,y){
+                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "y9x769v08r");
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-ink text-chalk font-body">
         <JsonLd data={organizationSchema(company)} />
         <JsonLd data={websiteSchema(company)} />
