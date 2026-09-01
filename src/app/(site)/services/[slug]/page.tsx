@@ -28,6 +28,7 @@ import Image from "next/image";
 import FormattedText from "@/components/ui/FormattedText";
 import TechStack from "@/components/common/TechStack";
 import QuickQuoteCard from "@/components/services/QuickQuoteCard";
+import SeoScopeOfWorkSection from "@/components/services/SeoScopeOfWorkSection";
 import { SERVICE_DETAILS } from "@/data/serviceDetails";
 
 const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
@@ -99,6 +100,7 @@ export default async function ServiceDetailPage({
   const details = SERVICE_DETAILS[slug];
   const isWebDev =
     service.slug === "website-development" || service.slug === "web-development";
+  const isSeo = service.slug === "seo";
 
   const imageSrc =
     service.ogImage ||
@@ -244,7 +246,7 @@ export default async function ServiceDetailPage({
         {/* =================================================================== */}
         {/* 2. WHAT'S INCLUDED / TECH STACK                                    */}
         {/* =================================================================== */}
-        {isWebDev ? (
+        {isWebDev && (
           <TechStack
             className="my-8 border-y border-chalk/10"
             eyebrow="ENGINEERING & PLATFORM ECOSYSTEM"
@@ -253,32 +255,34 @@ export default async function ServiceDetailPage({
             includeDeliverables={service.bullets}
             deliverablesTitle={`Core Inclusions & Deliverables (Included in ${service.title})`}
           />
-        ) : (
-          service.bullets && service.bullets.length > 0 && (
-            <section className="mx-auto max-w-[1440px] px-6 py-8 md:px-10">
-              <div className="rounded-3xl border border-chalk/20 bg-surface/70 p-6 md:p-8 shadow-sm">
-                <div className="flex items-center gap-2">
-                  <Sparkles size={16} className="text-signal" />
-                  <h2 className="font-mono text-mono-label uppercase tracking-widest text-muted font-bold">
-                    Core Inclusions & Deliverables (Included in {service.title})
-                  </h2>
-                </div>
-                <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                  {service.bullets.map((bullet) => (
-                    <div
-                      key={bullet}
-                      className="flex items-start gap-3 rounded-2xl border border-chalk/15 bg-surface p-4 shadow-sm"
-                    >
-                      <Check size={18} className="mt-0.5 shrink-0 text-flow" />
-                      <span className="font-body text-sm font-medium text-chalk">
-                        {bullet}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+        )}
+
+        {isSeo && <SeoScopeOfWorkSection />}
+
+        {!isWebDev && !isSeo && service.bullets && service.bullets.length > 0 && (
+          <section className="mx-auto max-w-[1440px] px-6 py-8 md:px-10">
+            <div className="rounded-3xl border border-chalk/20 bg-surface/70 p-6 md:p-8 shadow-sm">
+              <div className="flex items-center gap-2">
+                <Sparkles size={16} className="text-signal" />
+                <h2 className="font-mono text-mono-label uppercase tracking-widest text-muted font-bold">
+                  Core Inclusions & Deliverables (Included in {service.title})
+                </h2>
               </div>
-            </section>
-          )
+              <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {service.bullets.map((bullet) => (
+                  <div
+                    key={bullet}
+                    className="flex items-start gap-3 rounded-2xl border border-chalk/15 bg-surface p-4 shadow-sm"
+                  >
+                    <Check size={18} className="mt-0.5 shrink-0 text-flow" />
+                    <span className="font-body text-sm font-medium text-chalk">
+                      {bullet}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
         )}
 
         {/* =================================================================== */}

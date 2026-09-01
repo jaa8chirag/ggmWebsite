@@ -88,16 +88,22 @@ export default async function Footer() {
             </div>
           </div>
 
-          {/* Services Column */}
+          {/* Services Column (Curated 5 Flagships Per User Specification) */}
           <div>
             <p className="font-mono text-mono-label uppercase tracking-widest text-flow">
               Services
             </p>
             <ul className="mt-4 space-y-2.5">
-              {services.map((s) => (
-                <li key={s.slug}>
+              {[
+                { title: "Website Development Service", href: "/services/website-development" },
+                { title: "Mobile Application", href: "/services/mobile-app-development" },
+                { title: "SEO", href: "/services/seo" },
+                { title: "Google AdSense Service", href: "/services/google-adsense" },
+                { title: "Shopify", href: "/services/shopify-development" },
+              ].map((s) => (
+                <li key={s.href}>
                   <Link
-                    href={`/services/${s.slug}`}
+                    href={s.href}
                     className="font-body text-sm text-muted transition-colors hover:text-chalk"
                   >
                     {s.title}

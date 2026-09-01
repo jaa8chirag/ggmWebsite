@@ -659,13 +659,14 @@ export const SERVICE_DETAILS: Record<string, ServiceDetailContent> = {
 
   "website-development": {
     slug: "website-development",
-    badge: "FULL-STACK NEXT.JS ENGINEERING",
-    heroH1: "Custom Web Development & Engineering Agency in Delhi",
+    badge: "WEB DEVELOPMENT THAT WORKS FOR YOUR BUSINESS",
+    heroH1: "Website Development Service",
     heroSubtitle:
-      "We engineer sub-second, conversion-first Next.js web applications built to dominate search rankings and convert traffic into enterprise revenue. Zero bloat, 100% clean code.",
+      "GGM Technologies is a leading service provider of Website Development Service, E-Commerce Website Development, Shopify Website Development, and Digital Solutions. We are committed to delivering high quality, innovative, and customized solutions that meet our clients’ business requirements.",
     overviewParagraphs: [
-      "In modern digital business, your website is not an online brochure — it is your central revenue engine. A slow, bloated, template-based website directly harms your Google rankings, inflates your paid advertising acquisition costs, and sends high-intent visitors straight to your competitors.",
-      "At GGM Technologies, we engineer high-performance web applications using the modern React, Next.js App Router, TypeScript, and Tailwind CSS stack. Located in Delhi and building for global enterprises, we construct digital platforms with 100/100 Core Web Vitals, enterprise security, dynamic CMS integrations, and conversion funnels that perform under massive traffic spikes.",
+      "As a leading Website Development Company in India, GGM Technologies delivers custom built websites and digital solutions designed to combine modern aesthetics with powerful functionality. We create fast, responsive, secure, and scalable websites that help businesses establish a strong digital presence and achieve measurable growth.",
+      "With the rapid expansion of India’s e-commerce and digital ecosystem, having a professional online presence is no longer optional it’s essential. Whether you’re launching a new business, upgrading an existing website, or building an advanced e-commerce platform, our expert team delivers solutions tailored to your business goals.",
+      "Partner with GGM Technologies, a trusted Website Development Agency for innovative web development solutions that enhance customer engagement, generate leads, increase conversions, and support your business as it grows.",
     ],
     metrics: [
       { value: "< 0.8s", label: "Average Page Load Speed", subtext: "Delivered via Next.js Server Components and global edge CDN" },

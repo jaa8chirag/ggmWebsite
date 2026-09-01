@@ -30,73 +30,8 @@ export interface TechnologyItem {
 }
 
 export const ALL_TECHNOLOGIES: TechnologyItem[] = [
-  // 9 PROMINENT FLAGSHIPS FIRST
-  {
-    name: "WordPress",
-    category: "cms-ecommerce",
-    categoryLabel: "CMS & Editorial",
-    isProminent: true,
-    role: "Custom Enterprise CMS",
-    description: "Bespoke theme architectures, custom Gutenberg blocks, ACF Pro, and headless WordPress setups built for extreme speed and security.",
-    highlights: ["Custom Block Themes", "Headless WP & GraphQL", "Database Index Optimization", "Zero Agency Lock-In"],
-    color: "#21759B",
-    badgeBg: "rgba(33, 117, 155, 0.12)",
-  },
-  {
-    name: "Shopify",
-    category: "cms-ecommerce",
-    categoryLabel: "D2C & eCommerce",
-    isProminent: true,
-    role: "Shopify Plus & Liquid Engineering",
-    description: "Custom Shopify Liquid themes, Hydrogen headless storefronts, app integrations, and conversion-optimized checkout funnels.",
-    highlights: ["Shopify Plus Development", "Custom Liquid Themes", "Checkout Extensibility", "ERP & WMS Integrations"],
-    color: "#95BF47",
-    badgeBg: "rgba(149, 191, 71, 0.12)",
-  },
-  {
-    name: "WooCommerce",
-    category: "cms-ecommerce",
-    categoryLabel: "Scalable eCommerce",
-    isProminent: true,
-    role: "High-Volume Commerce",
-    description: "Scalable online stores with custom payment gateways, subscription workflows, multi-currency routing, and headless checkout speed.",
-    highlights: ["High-Volume Database Tuning", "Custom Payment Gateways", "Automated Inventory Sync", "Sub-second Page Speeds"],
-    color: "#96588A",
-    badgeBg: "rgba(150, 88, 138, 0.12)",
-  },
-  {
-    name: "PHP",
-    category: "backend",
-    categoryLabel: "Core Web Engine",
-    isProminent: true,
-    role: "Modern Object-Oriented Backend",
-    description: "Modern PHP 8.3+ development powering ultra-reliable enterprise portals, legacy code modernizations, and high-concurrency microservices.",
-    highlights: ["PHP 8.3 JIT Performance", "Object-Oriented Architecture", "Secure Authentication Systems", "High Concurrency Processing"],
-    color: "#777BB4",
-    badgeBg: "rgba(119, 123, 180, 0.12)",
-  },
-  {
-    name: "Laravel",
-    category: "backend",
-    categoryLabel: "Backend Framework",
-    isProminent: true,
-    role: "Enterprise Web Applications",
-    description: "Clean MVC architecture, robust REST/GraphQL APIs, background queues, and automated workflows engineered for serious scale.",
-    highlights: ["RESTful & GraphQL APIs", "Queues & Redis Caching", "Role-Based Access Control", "Microservices Architecture"],
-    color: "#FF2D20",
-    badgeBg: "rgba(255, 45, 32, 0.12)",
-  },
-  {
-    name: "React.js",
-    category: "frontend",
-    categoryLabel: "Frontend Architecture",
-    isProminent: true,
-    role: "Interactive Client Interfaces",
-    description: "High-performance reactive interfaces, modular component libraries, client-side state engines, and rich browser dashboards.",
-    highlights: ["Modular UI Components", "Redux / Zustand State", "Complex Data Visualizations", "High-FPS Micro-interactions"],
-    color: "#087EA4",
-    badgeBg: "rgba(8, 126, 164, 0.12)",
-  },
+  // 9 PROMINENT FLAGSHIPS (EXACT SEQUENCE PER USER SPECIFICATION)
+  // 1. Next.js
   {
     name: "Next.js",
     category: "frontend",
@@ -108,6 +43,79 @@ export const ALL_TECHNOLOGIES: TechnologyItem[] = [
     color: "#000000",
     badgeBg: "rgba(15, 20, 32, 0.10)",
   },
+  // 2. React.js
+  {
+    name: "React.js",
+    category: "frontend",
+    categoryLabel: "Frontend Architecture",
+    isProminent: true,
+    role: "Interactive Client Interfaces",
+    description: "High-performance reactive interfaces, modular component libraries, client-side state engines, and rich browser dashboards.",
+    highlights: ["Modular UI Components", "Redux / Zustand State", "Complex Data Visualizations", "High-FPS Micro-interactions"],
+    color: "#087EA4",
+    badgeBg: "rgba(8, 126, 164, 0.12)",
+  },
+  // 3. PHP
+  {
+    name: "PHP",
+    category: "backend",
+    categoryLabel: "Core Web Engine",
+    isProminent: true,
+    role: "Modern Object-Oriented Backend",
+    description: "Modern PHP 8.3+ development powering ultra-reliable enterprise portals, legacy code modernizations, and high-concurrency microservices.",
+    highlights: ["PHP 8.3 JIT Performance", "Object-Oriented Architecture", "Secure Authentication Systems", "High Concurrency Processing"],
+    color: "#777BB4",
+    badgeBg: "rgba(119, 123, 180, 0.12)",
+  },
+  // 4. Laravel
+  {
+    name: "Laravel",
+    category: "backend",
+    categoryLabel: "Backend Framework",
+    isProminent: true,
+    role: "Enterprise Web Applications",
+    description: "Clean MVC architecture, robust REST/GraphQL APIs, background queues, and automated workflows engineered for serious scale.",
+    highlights: ["RESTful & GraphQL APIs", "Queues & Redis Caching", "Role-Based Access Control", "Microservices Architecture"],
+    color: "#FF2D20",
+    badgeBg: "rgba(255, 45, 32, 0.12)",
+  },
+  // 5. Shopify
+  {
+    name: "Shopify",
+    category: "cms-ecommerce",
+    categoryLabel: "D2C & eCommerce",
+    isProminent: true,
+    role: "Shopify Plus & Liquid Engineering",
+    description: "Custom Shopify Liquid themes, Hydrogen headless storefronts, app integrations, and conversion-optimized checkout funnels.",
+    highlights: ["Shopify Plus Development", "Custom Liquid Themes", "Checkout Extensibility", "ERP & WMS Integrations"],
+    color: "#95BF47",
+    badgeBg: "rgba(149, 191, 71, 0.12)",
+  },
+  // 6. WordPress
+  {
+    name: "WordPress",
+    category: "cms-ecommerce",
+    categoryLabel: "CMS & Editorial",
+    isProminent: true,
+    role: "Custom Enterprise CMS",
+    description: "Bespoke theme architectures, custom Gutenberg blocks, ACF Pro, and headless WordPress setups built for extreme speed and security.",
+    highlights: ["Custom Block Themes", "Headless WP & GraphQL", "Database Index Optimization", "Zero Agency Lock-In"],
+    color: "#21759B",
+    badgeBg: "rgba(33, 117, 155, 0.12)",
+  },
+  // 7. WOOCOMMERCE
+  {
+    name: "WooCommerce",
+    category: "cms-ecommerce",
+    categoryLabel: "Scalable eCommerce",
+    isProminent: true,
+    role: "High-Volume Commerce",
+    description: "Scalable online stores with custom payment gateways, subscription workflows, multi-currency routing, and headless checkout speed.",
+    highlights: ["High-Volume Database Tuning", "Custom Payment Gateways", "Automated Inventory Sync", "Sub-second Page Speeds"],
+    color: "#96588A",
+    badgeBg: "rgba(150, 88, 138, 0.12)",
+  },
+  // 8. Node.js
   {
     name: "Node.js",
     category: "backend",
@@ -119,6 +127,7 @@ export const ALL_TECHNOLOGIES: TechnologyItem[] = [
     color: "#339933",
     badgeBg: "rgba(51, 153, 51, 0.12)",
   },
+  // 9. .NET
   {
     name: ".NET",
     category: "backend",

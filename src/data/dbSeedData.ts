@@ -7,9 +7,9 @@ export const DB_SERVICES: Service[] = [
     "id": "srv_1002",
     "slug": "website-development",
     "index": "01",
-    "title": "Website Development",
-    "promise": "Sub-second load times. Zero layout shift. Built to rank.",
-    "description": "Custom web development built on Next.js, React, Node.js, and modern TypeScript — responsive, accessible, secure, and engineered to turn visitors into paying clients.",
+    "title": "Website Development Service",
+    "promise": "Web Development That Works for Your Business",
+    "description": "GGM Technologies is a leading service provider of Website Development Service, E-Commerce Website Development, Shopify Website Development, and Digital Solutions. We are committed to delivering high quality, innovative, and customized solutions that meet our clients’ business requirements.",
     "bullets": [
       "Custom Next.js & React architecture",
       "Sub-second Core Web Vitals performance",
@@ -548,59 +548,15 @@ export const DB_PRODUCTS: Product[] = [
 
 export const DB_CERTIFICATES: CertificateDocument[] = [
   {
-    "id": "cert_msme",
-    "title": "MSME Udyam Registration Certificate",
-    "issuer": "Ministry of MSME, Govt. of India",
-    "certificateNo": "UDYAM-DL-08-0098741",
-    "pdfUrl": "/uploads/certificates/msme-udyam-certificate.pdf",
-    "imageUrl": null,
-    "description": "Official Micro, Small and Medium Enterprises registration for digital marketing and software engineering services.",
-    "issueDate": "2024",
-    "order": 0
-  },
-  {
-    "id": "cert_gst",
-    "title": "GST Registration Certificate (Form REG-06)",
-    "issuer": "Goods and Services Tax Network, Govt. of India",
-    "certificateNo": "07AABCU9603R1ZM",
-    "pdfUrl": "/uploads/certificates/gst-registration-certificate.pdf",
-    "imageUrl": null,
-    "description": "Government tax compliance and verified enterprise entity status under Delhi State jurisdiction.",
-    "issueDate": "2024",
-    "order": 1
-  },
-  {
-    "id": "cert_google",
-    "title": "Google Certified Partner & Search Ads Specialist",
-    "issuer": "Google Partners Academy",
-    "certificateNo": "GP-ADS-9982314-IN",
-    "pdfUrl": "/uploads/certificates/google-partner-certificate.pdf",
-    "imageUrl": null,
-    "description": "Certified proficiency in advanced Search Campaigns, Smart Bidding algorithms, and GA4 telemetry.",
-    "issueDate": "2025",
-    "order": 2
-  },
-  {
-    "id": "cert_indiamart",
-    "title": "IndiaMART TrustSeal Verified Certificate",
-    "issuer": "IndiaMART InterMESH Limited",
-    "certificateNo": "IM-TS-884710",
-    "pdfUrl": "/uploads/certificates/indiamart-trustseal.pdf",
-    "imageUrl": null,
-    "description": "Verified supplier credential ensuring authentic business location, domain ownership, and trade legitimacy.",
-    "issueDate": "2025",
-    "order": 3
-  },
-  {
     "id": "cert_justdial",
     "title": "Justdial Verified Certificate of Trust & Users' Choice",
     "issuer": "Justdial Limited",
     "certificateNo": "JD-TRUST-DL-110016",
     "pdfUrl": "/uploads/certificates/justdial-verified-certificate.pdf",
     "imageUrl": null,
-    "description": "Official Justdial Certified Trusted Member and Users' Choice 2026 accreditation with 5-star rating for verified Hauz Khas (New Delhi) premises, contact numbers, and trade authenticity.",
+    "description": "Official Justdial Certified Trusted Member and Users' Choice 2026 accreditation with 5-star rating for verified Green Park & Hauz Khas (New Delhi) premises, contact numbers, and trade authenticity.",
     "issueDate": "2026",
-    "order": 4
+    "order": 0
   },
   {
     "id": "cert_seo_sow",
@@ -609,9 +565,31 @@ export const DB_CERTIFICATES: CertificateDocument[] = [
     "certificateNo": "GGM-SOW-SEO-20K",
     "pdfUrl": "/uploads/certificates/ggm-seo-package-scope-of-work.pdf",
     "imageUrl": null,
-    "description": "Official Scope of Work, SLA delivery metrics, On-Page & Off-Page optimization protocols, and 50-backlink monthly deliverables charter by GGM Technologies (Green Park / Yusuf Sarai, New Delhi).",
+    "description": "Official Scope of Work, SLA delivery metrics, On-Page & Off-Page optimization protocols, and comprehensive deliverables charter by GGM Technologies (Green Park / Yusuf Sarai, New Delhi).",
     "issueDate": "2026",
-    "order": 5
+    "order": 1
+  },
+  {
+    "id": "cert_msme",
+    "title": "MSME Udyam Registration Certificate",
+    "issuer": "Ministry of Micro, Small & Medium Enterprises, Govt. of India",
+    "certificateNo": "UDYAM-DL-08-0098741",
+    "pdfUrl": "/uploads/certificates/msme-udyam-certificate.pdf",
+    "imageUrl": null,
+    "description": "Official Government of India Micro Enterprise registration confirming verified operations in Software Development, Digital Marketing, and IT Services under South Delhi jurisdiction.",
+    "issueDate": "2024",
+    "order": 2
+  },
+  {
+    "id": "cert_gst",
+    "title": "GST Registration Certificate (Form REG-06)",
+    "issuer": "Goods and Services Tax Network, Department of Revenue, Govt. of India",
+    "certificateNo": "07ELUPM2384A1ZV",
+    "pdfUrl": "/uploads/certificates/gst-registration-certificate.pdf",
+    "imageUrl": null,
+    "description": "Statutory tax compliance registration under Rule 10(1) verifying active regular taxpayer standing for GGM Technologies at Yusuf Sarai Commercial Complex, Green Park, New Delhi.",
+    "issueDate": "2024",
+    "order": 3
   }
 ];
 
