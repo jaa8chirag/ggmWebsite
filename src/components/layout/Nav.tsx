@@ -136,13 +136,13 @@ export default function Nav() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-6">
+      <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-6 transform-gpu will-change-transform">
         <nav
           className={cn(
-            "mx-auto flex max-w-[1280px] items-center justify-between rounded-full border px-5 py-2.5 backdrop-blur-xl backdrop-saturate-150 transition-all duration-300 md:px-6",
+            "mx-auto flex max-w-[1280px] items-center justify-between rounded-full border px-5 py-2.5 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 md:px-6 transform-gpu",
             scrolled
-              ? "border-white/90 bg-white/70 shadow-[0_14px_45px_rgba(3,112,186,0.1),0_4px_16px_rgba(0,0,0,0.06),inset_0_1.5px_2px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.02)]"
-              : "border-white/80 bg-white/45 shadow-[0_10px_35px_rgba(3,112,186,0.08),0_2px_12px_rgba(0,0,0,0.04),inset_0_1.5px_2px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.02)]"
+              ? "border-white/90 bg-white/80 shadow-[0_10px_30px_rgba(3,112,186,0.08),0_2px_8px_rgba(0,0,0,0.04)]"
+              : "border-white/80 bg-white/60 shadow-[0_8px_24px_rgba(3,112,186,0.06)]"
           )}
         >
           {/* Brand Logo */}

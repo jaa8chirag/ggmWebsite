@@ -157,11 +157,7 @@ function Scene({ progressRef }: { progressRef: MutableRefObject<number> }) {
     return () => window.removeEventListener("pointermove", onMove);
   }, []);
 
-  useEffect(() => {
-    const tick = () => invalidate();
-    gsap.ticker.add(tick);
-    return () => gsap.ticker.remove(tick);
-  }, [invalidate]);
+  // Native R3F useFrame handles animation smoothly when in view, no global gsap ticker loop needed
 
   useFrame((_, delta) => {
     const group = groupRef.current;
@@ -305,7 +301,7 @@ export default function BacklinkField({
     <div ref={containerRef} className={className}>
       {inView && (
         <Canvas
-          frameloop="demand"
+          frameloop="always"
           dpr={[1, 1.5]}
           gl={{ antialias: false, alpha: true }}
           camera={{ position: [0, 0, 7], fov: 45 }}
