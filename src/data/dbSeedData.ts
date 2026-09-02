@@ -587,7 +587,7 @@ export const DB_CERTIFICATES: CertificateDocument[] = [
     "certificateNo": "UDYAM-DL-08-0098741",
     "pdfUrl": "/uploads/certificates/msme-udyam-certificate.pdf",
     "imageUrl": null,
-    "description": "Official Government of India Micro Enterprise registration confirming verified operations in Software Development, Digital Marketing, and IT Services under South Delhi jurisdiction.",
+    "description": "Official Government of India MSME Udyam Registration Certificate validating GGM Technologies as a recognized enterprise for software, SEO, and digital media consulting.",
     "issueDate": "2024",
     "order": 3
   },
@@ -598,18 +598,18 @@ export const DB_CERTIFICATES: CertificateDocument[] = [
     "certificateNo": "07ELUPM2384A1ZV",
     "pdfUrl": "/uploads/certificates/gst-registration-certificate.pdf",
     "imageUrl": null,
-    "description": "Statutory tax compliance registration under Rule 10(1) verifying active regular taxpayer standing for GGM Technologies at Yusuf Sarai Commercial Complex, Green Park, New Delhi.",
+    "description": "Statutory Government of India GST Registration Certificate (Form GST REG-06) issued to Proprietor Guru Govind Maheesh for GGM Technologies at Yusuf Sarai Commercial Complex, Green Park, New Delhi.",
     "issueDate": "2024",
     "order": 4
   },
   {
     "id": "cert_google",
-    "title": "Google Certified Partner & Search Ads Specialist",
-    "issuer": "Google Partners Academy",
+    "title": "Google My Business Verified Business Certificate",
+    "issuer": "Google LLC",
     "certificateNo": "GP-ADS-9982314-IN",
     "pdfUrl": "/uploads/certificates/google-partner-certificate.pdf",
     "imageUrl": null,
-    "description": "Certified partner credential in Google Search Advertising, Smart Bidding algorithms, and Google Analytics 4 (GA4) telemetry.",
+    "description": "Official Google Verified Business Certification confirming GGM Technologies verified digital enterprise identity, local search authority, and operational excellence in New Delhi.",
     "issueDate": "2025",
     "order": 5
   }
