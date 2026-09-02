@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { CheckCircle2, Phone, Mail, User, MessageSquare, Briefcase, Loader2 } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { submitQuoteRequest } from "@/app/actions/quote";
@@ -52,6 +53,7 @@ export default function ContactForm({
 }: {
   services: { slug: string; title: string }[];
 }) {
+  const router = useRouter();
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Partial<Record<keyof FormValues, boolean>>>({});
@@ -102,6 +104,7 @@ export default function ContactForm({
 
       if (res.success) {
         setSubmitted(true);
+        router.push("/thank-you");
       } else {
         setServerError(res.error || "Failed to submit. Please contact us via phone or WhatsApp.");
       }

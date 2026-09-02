@@ -570,14 +570,14 @@ export const DB_CERTIFICATES: CertificateDocument[] = [
     "order": 1
   },
   {
-    "id": "cert_seo_sow",
-    "title": "GGM SEO Scope of Work & Package Specification",
-    "issuer": "GGM Technologies Commercial & Operations Wing",
-    "certificateNo": "GGM-SOW-SEO-20K",
-    "pdfUrl": "/uploads/certificates/ggm-seo-package-scope-of-work.pdf",
+    "id": "cert_indiamart",
+    "title": "IndiaMART TrustSEAL Verified Certificate of Trust",
+    "issuer": "IndiaMART InterMESH Ltd.",
+    "certificateNo": "IM-TRUSTSEAL-07ELUPM",
+    "pdfUrl": "/uploads/certificates/indiamart-trustseal-certificate.pdf",
     "imageUrl": null,
-    "description": "Official Scope of Work, SLA delivery metrics, On-Page & Off-Page optimization protocols, and comprehensive deliverables charter by GGM Technologies (Green Park / Yusuf Sarai, New Delhi).",
-    "issueDate": "2026",
+    "description": "Official IndiaMART TrustSEAL Certificate of Trust verifying GGM Technologies, Proprietor Guru Govind Maheesh, statutory GSTIN 07ELUPM2384A1ZV, and commercial premises at Yusuf Sarai Commercial Complex, Green Park, New Delhi.",
+    "issueDate": "2024",
     "order": 2
   },
   {

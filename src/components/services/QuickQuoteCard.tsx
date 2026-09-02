@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Zap, Phone, User, CheckCircle2, AlertCircle, ArrowRight, Loader2, ShieldCheck } from "lucide-react";
 import { submitQuoteRequest, type QuoteActionResult } from "@/app/actions/quote";
 
@@ -15,6 +16,7 @@ export default function QuickQuoteCard({
   serviceTitle,
   className = "",
 }: QuickQuoteCardProps) {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [pageUrl, setPageUrl] = useState("");
@@ -47,6 +49,7 @@ export default function QuickQuoteCard({
       if (res.success) {
         setName("");
         setPhone("");
+        router.push("/thank-you");
       }
     } catch (err: any) {
       setResult({
