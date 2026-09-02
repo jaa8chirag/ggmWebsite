@@ -351,7 +351,7 @@ export async function getSettings(): Promise<SiteSettingsModel> {
     aboutIntro: settings.aboutIntro,
     mission: settings.mission,
     vision: settings.vision,
-    ceoName: settings.ceoName ?? "Chirag Kumar",
+    ceoName: settings.ceoName ?? "Guru Govind Mahesh",
     ceoTitle: settings.ceoTitle ?? "Founder & Chief Executive Officer",
     ceoBio: settings.ceoBio ?? "",
     companyStory: settings.companyStory ?? "",
@@ -413,7 +413,7 @@ const STATIC_LEGAL_FALLBACKS: Record<string, { title: string; subtitle: string; 
   "about-ceo": {
     title: "About Founder & CEO",
     subtitle: "Algorithmic Growth Strategist, Full-Stack Engineer, and Visionary Leader of GGM Technologies.",
-    content: "## Executive Profile: Chirag Kumar (Founder & CEO)\n\nDriven by an uncompromising commitment to transparent, revenue-backed digital growth.",
+    content: "## Executive Profile: Guru Govind Mahesh (Founder & CEO)\n\nDriven by an uncompromising commitment to transparent, revenue-backed digital growth.",
   },
   "about-the-company": {
     title: "About The Company & Infrastructure",

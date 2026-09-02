@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return buildMetadata({
     title: page.metaTitle || `${page.title} | GGM Technologies`,
-    description: page.metaDescription || page.subtitle || "Learn about Chirag Kumar, Founder and CEO of GGM Technologies.",
+    description: page.metaDescription || page.subtitle || "Learn about Guru Govind Mahesh, Founder and CEO of GGM Technologies.",
     path: "/about-ceo",
   });
 }

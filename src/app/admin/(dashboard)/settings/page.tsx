@@ -290,7 +290,7 @@ export default async function AdminSettingsPage() {
                 <label className={labelClass} htmlFor="ceoName">
                   CEO / Founder Name
                 </label>
-                <input id="ceoName" name="ceoName" defaultValue={settings.ceoName ?? "Chirag Kumar"} className={inputClass} />
+                <input id="ceoName" name="ceoName" defaultValue={settings.ceoName ?? "Guru Govind Mahesh"} className={inputClass} />
               </div>
               <div>
                 <label className={labelClass} htmlFor="ceoTitle">

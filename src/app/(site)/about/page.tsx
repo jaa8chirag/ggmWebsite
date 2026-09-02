@@ -146,10 +146,10 @@ export default async function AboutPage() {
             <div className="lg:col-span-5">
               <div className="rounded-3xl border-2 border-chalk/20 bg-surface p-8 shadow-xl">
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-flow text-white font-display text-2xl font-bold shadow-lg shadow-flow/30">
-                  {settings.ceoName?.charAt(0) ?? "C"}
+                  {settings.ceoName?.charAt(0) ?? "G"}
                 </div>
                 <h3 className="mt-6 font-display text-2xl font-bold text-chalk">
-                  {settings.ceoName ?? "Chirag Kumar"}
+                  {settings.ceoName ?? "Guru Govind Mahesh"}
                 </h3>
                 <p className="font-mono text-xs uppercase tracking-wider text-flow font-semibold mt-1">
                   {settings.ceoTitle ?? "Founder & Chief Executive Officer"}
@@ -176,7 +176,7 @@ export default async function AboutPage() {
                 <FormattedText
                   text={
                     settings.ceoBio ||
-                    "Driven by an uncompromising commitment to transparent, numbers-backed digital growth, Chirag Kumar founded GGM Technologies to bridge the gap between creative marketing strategy and hardcore engineering precision."
+                    "Driven by an uncompromising commitment to transparent, numbers-backed digital growth, Guru Govind Mahesh founded GGM Technologies to bridge the gap between creative marketing strategy and hardcore engineering precision."
                   }
                   className="font-body text-body-l text-muted leading-relaxed"
                 />
