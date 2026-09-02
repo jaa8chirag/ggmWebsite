@@ -14,6 +14,8 @@ export async function submitQuoteRequest(formData: FormData): Promise<QuoteActio
   try {
     const name = (formData.get("name") as string)?.trim();
     const phone = (formData.get("phone") as string)?.trim();
+    const email = (formData.get("email") as string)?.trim() || null;
+    const message = (formData.get("message") as string)?.trim() || null;
     const serviceSlug = (formData.get("serviceSlug") as string)?.trim() || "general";
     const serviceTitle = (formData.get("serviceTitle") as string)?.trim() || "General Consultation";
     const pageUrl = (formData.get("pageUrl") as string)?.trim() || "/";
@@ -23,7 +25,7 @@ export async function submitQuoteRequest(formData: FormData): Promise<QuoteActio
     }
 
     // Clean phone number
-    const cleanPhone = phone.replace(/[\s\-\(\)]/g, "");
+    const cleanPhone = phone ? phone.replace(/[\s\-\(\)]/g, "") : "";
     if (!cleanPhone || cleanPhone.length < 8 || !/^[+]?[0-9]{8,15}$/.test(cleanPhone)) {
       return { success: false, error: "Please enter a valid 10-digit mobile or WhatsApp number." };
     }
@@ -31,9 +33,9 @@ export async function submitQuoteRequest(formData: FormData): Promise<QuoteActio
     const id = `quote_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
     await query(
-      `INSERT INTO \`QuoteRequest\` (\`id\`, \`name\`, \`phone\`, \`serviceSlug\`, \`serviceTitle\`, \`pageUrl\`, \`status\`, \`createdAt\`)
-       VALUES (?, ?, ?, ?, ?, ?, 'PENDING', NOW(3))`,
-      [id, name, phone, serviceSlug, serviceTitle, pageUrl]
+      `INSERT INTO \`QuoteRequest\` (\`id\`, \`name\`, \`phone\`, \`email\`, \`serviceSlug\`, \`serviceTitle\`, \`message\`, \`pageUrl\`, \`status\`, \`createdAt\`)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'PENDING', NOW(3))`,
+      [id, name, phone, email, serviceSlug, serviceTitle, message, pageUrl]
     );
 
     revalidatePath("/admin");
@@ -41,7 +43,7 @@ export async function submitQuoteRequest(formData: FormData): Promise<QuoteActio
 
     return {
       success: true,
-      message: `Thank you, ${name}! Your request for ${serviceTitle} has been received. Our senior consultant will call you within 15 minutes.`,
+      message: `Thank you, ${name}! Your request for ${serviceTitle} has been received. Our team will contact you within 15 minutes.`,
     };
   } catch (err: any) {
     console.error("Error submitting quote request:", err);

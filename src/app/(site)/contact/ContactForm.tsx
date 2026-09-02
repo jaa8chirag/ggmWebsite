@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Phone, Mail, User, MessageSquare, Briefcase, Loader2 } from "lucide-react";
 import Button from "@/components/ui/Button";
+import { submitQuoteRequest } from "@/app/actions/quote";
 
 interface FormValues {
   name: string;
+  phone: string;
   email: string;
   service: string;
   message: string;
@@ -16,6 +18,7 @@ type FormErrors = Partial<Record<keyof FormValues, string>>;
 
 const initialValues: FormValues = {
   name: "",
+  phone: "",
   email: "",
   service: "",
   message: "",
@@ -25,19 +28,20 @@ function validate(values: FormValues): FormErrors {
   const errors: FormErrors = {};
 
   if (!values.name.trim()) {
-    errors.name = "Tell us your name.";
+    errors.name = "Please tell us your name.";
+  }
+
+  const cleanPhone = values.phone.replace(/[\s\-\(\)]/g, "");
+  if (!cleanPhone) {
+    errors.phone = "Please enter your mobile / WhatsApp number.";
+  } else if (cleanPhone.length < 10 || !/^[+]?[0-9]{10,15}$/.test(cleanPhone)) {
+    errors.phone = "Please enter a valid 10-digit mobile number.";
   }
 
   if (!values.email.trim()) {
-    errors.email = "We need an email to reply to.";
+    errors.email = "Please provide an email address for project details.";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
-    errors.email = "That doesn't look like a valid email.";
-  }
-
-  if (!values.message.trim()) {
-    errors.message = "Give us a line or two on what you need.";
-  } else if (values.message.trim().length < 10) {
-    errors.message = "A little more detail helps — at least 10 characters.";
+    errors.email = "That doesn't look like a valid email address.";
   }
 
   return errors;
@@ -51,15 +55,13 @@ export default function ContactForm({
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Partial<Record<keyof FormValues, boolean>>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (field: keyof FormValues, value: string) => {
     const next = { ...values, [field]: value };
     setValues(next);
-    // Re-validate live once a field has been touched, so a fixed error clears
-    // immediately rather than lingering until blur — a stale error message
-    // shifts layout, which can make a click on Submit land somewhere else
-    // entirely if the shift happens between mousedown and mouseup.
     if (touched[field]) {
       setErrors(validate(next));
     }
@@ -70,48 +72,101 @@ export default function ContactForm({
     setErrors(validate(values));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setServerError(null);
+
     const nextErrors = validate(values);
     setErrors(nextErrors);
-    setTouched({ name: true, email: true, service: true, message: true });
+    setTouched({ name: true, phone: true, email: true, service: true, message: true });
 
-    if (Object.keys(nextErrors).length === 0) {
-      setSubmitted(true);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    setIsSubmitting(true);
+    try {
+      const selectedService = services.find((s) => s.slug === values.service);
+      const serviceTitle = selectedService
+        ? `Start a Project - ${selectedService.title}`
+        : "Start a Project - General Inquiry";
+
+      const formData = new FormData();
+      formData.set("name", values.name);
+      formData.set("phone", values.phone);
+      formData.set("email", values.email);
+      formData.set("serviceSlug", values.service || "general");
+      formData.set("serviceTitle", serviceTitle);
+      formData.set("message", values.message || "");
+      formData.set("pageUrl", "/contact");
+
+      const res = await submitQuoteRequest(formData);
+
+      if (res.success) {
+        setSubmitted(true);
+      } else {
+        setServerError(res.error || "Failed to submit. Please contact us via phone or WhatsApp.");
+      }
+    } catch (err) {
+      setServerError("An unexpected error occurred. Please call or WhatsApp us directly.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   if (submitted) {
     return (
-      <div className="flex flex-col items-start gap-4 rounded-2xl border border-flow/30 bg-surface p-10">
-        <CheckCircle2 size={32} className="text-flow" />
-        <h2 className="font-display text-2xl text-chalk">
-          Message sent.
-        </h2>
-        <p className="max-w-sm font-body text-body text-muted">
-          Thanks, {values.name.split(" ")[0]}. We&apos;ll get back to you
-          within one business day.
-        </p>
-        <Button variant="ghost" onClick={() => {
-          setValues(initialValues);
-          setTouched({});
-          setErrors({});
-          setSubmitted(false);
-        }}>
-          Send another message
+      <div className="flex flex-col items-start gap-5 rounded-3xl border-2 border-flow/40 bg-surface p-8 md:p-10 shadow-xl">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-500">
+          <CheckCircle2 size={36} />
+        </div>
+        <div>
+          <h2 className="font-display text-2xl font-bold text-chalk">
+            Project Inquiry Received!
+          </h2>
+          <p className="mt-2 font-body text-sm text-muted">
+            Thank you, <span className="font-semibold text-chalk">{values.name}</span>. We have logged your request for{" "}
+            <span className="font-semibold text-flow">
+              {services.find((s) => s.slug === values.service)?.title || "your digital growth"}
+            </span>
+            . Our senior technical consultant will call you shortly on{" "}
+            <span className="font-mono font-semibold text-chalk">{values.phone}</span>.
+          </p>
+        </div>
+
+        <div className="w-full rounded-2xl border border-chalk/10 bg-ink/50 p-4 font-mono text-xs text-muted">
+          <p>✓ Instant notification dispatched to project directors</p>
+          <p className="mt-1">✓ Non-disclosure &amp; direct quote review within business hours</p>
+        </div>
+
+        <Button
+          variant="ghost"
+          onClick={() => {
+            setValues(initialValues);
+            setTouched({});
+            setErrors({});
+            setSubmitted(false);
+          }}
+        >
+          Submit another inquiry
         </Button>
       </div>
     );
   }
 
   return (
-    <form noValidate onSubmit={handleSubmit} className="space-y-6">
+    <form noValidate onSubmit={handleSubmit} className="space-y-5 rounded-3xl border border-chalk/20 bg-surface/70 p-6 md:p-8 shadow-lg backdrop-blur-md">
+      {serverError && (
+        <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs font-mono text-rose-400">
+          {serverError}
+        </div>
+      )}
+
+      {/* Name */}
       <div>
         <label
           htmlFor="name"
-          className="font-mono text-mono-label uppercase tracking-widest text-muted"
+          className="flex items-center gap-2 font-mono text-mono-label uppercase tracking-widest text-muted"
         >
-          Name
+          <User size={13} className="text-flow" /> Your Full Name *
         </label>
         <input
           id="name"
@@ -120,21 +175,49 @@ export default function ContactForm({
           onChange={(e) => handleChange("name", e.target.value)}
           onBlur={() => handleBlur("name")}
           aria-invalid={Boolean(touched.name && errors.name)}
-          aria-describedby="name-error"
-          className="mt-2 w-full rounded-lg border border-chalk/15 bg-transparent px-4 py-3 font-body text-chalk placeholder:text-muted/50 focus:border-flow"
-          placeholder="Your name"
+          className="mt-2 w-full rounded-xl border border-chalk/20 bg-surface px-4 py-3 font-body text-chalk placeholder:text-muted/50 focus:border-flow focus:ring-1 focus:ring-flow transition-all"
+          placeholder="e.g. Rahul Sharma"
         />
-        <p id="name-error" className="mt-2 min-h-4 font-mono text-xs text-signal">
-          {touched.name ? errors.name : ""}
-        </p>
+        {touched.name && errors.name && (
+          <p className="mt-1.5 font-mono text-xs text-signal">{errors.name}</p>
+        )}
       </div>
 
+      {/* Phone Number (Crucial Field) */}
+      <div>
+        <label
+          htmlFor="phone"
+          className="flex items-center gap-2 font-mono text-mono-label uppercase tracking-widest text-muted"
+        >
+          <Phone size={13} className="text-signal" /> Mobile / WhatsApp Number *
+        </label>
+        <div className="relative mt-2">
+          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-mono text-xs font-bold text-muted">
+            +91
+          </span>
+          <input
+            id="phone"
+            type="tel"
+            value={values.phone}
+            onChange={(e) => handleChange("phone", e.target.value)}
+            onBlur={() => handleBlur("phone")}
+            aria-invalid={Boolean(touched.phone && errors.phone)}
+            className="w-full rounded-xl border border-chalk/20 bg-surface py-3 pl-14 pr-4 font-mono text-sm text-chalk placeholder:text-muted/50 focus:border-flow focus:ring-1 focus:ring-flow transition-all"
+            placeholder="98765 43210"
+          />
+        </div>
+        {touched.phone && errors.phone && (
+          <p className="mt-1.5 font-mono text-xs text-signal">{errors.phone}</p>
+        )}
+      </div>
+
+      {/* Email */}
       <div>
         <label
           htmlFor="email"
-          className="font-mono text-mono-label uppercase tracking-widest text-muted"
+          className="flex items-center gap-2 font-mono text-mono-label uppercase tracking-widest text-muted"
         >
-          Email
+          <Mail size={13} className="text-flow" /> Email Address *
         </label>
         <input
           id="email"
@@ -143,30 +226,30 @@ export default function ContactForm({
           onChange={(e) => handleChange("email", e.target.value)}
           onBlur={() => handleBlur("email")}
           aria-invalid={Boolean(touched.email && errors.email)}
-          aria-describedby="email-error"
-          className="mt-2 w-full rounded-lg border border-chalk/15 bg-transparent px-4 py-3 font-body text-chalk placeholder:text-muted/50 focus:border-flow"
-          placeholder="you@company.com"
+          className="mt-2 w-full rounded-xl border border-chalk/20 bg-surface px-4 py-3 font-body text-chalk placeholder:text-muted/50 focus:border-flow focus:ring-1 focus:ring-flow transition-all"
+          placeholder="rahul@company.com"
         />
-        <p id="email-error" className="mt-2 min-h-4 font-mono text-xs text-signal">
-          {touched.email ? errors.email : ""}
-        </p>
+        {touched.email && errors.email && (
+          <p className="mt-1.5 font-mono text-xs text-signal">{errors.email}</p>
+        )}
       </div>
 
+      {/* Service */}
       <div>
         <label
           htmlFor="service"
-          className="font-mono text-mono-label uppercase tracking-widest text-muted"
+          className="flex items-center gap-2 font-mono text-mono-label uppercase tracking-widest text-muted"
         >
-          What do you need? (optional)
+          <Briefcase size={13} className="text-flow" /> What Service Do You Need? (Optional)
         </label>
         <select
           id="service"
           value={values.service}
           onChange={(e) => handleChange("service", e.target.value)}
-          className="mt-2 w-full rounded-lg border border-chalk/15 bg-transparent px-4 py-3 font-body text-chalk focus:border-flow"
+          className="mt-2 w-full rounded-xl border border-chalk/20 bg-surface px-4 py-3 font-body text-chalk focus:border-flow focus:ring-1 focus:ring-flow transition-all"
         >
           <option value="" className="bg-surface">
-            Select a service
+            Select a service or general discussion
           </option>
           {services.map((service) => (
             <option key={service.slug} value={service.slug} className="bg-surface">
@@ -176,32 +259,43 @@ export default function ContactForm({
         </select>
       </div>
 
+      {/* Message */}
       <div>
         <label
           htmlFor="message"
-          className="font-mono text-mono-label uppercase tracking-widest text-muted"
+          className="flex items-center gap-2 font-mono text-mono-label uppercase tracking-widest text-muted"
         >
-          Message
+          <MessageSquare size={13} className="text-flow" /> Tell Us About Your Project (Optional)
         </label>
         <textarea
           id="message"
-          rows={5}
+          rows={4}
           value={values.message}
           onChange={(e) => handleChange("message", e.target.value)}
           onBlur={() => handleBlur("message")}
-          aria-invalid={Boolean(touched.message && errors.message)}
-          aria-describedby="message-error"
-          className="mt-2 w-full rounded-lg border border-chalk/15 bg-transparent px-4 py-3 font-body text-chalk placeholder:text-muted/50 focus:border-flow"
-          placeholder="What are you trying to grow?"
+          className="mt-2 w-full rounded-xl border border-chalk/20 bg-surface px-4 py-3 font-body text-chalk placeholder:text-muted/50 focus:border-flow focus:ring-1 focus:ring-flow transition-all"
+          placeholder="Briefly describe your goals, timeline, or current website URL..."
         />
-        <p id="message-error" className="mt-2 min-h-4 font-mono text-xs text-signal">
-          {touched.message ? errors.message : ""}
-        </p>
       </div>
 
-      <Button type="submit" variant="signal">
-        Send message
-      </Button>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full flex items-center justify-center gap-2 rounded-xl bg-signal py-3.5 px-6 font-mono text-xs font-bold uppercase tracking-widest text-chalk shadow-lg hover:bg-flow hover:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        {isSubmitting ? (
+          <>
+            <Loader2 size={16} className="animate-spin" />
+            Submitting Your Request...
+          </>
+        ) : (
+          "Start Project & Get Call"
+        )}
+      </button>
+
+      <p className="text-center font-mono text-[11px] text-muted">
+        ⚡ Guaranteed response within 15 minutes during working hours.
+      </p>
     </form>
   );
 }

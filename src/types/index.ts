@@ -203,8 +203,10 @@ export interface QuoteRequest {
   id: string;
   name: string;
   phone: string;
+  email?: string | null;
   serviceSlug: string;
   serviceTitle: string;
+  message?: string | null;
   pageUrl: string;
   status: QuoteStatus;
   notes?: string | null;

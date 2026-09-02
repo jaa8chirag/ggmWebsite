@@ -29,11 +29,14 @@ export default function QuotesTable({ initialQuotes }: QuotesTableProps) {
 
   const filteredQuotes = quotes.filter((q) => {
     const matchesStatus = filterStatus === "ALL" || q.status === filterStatus;
+    const query = searchQuery.toLowerCase();
     const matchesSearch =
       searchQuery === "" ||
-      q.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      q.name.toLowerCase().includes(query) ||
       q.phone.includes(searchQuery) ||
-      q.serviceTitle.toLowerCase().includes(searchQuery.toLowerCase());
+      (q.email && q.email.toLowerCase().includes(query)) ||
+      (q.message && q.message.toLowerCase().includes(query)) ||
+      q.serviceTitle.toLowerCase().includes(query);
     return matchesStatus && matchesSearch;
   });
 
@@ -177,11 +180,22 @@ export default function QuotesTable({ initialQuotes }: QuotesTableProps) {
                         {dateStr}
                       </td>
 
-                      {/* Name */}
+                      {/* Name & Email */}
                       <td className="py-4 px-4">
-                        <span className="font-display text-sm font-bold text-chalk">
-                          {q.name}
-                        </span>
+                        <div className="flex flex-col">
+                          <span className="font-display text-sm font-bold text-chalk">
+                            {q.name}
+                          </span>
+                          {q.email && (
+                            <a
+                              href={`mailto:${q.email}`}
+                              className="mt-0.5 font-mono text-[11px] text-flow hover:underline truncate max-w-[180px]"
+                              title={q.email}
+                            >
+                              {q.email}
+                            </a>
+                          )}
+                        </div>
                       </td>
 
                       {/* Phone & Direct Action Buttons */}
@@ -201,7 +215,7 @@ export default function QuotesTable({ initialQuotes }: QuotesTableProps) {
                           {/* One-Click WhatsApp */}
                           <a
                             href={`https://wa.me/${cleanPhoneForWhatsApp(q.phone)}?text=${encodeURIComponent(
-                              `Hello ${q.name}, thank you for requesting a quote for ${q.serviceTitle} on GGM Technologies. How can our team help you today?`
+                              `Hello ${q.name}, thank you for contacting GGM Technologies for ${q.serviceTitle}. How can our team help you today?`
                             )}`}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -213,19 +227,27 @@ export default function QuotesTable({ initialQuotes }: QuotesTableProps) {
                         </div>
                       </td>
 
-                      {/* Service Origin */}
+                      {/* Service Origin & Message */}
                       <td className="py-4 px-4">
-                        <div>
+                        <div className="max-w-xs">
                           <span className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-flow">
                             <Zap size={11} className="text-signal" />
                             {q.serviceTitle}
                           </span>
+                          {q.message && (
+                            <p
+                              className="mt-1 rounded-lg border border-chalk/10 bg-ink/40 p-2 font-body text-[11px] text-muted italic line-clamp-2"
+                              title={q.message}
+                            >
+                              &ldquo;{q.message}&rdquo;
+                            </p>
+                          )}
                           {q.pageUrl && (
                             <a
                               href={q.pageUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="mt-0.5 flex items-center gap-1 font-mono text-[10px] text-muted hover:text-chalk truncate max-w-xs"
+                              className="mt-1 flex items-center gap-1 font-mono text-[10px] text-muted hover:text-chalk truncate max-w-xs"
                               title={q.pageUrl}
                             >
                               <Globe size={10} />
