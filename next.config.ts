@@ -8,17 +8,6 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/:path*",
-        has: [
-          {
-            type: "host",
-            value: "www.ggmtechnologies.com",
-          },
-        ],
-        destination: "https://ggmtechnologies.com/:path*",
-        permanent: true,
-      },
-      {
         source: "/privacy-policy-2",
         destination: "/privacy-policy",
         permanent: true,
