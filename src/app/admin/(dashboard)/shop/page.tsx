@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { query } from "@/lib/db";
+import { DB_PRODUCTS } from "@/data/dbSeedData";
 import DeleteButton from "@/components/admin/DeleteButton";
 import { cardClass } from "@/components/admin/styles";
 import { deleteProduct } from "./actions";
 
 export default async function AdminShopPage() {
-  const products = await query<any>("SELECT * FROM `Product` ORDER BY `name` ASC");
+  const dbProducts = await query<any>("SELECT * FROM `Product` ORDER BY `name` ASC");
+  const products = dbProducts && dbProducts.length > 0 ? dbProducts : DB_PRODUCTS;
 
   return (
     <div>

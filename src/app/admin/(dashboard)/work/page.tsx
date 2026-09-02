@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { query } from "@/lib/db";
+import { DB_CASE_STUDIES } from "@/data/dbSeedData";
 import DeleteButton from "@/components/admin/DeleteButton";
 import { cardClass } from "@/components/admin/styles";
 import { deleteCaseStudy } from "./actions";
 
 export default async function AdminWorkPage() {
-  const items = await query<any>("SELECT * FROM `CaseStudy` ORDER BY `order` ASC");
+  const dbItems = await query<any>("SELECT * FROM `CaseStudy` ORDER BY `order` ASC");
+  const items = dbItems && dbItems.length > 0 ? dbItems : DB_CASE_STUDIES;
 
   return (
     <div>

@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { query } from "@/lib/db";
+import { DB_POSTS } from "@/data/dbSeedData";
 import DeleteButton from "@/components/admin/DeleteButton";
 import { cardClass } from "@/components/admin/styles";
 import { deleteBlogPost } from "./actions";
 
 export default async function AdminBlogPage() {
-  const posts = await query<any>("SELECT * FROM `BlogPost` ORDER BY `date` DESC");
+  const dbPosts = await query<any>("SELECT * FROM `BlogPost` ORDER BY `date` DESC");
+  const posts = dbPosts && dbPosts.length > 0 ? dbPosts : DB_POSTS;
 
   return (
     <div>

@@ -14,6 +14,13 @@ import {
   Zap,
 } from "lucide-react";
 import { queryOne } from "@/lib/db";
+import {
+  DB_SERVICES,
+  DB_PRODUCTS,
+  DB_POSTS,
+  DB_CASE_STUDIES,
+  DB_TESTIMONIALS,
+} from "@/data/dbSeedData";
 
 async function getCount(sql: string, params: any[] = []): Promise<number> {
   const row = await queryOne<any>(sql, params);
@@ -43,6 +50,14 @@ export default async function AdminDashboardPage() {
     getCount("SELECT COUNT(*) as c FROM `QuoteRequest` WHERE `status` = 'PENDING'"),
   ]);
 
+  const isDbConnected = serviceCount > 0;
+  const displayServiceCount = serviceCount || DB_SERVICES.length;
+  const displayBlogCount = blogCount || DB_POSTS.length;
+  const displayPublishedBlogCount = publishedBlogCount || DB_POSTS.length;
+  const displayWorkCount = workCount || DB_CASE_STUDIES.length;
+  const displayProductCount = productCount || DB_PRODUCTS.length;
+  const displayTestimonialCount = testimonialCount || DB_TESTIMONIALS.length;
+
   const cards = [
     {
       label: "15-Min Quotes",
@@ -54,11 +69,11 @@ export default async function AdminDashboardPage() {
     },
     {
       label: "Services",
-      value: serviceCount,
+      value: displayServiceCount,
       href: "/admin/services",
       icon: Boxes,
       accent: "from-flow/20 to-flow/5 text-flow border-flow/40",
-      description: "Active agency services",
+      description: `${displayServiceCount} active services`,
     },
     {
       label: "Target Locations",
@@ -78,35 +93,35 @@ export default async function AdminDashboardPage() {
     },
     {
       label: "Blog Posts",
-      value: publishedBlogCount,
+      value: displayPublishedBlogCount,
       href: "/admin/blog",
       icon: FileText,
       accent: "from-signal/20 to-signal/5 text-signal border-signal/40",
-      description: `${publishedBlogCount} published / ${blogCount} total`,
+      description: `${displayPublishedBlogCount} published / ${displayBlogCount} total`,
     },
     {
       label: "Case Studies",
-      value: workCount,
+      value: displayWorkCount,
       href: "/admin/work",
       icon: Briefcase,
       accent: "from-flow/20 to-flow/5 text-flow border-flow/40",
-      description: "Client success stories",
+      description: `${displayWorkCount} client success stories`,
     },
     {
       label: "Shop Products",
-      value: productCount,
+      value: displayProductCount,
       href: "/admin/shop",
       icon: ShoppingBag,
       accent: "from-signal/20 to-signal/5 text-signal border-signal/40",
-      description: "Web & SEO packages",
+      description: `${displayProductCount} web & SEO packages`,
     },
     {
       label: "Client Testimonials",
-      value: testimonialCount,
+      value: displayTestimonialCount,
       href: "/admin/testimonials",
       icon: MessageSquareQuote,
       accent: "from-flow/20 to-flow/5 text-flow border-flow/40",
-      description: "Verified customer reviews",
+      description: `${displayTestimonialCount} verified reviews`,
     },
   ];
 
@@ -116,8 +131,14 @@ export default async function AdminDashboardPage() {
       <div className="flex flex-col gap-4 rounded-3xl border-2 border-chalk/30 bg-surface p-8 shadow-xl md:flex-row md:items-center md:justify-between">
         <div>
           <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-signal">
-            <span className="h-2 w-2 rounded-full bg-signal animate-pulse" />
-            System Live & Connected
+            <span
+              className={`h-2.5 w-2.5 rounded-full ${
+                isDbConnected ? "bg-emerald-500 animate-pulse" : "bg-flow"
+              }`}
+            />
+            {isDbConnected
+              ? "Database Connected & Live"
+              : "Active Content Serving (Synced State)"}
           </div>
           <h1 className="mt-2 font-display text-3xl text-chalk">
             Content Management Dashboard

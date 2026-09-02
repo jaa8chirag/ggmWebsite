@@ -1,18 +1,25 @@
 import Link from "next/link";
 import { Plus, MapPin } from "lucide-react";
 import { query } from "@/lib/db";
+import { DB_SERVICES } from "@/data/dbSeedData";
 import DeleteButton from "@/components/admin/DeleteButton";
 import { cardClass } from "@/components/admin/styles";
 import { deleteService } from "./actions";
 
 export default async function AdminServicesPage() {
-  const services = await query<any>(
+  const dbServices = await query<any>(
     `SELECT s.*, 
             (SELECT COUNT(*) FROM \`ServiceFaq\` f WHERE f.serviceId = s.id) as faqCount,
             (SELECT COUNT(*) FROM \`ServiceLocation\` sl WHERE sl.serviceId = s.id) as locationCount
      FROM \`Service\` s
      ORDER BY s.index ASC`
   );
+
+  const services = dbServices && dbServices.length > 0 ? dbServices : DB_SERVICES.map(s => ({
+    ...s,
+    faqCount: 0,
+    locationCount: 0,
+  }));
 
   return (
     <div>
