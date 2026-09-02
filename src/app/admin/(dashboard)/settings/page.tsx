@@ -180,8 +180,8 @@ export default async function AdminSettingsPage() {
               <input
                 id="whatsapp"
                 name="whatsapp"
-                defaultValue={settings.whatsapp ?? "+919876543210"}
-                placeholder="+919876543210"
+                defaultValue={settings.whatsapp ?? "+919002600880"}
+                placeholder="+919002600880"
                 className={inputClass}
               />
             </div>

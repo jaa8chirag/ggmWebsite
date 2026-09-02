@@ -8,10 +8,10 @@ interface FloatingSocialsProps {
 }
 
 export default function FloatingSocials({
-  phoneHref = "tel:+919876543210",
-  whatsapp = "+919876543210",
+  phoneHref = "tel:+919002600880",
+  whatsapp = "+919002600880",
 }: FloatingSocialsProps) {
-  const cleanNumber = (whatsapp || "+919876543210").replace(/[^0-9]/g, "");
+  const cleanNumber = (whatsapp || "+919002600880").replace(/[^0-9]/g, "");
   const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent("Hello GGM Technologies! I would like to inquire about digital marketing & SEO services.")}`;
 
   return (

@@ -318,7 +318,7 @@ export const DB_SETTINGS: SiteSettingsModel = {
     "Ashoka Realty Group",
     "Verve Wellness"
   ],
-  "whatsapp": "+919876543210",
+  "whatsapp": "+919002600880",
   "facebook": "https://facebook.com/ggmtechnologies",
   "twitter": "https://x.com/ggmtechnologies",
   "instagram": "https://instagram.com/ggmtechnologies",

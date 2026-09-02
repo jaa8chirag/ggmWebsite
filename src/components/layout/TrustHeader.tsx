@@ -17,7 +17,7 @@ interface TrustHeaderProps {
 }
 
 export default function TrustHeader({ settings }: TrustHeaderProps) {
-  const cleanWhatsapp = (settings.whatsapp || "+919876543210").replace(/[^0-9]/g, "");
+  const cleanWhatsapp = (settings.whatsapp || "+919002600880").replace(/[^0-9]/g, "");
   const whatsappUrl = `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent("Hello GGM Technologies! I would like to inquire about digital marketing & SEO services.")}`;
 
   return (

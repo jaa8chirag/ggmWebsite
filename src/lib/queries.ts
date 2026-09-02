@@ -336,7 +336,7 @@ export async function getSettings(): Promise<SiteSettingsModel> {
     addressLine3: settings.addressLine3,
     gst: settings.gst,
     businessHours: settings.businessHours,
-    whatsapp: settings.whatsapp ?? "+919876543210",
+    whatsapp: settings.whatsapp ?? "+919002600880",
     facebook: settings.facebook ?? "https://facebook.com/ggmtechnologies",
     twitter: settings.twitter ?? "https://x.com/ggmtechnologies",
     instagram: settings.instagram ?? "https://instagram.com/ggmtechnologies",

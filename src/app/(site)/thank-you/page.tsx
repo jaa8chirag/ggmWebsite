@@ -64,7 +64,7 @@ export default async function ThankYouPage() {
             <div className="mt-4 flex flex-col sm:flex-row items-center gap-3">
               {/* WhatsApp Button */}
               <a
-                href={`https://wa.me/919696969696?text=${encodeURIComponent(
+                href={`https://wa.me/${(settings.whatsapp || "+919002600880").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
                   "Hello GGM Technologies, I just submitted an inquiry on your website. I would like to discuss my project directly."
                 )}`}
                 target="_blank"
