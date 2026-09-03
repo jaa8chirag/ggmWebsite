@@ -371,13 +371,14 @@ export const SERVICE_DETAILS: Record<string, ServiceDetailContent> = {
 
   "e-commerce": {
     slug: "e-commerce",
-    badge: "ENTERPRISE E-COMMERCE ACCELERATION",
-    heroH1: "E-Commerce Solutions & Storefront Engineering in Delhi",
-    heroSubtitle:
-      "Scale your online store into a high-converting revenue engine. We build lightning-fast storefronts, headless commerce architectures, and automated multi-channel growth systems.",
+    badge: "E-COMMERCE WEBSITE DEVELOPMENT COMPANY",
+    heroH1: "E-commerce Website Development Company",
+    heroSubtitle: "Your Products Deserve a Store That Sells",
     overviewParagraphs: [
-      "In modern digital commerce, driving visitors is only half the battle. Slow page loads, high cart abandonment, and clunky mobile checkout flows silently drain margins. At GGM Technologies, we engineer conversion-first eCommerce ecosystems built for high Average Order Value (AOV) and long-term customer lifetime value.",
-      "From custom Shopify Plus builds and high-scale WooCommerce architectures to headless Next.js storefronts, multi-currency global checkouts, and automated ERP/logistics sync, our eCommerce engineering ensures your store performs under extreme traffic surges with 99.99% uptime and friction-free payment experiences.",
+      "Building an online store is about more than simply putting your products on a website. It’s about creating a place where customers feel comfortable exploring, trust your brand, and can shop without any unnecessary hassle.",
+      "At GGM Technologies, we build E-Commerce websites around the way your business actually works. Whether you are launching your first online store, bringing an existing business online, or giving an outdated website a much needed refresh, we help you create a shopping experience that feels simple, fast, and easy to use.",
+      "From well-organized product pages and categories to secure payments, smooth order management, mobile friendly design, and easy navigation, we take care of the details that make online shopping enjoyable. The goal is simple: help your customers find what they need, trust your business, and buy with confidence.",
+      "We work with MERN Stack (NEXT. JS) , Shopify, WooCommerce, WordPress, PHP, to build eCommerce solutions that fit your business, your goals, and your Budget.",
     ],
     metrics: [
       { value: "4.8x+", label: "Average Revenue Lift", subtext: "Across scaled DTC, B2B, and multi-brand eCommerce storefronts" },

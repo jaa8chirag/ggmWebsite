@@ -71,9 +71,9 @@ export const DB_SERVICES: Service[] = [
     "id": "srv_1001",
     "slug": "e-commerce",
     "index": "03",
-    "title": "E-Commerce",
-    "promise": "Scale your online store into a high-converting revenue engine.",
-    "description": "End-to-end eCommerce development, conversion rate optimization, headless storefronts, seamless payment gateways, and multi-channel scaling.",
+    "title": "E-commerce Website Development Company",
+    "promise": "Your Products Deserve a Store That Sells",
+    "description": "We create simple, fast, and secure online stores made for your business.",
     "bullets": [
       "Custom Shopify, WooCommerce & Headless Storefronts",
       "Checkout & Conversion Rate Optimization (CRO)",
@@ -93,8 +93,8 @@ export const DB_SERVICES: Service[] = [
         "answer": "Yes, we integrate Razorpay, Cashfree, PayU, Stripe, Shiprocket, Delhivery, and automated WhatsApp order confirmation and abandoned cart recovery systems."
       }
     ],
-    "metaTitle": "E-Commerce Development & Solutions in Delhi | GGM Technologies",
-    "metaDescription": "Scale your online store with high-converting eCommerce solutions, custom Shopify & WooCommerce stores, and headless architectures by GGM Technologies.",
+    "metaTitle": "E-Commerce Website Development Company in Delhi | GGM Technologies",
+    "metaDescription": "We create simple, fast, and secure online stores made for your business. Shopify, WooCommerce, Next.js & custom eCommerce solutions by GGM Technologies.",
     "ogImage": "/images/services/e-commerce.jpg",
     "canonicalOverride": null,
     "noIndex": false

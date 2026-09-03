@@ -104,6 +104,8 @@ export default async function ServiceDetailPage({
   const details = SERVICE_DETAILS[slug];
   const isWebDev =
     service.slug === "website-development" || service.slug === "web-development";
+  const isEcommerce =
+    service.slug === "e-commerce" || service.slug === "ecommerce";
   const isSeo = service.slug === "seo";
 
   const imageSrc =
@@ -250,12 +252,16 @@ export default async function ServiceDetailPage({
         {/* =================================================================== */}
         {/* 2. WHAT'S INCLUDED / TECH STACK                                    */}
         {/* =================================================================== */}
-        {isWebDev && (
+        {(isWebDev || isEcommerce) && (
           <TechStack
             className="my-8 border-y border-chalk/10"
-            eyebrow="ENGINEERING & PLATFORM ECOSYSTEM"
-            title="Website Development Technologies We Master & Build"
-            description="From high-conversion eCommerce (WordPress, Shopify, WooCommerce) to mission-critical full-stack applications (Next.js, React, Node.js, Laravel & .NET) — we build fast, scalable, conversion-first digital platforms."
+            eyebrow={isEcommerce ? "PRIMARY COMPETENCIES & FLAGSHIP FRAMEWORKS" : "ENGINEERING & PLATFORM ECOSYSTEM"}
+            title={isEcommerce ? "E-Commerce Technologies We Master & Build" : "Website Development Technologies We Master & Build"}
+            description={
+              isEcommerce
+                ? "We work with MERN Stack (NEXT. JS) , Shopify, WooCommerce, WordPress, PHP, to build eCommerce solutions that fit your business, your goals, and your Budget."
+                : "From high-conversion eCommerce (WordPress, Shopify, WooCommerce) to mission-critical full-stack applications (Next.js, React, Node.js, Laravel & .NET) — we build fast, scalable, conversion-first digital platforms."
+            }
             includeDeliverables={service.bullets}
             deliverablesTitle={`Core Inclusions & Deliverables (Included in ${service.title})`}
           />
@@ -263,7 +269,7 @@ export default async function ServiceDetailPage({
 
         {isSeo && <SeoScopeOfWorkSection />}
 
-        {!isWebDev && !isSeo && service.bullets && service.bullets.length > 0 && (
+        {!isWebDev && !isEcommerce && !isSeo && service.bullets && service.bullets.length > 0 && (
           <section className="mx-auto max-w-[1440px] px-6 py-8 md:px-10">
             <div className="rounded-3xl border border-chalk/20 bg-surface/70 p-6 md:p-8 shadow-sm">
               <div className="flex items-center gap-2">
