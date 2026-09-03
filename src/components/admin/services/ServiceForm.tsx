@@ -28,6 +28,7 @@ export interface ServiceFormValues {
 const SERVICE_PRESET_IMAGES = [
   { label: "Web Development", url: "/images/services/web-development.jpg" },
   { label: "SEO & Rankings", url: "/images/services/seo.jpg" },
+  { label: "E-Commerce", url: "/images/services/e-commerce.jpg" },
   { label: "PPC & Google Ads", url: "/images/services/ppc.jpg" },
   { label: "Lead Generation", url: "/images/services/lead-generation.jpg" },
   { label: "Social Media Marketing", url: "/images/services/social-media-marketing.jpg" },

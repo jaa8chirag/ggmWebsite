@@ -39,9 +39,9 @@ export const DB_SERVICES: Service[] = [
     "id": "srv_1000",
     "slug": "seo",
     "index": "02",
-    "title": "SEO",
-    "promise": "We get you found before your competitors are.",
-    "description": "Search engine optimization built on technical audits, keyword-mapped content, and authoritative editorial backlinks that actually move rankings — not just vanity traffic.",
+    "title": "SEO (Search Engine Optimization)",
+    "promise": "Turn Google, Chat Gpt, Gemini Searches Into Traffic, Leads & Revenue",
+    "description": "Your customers are searching. Let’s make sure they find you. Simple SEO that brings more traffic, leads, and sales.",
     "bullets": [
       "Technical audit & Core Web Vitals fixes",
       "Keyword & topical authority content strategy",
@@ -62,40 +62,40 @@ export const DB_SERVICES: Service[] = [
       }
     ],
     "metaTitle": "Best SEO Agency in Delhi | Rank #1 on Google | GGM Technologies",
-    "metaDescription": "Enterprise SEO services delivering top organic search rankings. Technical audits, high-intent keyword strategies, and authoritative link acquisition.",
+    "metaDescription": "Simple SEO that brings more traffic, leads, and sales. Turn Google, ChatGPT, and Gemini searches into revenue with GGM Technologies in Delhi.",
     "ogImage": "/images/services/seo.jpg",
     "canonicalOverride": null,
     "noIndex": false
   },
   {
     "id": "srv_1001",
-    "slug": "ppc",
+    "slug": "e-commerce",
     "index": "03",
-    "title": "Pay-Per-Click Advertising (PPC)",
-    "promise": "Every rupee of ad spend earns its place.",
-    "description": "Strategic Pay-Per-Click (PPC) campaigns focused on lowest cost-per-acquisition (CPA) and maximum ROAS across Google Search, Display, Remarketing, and Meta Ads.",
+    "title": "E-Commerce",
+    "promise": "Scale your online store into a high-converting revenue engine.",
+    "description": "End-to-end eCommerce development, conversion rate optimization, headless storefronts, seamless payment gateways, and multi-channel scaling.",
     "bullets": [
-      "Full-funnel campaign architecture & smart bidding",
-      "Negative keyword sculpting & budget optimization",
-      "Dedicated conversion-rate-optimized landing pages"
+      "Custom Shopify, WooCommerce & Headless Storefronts",
+      "Checkout & Conversion Rate Optimization (CRO)",
+      "Payment Gateway, Logistics & Inventory Automation"
     ],
     "faqs": [
       {
-        "question": "What's the minimum ad spend you'll work with?",
-        "answer": "We generally take on accounts spending ₹50,000/month or more on media, since that's roughly the floor where structured testing starts producing reliable data."
+        "question": "Which eCommerce platforms do you build and support?",
+        "answer": "We specialize in Shopify, Shopify Plus, WooCommerce, and custom headless Next.js eCommerce architectures tailored for high transaction speed and mobile conversions."
       },
       {
-        "question": "Is management fee separate from ad spend?",
-        "answer": "Yes. Your ad budget goes straight to Google — we never touch it. Our management fee is billed separately and scoped during onboarding."
+        "question": "Can you migrate our existing store without losing SEO rankings or customer data?",
+        "answer": "Yes. We execute zero-downtime migrations preserving your complete product catalog, customer records, order history, and 301 URL redirect mapping for full Google ranking retention."
       },
       {
-        "question": "Can you take over an account mid-flight?",
-        "answer": "Regularly. We start with a structural audit of the existing account before changing anything, so we don't lose data history or reset the learning phase unnecessarily."
+        "question": "Do you integrate Indian payment gateways and shipping aggregators?",
+        "answer": "Yes, we integrate Razorpay, Cashfree, PayU, Stripe, Shiprocket, Delhivery, and automated WhatsApp order confirmation and abandoned cart recovery systems."
       }
     ],
-    "metaTitle": "PPC & Google Ads Agency in Delhi | High ROAS Campaigns | GGM Technologies",
-    "metaDescription": "Google Ads and performance PPC management. Stop wasting ad spend with data-driven Search, PMax, and remarketing campaigns built for maximum return.",
-    "ogImage": "/images/services/ppc.jpg",
+    "metaTitle": "E-Commerce Development & Solutions in Delhi | GGM Technologies",
+    "metaDescription": "Scale your online store with high-converting eCommerce solutions, custom Shopify & WooCommerce stores, and headless architectures by GGM Technologies.",
+    "ogImage": "/images/services/e-commerce.jpg",
     "canonicalOverride": null,
     "noIndex": false
   },

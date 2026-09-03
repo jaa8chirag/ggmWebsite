@@ -21,6 +21,8 @@ const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
   "website-development": "/images/services/website-development.jpg",
   "web-development": "/images/services/website-development.jpg",
   seo: "/images/services/seo.jpg",
+  "e-commerce": "/images/services/e-commerce.jpg",
+  ecommerce: "/images/services/e-commerce.jpg",
   ppc: "/images/services/ppc.jpg",
   "google-adsense": "/images/services/google-adsense.jpg",
   "google-ads": "/images/services/google-adsense.jpg",

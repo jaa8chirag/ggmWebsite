@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
         destination: "/refund-policy",
         permanent: true,
       },
+      {
+        source: "/services/ppc",
+        destination: "/services/e-commerce",
+        permanent: true,
+      },
     ];
   },
 };

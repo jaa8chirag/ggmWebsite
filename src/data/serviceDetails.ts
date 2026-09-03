@@ -83,13 +83,13 @@ export interface ServiceDetailContent {
 export const SERVICE_DETAILS: Record<string, ServiceDetailContent> = {
   seo: {
     slug: "seo",
-    badge: "ENGINEERING-LED ORGANIC SEARCH",
-    heroH1: "Technical SEO & Search Engine Dominance in Delhi",
+    badge: "PERFORMANCE DRIVEN SEO AGENCY",
+    heroH1: "SEO (Search Engine Optimization)",
     heroSubtitle:
-      "We replace speculative SEO with algorithmic precision. From Core Web Vitals and semantic entity graphs to high-authority editorial PR, we build search engines' favorite digital assets.",
+      "Turn Google, Chat Gpt, Gemini Searches Into Traffic, Leads & Revenue",
     overviewParagraphs: [
-      "In 2026, search engine optimization is no longer about keyword stuffing or superficial blog posts. With the introduction of Google's Search Generative Experience (SGE), AI Overviews, and continuous Core Algorithm updates, ranking on page one demands an uncompromising blend of hardcore technical web architecture, deep semantic relevance, and authoritative digital citations.",
-      "At GGM Technologies, we treat search optimization as a software engineering and data science discipline. Based in South Delhi and serving ambitious brands across India and globally, our SEO systems diagnose your site's JavaScript hydration bottlenecks, render budgets, and topical depth to engineer sustainable, compounding organic revenue that algorithmic shifts cannot wash away.",
+      "People are already searching on Google for the products and services you provide. We help make sure your business is there when they search. At GGM Technologies, we keep SEO simple and focused on what really matters getting your business in front of the right people and audience. Whether you're looking to grow a website, Shopify store, WooCommerce store, or eCommerce business, we work with you to bring in more visitors, more enquiries, and sales ultimately more customers.",
+      "Think of us as your SEO partner, not just SEO Agency. We take the time to understand your business, your customers, and your goals before creating an SEO strategy that fits you. From improving your Google rankings and website content to finding the right keywords and fixing technical issues, we focus on making your online presence work harder for your business.",
     ],
     metrics: [
       { value: "310%+", label: "Average Organic Lift", subtext: "Measured over 6–12 months across active enterprise retainers" },
@@ -367,6 +367,129 @@ export const SERVICE_DETAILS: Record<string, ServiceDetailContent> = {
     metaDescription:
       "Enterprise SEO agency in Delhi specializing in technical SEO audits, Core Web Vitals, semantic entity clustering, and high-authority link acquisition.",
     focusKeywords: ["SEO services in Delhi", "technical SEO agency", "local SEO Delhi", "Core Web Vitals", "link building agency India"],
+  },
+
+  "e-commerce": {
+    slug: "e-commerce",
+    badge: "ENTERPRISE E-COMMERCE ACCELERATION",
+    heroH1: "E-Commerce Solutions & Storefront Engineering in Delhi",
+    heroSubtitle:
+      "Scale your online store into a high-converting revenue engine. We build lightning-fast storefronts, headless commerce architectures, and automated multi-channel growth systems.",
+    overviewParagraphs: [
+      "In modern digital commerce, driving visitors is only half the battle. Slow page loads, high cart abandonment, and clunky mobile checkout flows silently drain margins. At GGM Technologies, we engineer conversion-first eCommerce ecosystems built for high Average Order Value (AOV) and long-term customer lifetime value.",
+      "From custom Shopify Plus builds and high-scale WooCommerce architectures to headless Next.js storefronts, multi-currency global checkouts, and automated ERP/logistics sync, our eCommerce engineering ensures your store performs under extreme traffic surges with 99.99% uptime and friction-free payment experiences.",
+    ],
+    metrics: [
+      { value: "4.8x+", label: "Average Revenue Lift", subtext: "Across scaled DTC, B2B, and multi-brand eCommerce storefronts" },
+      { value: "< 0.9s", label: "Target Checkout Speed", subtext: "Sub-second mobile checkout to minimize friction and bounce rates" },
+      { value: "+38%", label: "Conversion Rate Uplift", subtext: "Achieved via checkout simplification and personalized upsell funnels" },
+      { value: "99.99%", label: "Storefront Infrastructure Uptime", subtext: "Engineered on resilient cloud edge and high-speed CDNs" },
+    ],
+    pillarsTitle: "Full-Stack eCommerce Growth Capabilities",
+    pillarsSubtitle:
+      "End-to-end storefront design, technical development, payment infrastructure, and conversion optimization.",
+    pillars: [
+      {
+        title: "Custom Storefront Design & Headless Architecture",
+        tagline: "Ultra-fast, brand-defining shopping experiences tailored to convert.",
+        description:
+          "We build bespoke storefronts on Shopify, WooCommerce, and headless Next.js architectures with custom UI/UX, product filtering, dynamic cart drawers, and lightning-fast page speed.",
+        deliverables: [
+          "Bespoke UX/UI design system tailored to your brand identity",
+          "Headless Next.js & Shopify Storefront API implementation",
+          "Mobile-first responsive optimization with sub-second LCP",
+          "Faceted product filtering, instant search, and visual merchandising",
+          "Dynamic cart drawers with free shipping threshold progress bars",
+        ],
+      },
+      {
+        title: "Checkout & Conversion Rate Optimization (CRO)",
+        tagline: "Plugging revenue leaks and maximizing Average Order Value (AOV).",
+        description:
+          "We eliminate checkout friction with 1-click checkouts, post-purchase one-click upsells, trust badges, and automated cart abandonment sequences.",
+        deliverables: [
+          "Checkout funnel audit & drop-off bottleneck remediation",
+          "1-Click checkout & express wallets (UPI, Apple Pay, Google Pay)",
+          "Post-purchase upsell and cross-sell bundle architectures",
+          "Automated exit-intent offers and abandoned checkout recovery",
+          "A/B split testing on product detail pages (PDP) and cart flows",
+        ],
+      },
+      {
+        title: "Payment Gateways & Multi-Currency International Commerce",
+        tagline: "Global and domestic checkout compliance with zero payment failures.",
+        description:
+          "Seamless integration of Indian and global payment gateways including Razorpay, Stripe, Cashfree, PayU, and multi-currency automatic geo-routing.",
+        deliverables: [
+          "Multi-gateway fallback routing to prevent transaction drops",
+          "Multi-currency dynamic pricing and localized currency display",
+          "Cash on Delivery (COD) verification & OTP anti-fraud algorithms",
+          "PCI-DSS compliant secure tokenization and fraud detection",
+          "Subscription billing and recurring payment integrations",
+        ],
+      },
+      {
+        title: "Logistics, Shipping & ERP Automation",
+        tagline: "Automating fulfillment from warehouse to doorstep.",
+        description:
+          "We connect your store to premier shipping aggregators (Shiprocket, Delhivery, Bluedart), automated tracking webhooks, and enterprise inventory management systems.",
+        deliverables: [
+          "Real-time shipping rate calculators & automated pincode serviceability",
+          "Automated courier allocation & Shiprocket / Delhivery API sync",
+          "Real-time order tracking pages embedded on your domain",
+          "Automated WhatsApp & SMS order confirmation and dispatch alerts",
+          "Multi-warehouse inventory synchronization & return management (NDR)",
+        ],
+      },
+      {
+        title: "Platform Migration with Zero Downtime",
+        tagline: "Risk-free migration with complete SEO ranking and customer data protection.",
+        description:
+          "Migrate from legacy platforms to Shopify or modern headless setups without losing historical order data, customer accounts, or Google organic search rankings.",
+        deliverables: [
+          "Complete product catalog, variant, and media asset transfer",
+          "Customer account & historical order history synchronization",
+          "Exhaustive 1-to-1 301 URL redirect mapping for zero SEO loss",
+          "DNS cutover management with zero storefront downtime",
+          "Post-launch data integrity audit and revenue tracking verification",
+        ],
+      },
+      {
+        title: "Retention, Email & WhatsApp Funnel Marketing",
+        tagline: "Turning one-time shoppers into high-LTV repeat brand advocates.",
+        description:
+          "We engineer automated lifecycle marketing flows across Klaviyo and WhatsApp Business API to drive repeat orders, win-back lapsing customers, and maximize LTV.",
+        deliverables: [
+          "Automated welcome series, browse abandonment, and win-back flows",
+          "Official WhatsApp Business API transactional and broadcast setups",
+          "Tiered loyalty and rewards program configuration",
+          "Customer segmentation by RFM (Recency, Frequency, Monetary value)",
+          "Review aggregation and UGC social proof widgets",
+        ],
+      },
+    ],
+    faqsTitle: "Frequently Asked Questions about eCommerce",
+    faqs: [
+      {
+        question: "Which eCommerce platforms do you build and support?",
+        answer: "We specialize in Shopify, Shopify Plus, WooCommerce, and custom headless Next.js eCommerce architectures tailored for high transaction speed and mobile conversions.",
+      },
+      {
+        question: "Can you migrate our existing store without losing SEO rankings or customer data?",
+        answer: "Yes. We execute zero-downtime migrations preserving your complete product catalog, customer records, order history, and 301 URL redirect mapping for full Google ranking retention.",
+      },
+      {
+        question: "Do you integrate Indian payment gateways and shipping aggregators?",
+        answer: "Yes, we integrate Razorpay, Cashfree, PayU, Stripe, Shiprocket, Delhivery, and automated WhatsApp order confirmation and abandoned cart recovery systems.",
+      },
+      {
+        question: "How long does a custom eCommerce store build typically take?",
+        answer: "Standard custom Shopify or WooCommerce builds typically launch within 2 to 4 weeks. Complex enterprise headless architectures with deep ERP sync generally take 4 to 8 weeks.",
+      },
+    ],
+    metaTitle: "E-Commerce Development & Solutions in Delhi | GGM Technologies",
+    metaDescription: "Scale your online store with high-converting eCommerce solutions, custom Shopify & WooCommerce stores, and headless architectures by GGM Technologies in Delhi.",
+    focusKeywords: ["ecommerce solutions delhi", "ecommerce website development", "shopify development company", "woocommerce store design"],
   },
 
   ppc: {
