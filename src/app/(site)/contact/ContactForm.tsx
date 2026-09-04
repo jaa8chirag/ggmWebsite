@@ -156,7 +156,13 @@ export default function ContactForm({
   }
 
   return (
-    <form noValidate onSubmit={handleSubmit} className="space-y-5 rounded-3xl border border-chalk/20 bg-surface/70 p-6 md:p-8 shadow-lg backdrop-blur-md">
+    <form
+      noValidate
+      onSubmit={handleSubmit}
+      toolname="submitContactInquiry"
+      tooldescription="Submit a comprehensive project inquiry or consultation request to GGM Technologies."
+      className="space-y-5 rounded-3xl border border-chalk/20 bg-surface/70 p-6 md:p-8 shadow-lg backdrop-blur-md"
+    >
       {serverError && (
         <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs font-mono text-rose-400">
           {serverError}
@@ -173,11 +179,13 @@ export default function ContactForm({
         </label>
         <input
           id="name"
+          name="name"
           type="text"
           value={values.name}
           onChange={(e) => handleChange("name", e.target.value)}
           onBlur={() => handleBlur("name")}
           aria-invalid={Boolean(touched.name && errors.name)}
+          toolparamdescription="The user's full name requesting a consultation."
           className="mt-2 w-full rounded-xl border border-chalk/20 bg-surface px-4 py-3 font-body text-chalk placeholder:text-muted/50 focus:border-flow focus:ring-1 focus:ring-flow transition-all"
           placeholder="e.g. Rahul Sharma"
         />
@@ -200,11 +208,13 @@ export default function ContactForm({
           </span>
           <input
             id="phone"
+            name="phone"
             type="tel"
             value={values.phone}
             onChange={(e) => handleChange("phone", e.target.value)}
             onBlur={() => handleBlur("phone")}
             aria-invalid={Boolean(touched.phone && errors.phone)}
+            toolparamdescription="The user's 10-digit Indian phone or WhatsApp number."
             className="w-full rounded-xl border border-chalk/20 bg-surface py-3 pl-14 pr-4 font-mono text-sm text-chalk placeholder:text-muted/50 focus:border-flow focus:ring-1 focus:ring-flow transition-all"
             placeholder="98765 43210"
           />
@@ -224,11 +234,13 @@ export default function ContactForm({
         </label>
         <input
           id="email"
+          name="email"
           type="email"
           value={values.email}
           onChange={(e) => handleChange("email", e.target.value)}
           onBlur={() => handleBlur("email")}
           aria-invalid={Boolean(touched.email && errors.email)}
+          toolparamdescription="The user's business email address for proposal and report delivery."
           className="mt-2 w-full rounded-xl border border-chalk/20 bg-surface px-4 py-3 font-body text-chalk placeholder:text-muted/50 focus:border-flow focus:ring-1 focus:ring-flow transition-all"
           placeholder="rahul@company.com"
         />
@@ -247,6 +259,7 @@ export default function ContactForm({
         </label>
         <select
           id="service"
+          name="service"
           value={values.service}
           onChange={(e) => handleChange("service", e.target.value)}
           className="mt-2 w-full rounded-xl border border-chalk/20 bg-surface px-4 py-3 font-body text-chalk focus:border-flow focus:ring-1 focus:ring-flow transition-all"
@@ -272,10 +285,12 @@ export default function ContactForm({
         </label>
         <textarea
           id="message"
+          name="message"
           rows={4}
           value={values.message}
           onChange={(e) => handleChange("message", e.target.value)}
           onBlur={() => handleBlur("message")}
+          toolparamdescription="Detailed description of the user's project requirements, timeline, or goals."
           className="mt-2 w-full rounded-xl border border-chalk/20 bg-surface px-4 py-3 font-body text-chalk placeholder:text-muted/50 focus:border-flow focus:ring-1 focus:ring-flow transition-all"
           placeholder="Briefly describe your goals, timeline, or current website URL..."
         />

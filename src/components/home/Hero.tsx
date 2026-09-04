@@ -89,34 +89,34 @@ export default function Hero({ eyebrow }: { eyebrow: string }) {
         },
       });
 
-      // Delivery stack: each card starts scattered off its resting spot and
-      // settles into place as the user scrolls through the first half of the
-      // hero — "as you scroll, we're shipping the work."
-      const cards = cardRefs.current;
-      cards.forEach((card, i) => {
-        if (!card) return;
-        gsap.set(card, {
-          x: deliveryTransforms[i].x,
-          y: deliveryTransforms[i].y,
-          rotate: deliveryTransforms[i].rotate,
-          opacity: 0,
+      // Delivery stack: only initialize on desktop screens where cards are visible
+      if (window.innerWidth >= 768) {
+        const cards = cardRefs.current;
+        cards.forEach((card, i) => {
+          if (!card) return;
+          gsap.set(card, {
+            x: deliveryTransforms[i].x,
+            y: deliveryTransforms[i].y,
+            rotate: deliveryTransforms[i].rotate,
+            opacity: 0,
+          });
         });
-      });
 
-      gsap.to(cards, {
-        x: 0,
-        y: 0,
-        rotate: 0,
-        opacity: 1,
-        ease: "power2.out",
-        stagger: 0.15,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "center top",
-          scrub: 1,
-        },
-      });
+        gsap.to(cards, {
+          x: 0,
+          y: 0,
+          rotate: 0,
+          opacity: 1,
+          ease: "power2.out",
+          stagger: 0.15,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "center top",
+            scrub: 1,
+          },
+        });
+      }
     },
     { scope: sectionRef }
   );

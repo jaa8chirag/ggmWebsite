@@ -18,7 +18,7 @@ export default function SmoothScroll({
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || window.innerWidth < 768) return;
 
     // Ultra-responsive, zero-lag scroll engine:
     // Native 120Hz/60Hz wheel & touch (0ms latency), smooth programmatic anchor links

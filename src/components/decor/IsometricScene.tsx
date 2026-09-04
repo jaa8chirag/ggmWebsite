@@ -106,7 +106,7 @@ export default function IsometricScene({
   useGSAP(
     () => {
       if (!animate) return;
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || window.innerWidth < 768) return;
 
       const cubes = rootRef.current?.querySelectorAll<SVGGElement>("[data-cube]");
       cubes?.forEach((cube, i) => {

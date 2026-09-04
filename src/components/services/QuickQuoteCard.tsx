@@ -110,7 +110,12 @@ export default function QuickQuoteCard({
           </div>
         ) : (
           /* Form Inputs */
-          <form onSubmit={handleSubmit} className="mt-3 space-y-2.5">
+          <form
+            onSubmit={handleSubmit}
+            toolname="requestQuickQuote"
+            tooldescription="Submits an instant request for a 15-minute digital marketing or web development quote from GGM Technologies."
+            className="mt-3 space-y-2.5"
+          >
             {result?.error && (
               <div className="flex items-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 p-2 font-mono text-[11px] text-red-400">
                 <AlertCircle size={13} className="shrink-0" />
@@ -127,10 +132,14 @@ export default function QuickQuoteCard({
                 </div>
                 <input
                   type="text"
+                  name="name"
+                  id="quote-name"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your Name *"
+                  aria-label="Your Full Name"
+                  toolparamdescription="The user's full name requesting a quick quote."
                   className="w-full rounded-lg border border-chalk/20 bg-ink/70 py-2 pl-8 pr-2.5 font-body text-xs text-chalk placeholder-muted/60 focus:border-signal focus:outline-none"
                   disabled={isSubmitting}
                 />
@@ -143,10 +152,14 @@ export default function QuickQuoteCard({
                 </div>
                 <input
                   type="tel"
+                  name="phone"
+                  id="quote-phone"
                   required
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Phone / WhatsApp *"
+                  aria-label="Phone or WhatsApp Number"
+                  toolparamdescription="The user's direct phone or WhatsApp contact number for quote delivery."
                   className="w-full rounded-lg border border-chalk/20 bg-ink/70 py-2 pl-8 pr-2.5 font-body text-xs text-chalk placeholder-muted/60 focus:border-signal focus:outline-none"
                   disabled={isSubmitting}
                 />
