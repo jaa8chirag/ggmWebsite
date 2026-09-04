@@ -1,3 +1,4 @@
+import Script from "next/script";
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import SmoothScroll from "@/components/layout/SmoothScroll";
@@ -19,16 +20,19 @@ import "../globals.css";
 const bricolage = Bricolage_Grotesque({
   variable: "--font-display-raw",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geist = Geist({
   variable: "--font-body-raw",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-mono-raw",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const title = "Digital Marketing Agency in Delhi | GGM Technologies";
@@ -59,12 +63,6 @@ export const metadata: Metadata = {
   },
   verification: {
     google: process.env.GOOGLE_SITE_VERIFICATION || "google37f47672baefed8c",
-    other: {
-      "google-site-verification": [
-        "google37f47672baefed8c",
-        "google37f47672baefed8c.html",
-      ],
-    },
   },
 };
 
@@ -86,9 +84,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       className={`${bricolage.variable} ${geist.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        {/* Google Tag Manager */}
-        <script
+        <meta name="google-site-verification" content="google37f47672baefed8c" />
+        {/* Google Tag Manager (afterInteractive prevents render blocking) */}
+        <Script
           id="google-tag-manager"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -97,11 +97,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-K9GKNZG9');`,
           }}
         />
-        {/* End Google Tag Manager */}
-        <meta name="google-site-verification" content="google37f47672baefed8c" />
-        <meta name="google-site-verification" content="google37f47672baefed8c.html" />
-        <script
-          type="text/javascript"
+        {/* Microsoft Clarity (afterInteractive) */}
+        <Script
+          id="microsoft-clarity"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (function(c,l,a,r,i,t,y){

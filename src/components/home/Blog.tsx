@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import Eyebrow from "@/components/ui/Eyebrow";
 
@@ -45,10 +46,13 @@ export default function Blog({ posts }: { posts: PostData[] }) {
                 className="group flex flex-col gap-6 rounded-2xl border-2 border-chalk/30 bg-surface p-6 shadow-md transition-all duration-300 hover:border-flow hover:shadow-xl md:flex-row md:items-center md:justify-between"
               >
                 <div className="flex flex-col gap-6 md:flex-row md:items-center">
-                  <div className="h-28 w-44 shrink-0 overflow-hidden rounded-xl border border-chalk/20 bg-ink">
-                    <img
+                  <div className="relative h-28 w-44 shrink-0 overflow-hidden rounded-xl border border-chalk/20 bg-ink">
+                    <Image
                       src={imgSrc}
                       alt={post.title}
+                      width={176}
+                      height={112}
+                      sizes="176px"
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>

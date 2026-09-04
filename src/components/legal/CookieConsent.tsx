@@ -38,11 +38,12 @@ export default function CookieConsent() {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (!stored) {
-        const timer = setTimeout(() => setIsVisible(true), 800);
+        const timer = setTimeout(() => setIsVisible(true), 2500);
         return () => clearTimeout(timer);
       }
     } catch {
-      setIsVisible(true);
+      const timer = setTimeout(() => setIsVisible(true), 2500);
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -125,7 +126,7 @@ export default function CookieConsent() {
                   <h3 className="font-display text-sm font-bold text-chalk">
                     Cookie &amp; Privacy Choices
                   </h3>
-                  <span className="font-mono text-[10px] text-muted">
+                  <span className="font-mono text-[10px] text-chalk/80 font-medium">
                     EU GDPR Compliant
                   </span>
                 </div>
@@ -133,7 +134,7 @@ export default function CookieConsent() {
               <button
                 type="button"
                 onClick={handleRejectNonEssential}
-                className="rounded-lg p-1 text-muted/70 hover:bg-chalk/10 hover:text-chalk transition-colors"
+                className="rounded-lg p-1 text-chalk/70 hover:bg-chalk/10 hover:text-chalk transition-colors"
                 aria-label="Dismiss cookie notice"
               >
                 <X size={16} />
@@ -141,11 +142,11 @@ export default function CookieConsent() {
             </div>
 
             {/* Description */}
-            <p className="mt-2.5 font-body text-xs text-muted leading-relaxed">
+            <p className="mt-2.5 font-body text-xs text-chalk/85 leading-relaxed">
               We use cookies to ensure optimal security, analyze traffic, and improve site performance. Learn more in our{" "}
               <Link
                 href="/cookie-policy"
-                className="font-medium text-flow underline decoration-flow/40 hover:text-signal"
+                className="font-semibold text-flow underline decoration-flow/40 hover:text-signal"
               >
                 Cookie Policy
               </Link>
@@ -153,11 +154,11 @@ export default function CookieConsent() {
             </p>
 
             {/* Action Buttons */}
-            <div className="mt-3.5 flex items-center justify-between gap-2 pt-2 border-t border-chalk/10">
+            <div className="mt-3.5 flex items-center justify-between gap-2 pt-2 border-t border-chalk/15">
               <button
                 type="button"
                 onClick={() => setShowPreferences(true)}
-                className="flex items-center gap-1 font-mono text-[11px] text-muted hover:text-flow transition-colors"
+                className="flex items-center gap-1 font-mono text-[11px] font-medium text-chalk/80 hover:text-flow transition-colors"
               >
                 <Settings2 size={13} /> Preferences
               </button>
@@ -165,7 +166,7 @@ export default function CookieConsent() {
                 <button
                   type="button"
                   onClick={handleRejectNonEssential}
-                  className="rounded-full border border-chalk/25 bg-surface px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-muted hover:border-chalk/40 hover:text-chalk transition-colors"
+                  className="rounded-full border border-chalk/35 bg-surface px-3 py-1.5 font-mono text-[11px] font-medium uppercase tracking-wider text-chalk hover:border-chalk/60 hover:bg-chalk/5 transition-colors"
                 >
                   Reject
                 </button>

@@ -45,6 +45,21 @@ export default function RevealText({
         return;
       }
 
+      if (as === "h1") {
+        gsap.fromTo(
+          targets,
+          { opacity: 0.9, y: 4 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.4,
+            ease: "power2.out",
+            stagger,
+          }
+        );
+        return;
+      }
+
       gsap.fromTo(
         targets,
         { yPercent: 110, opacity: 0 },

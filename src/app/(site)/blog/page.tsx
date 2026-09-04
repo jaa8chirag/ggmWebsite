@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { getPublishedPosts } from "@/lib/queries";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
@@ -46,10 +47,13 @@ export default async function BlogPage() {
             >
               <div className="flex flex-col gap-6 md:flex-row md:items-center">
                 {post.ogImage && (
-                  <div className="h-28 w-44 shrink-0 overflow-hidden rounded-xl border border-chalk/20 bg-surface">
-                    <img
+                  <div className="relative h-28 w-44 shrink-0 overflow-hidden rounded-xl border border-chalk/20 bg-surface">
+                    <Image
                       src={post.ogImage}
                       alt={post.title}
+                      width={176}
+                      height={112}
+                      sizes="176px"
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>

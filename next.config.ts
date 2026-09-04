@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  images: {
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [360, 480, 640, 750, 828, 1080, 1200],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 31536000,
+  },
   async redirects() {
     return [
       // 1. Legal legacy WordPress URLs
