@@ -15,6 +15,7 @@ import {
   FileText,
   Briefcase,
   ChevronRight,
+  ChevronLeft,
   LayoutList,
   LayoutGrid,
   ArrowUpDown,
@@ -62,6 +63,8 @@ const PAYMENT_BADGES: Record<PaymentStatus, { label: string; bg: string; text: s
 
 type SortMode = "FOLLOWUP_PRIORITY" | "NEWEST" | "PAYMENT_DUE" | "HIGHEST_PRICE";
 
+const ITEMS_PER_PAGE = 10;
+
 export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmContainerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState<CrmLeadStatus | "ALL">("ALL");
@@ -69,6 +72,7 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
   const [viewMode, setViewMode] = useState<"list" | "grid">("list"); // Default to list view
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState<CrmLeadModel | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Filter & Priority Sort logic
   const processedLeads = useMemo(() => {
@@ -123,6 +127,14 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
   }, [initialLeads, selectedFilter, searchQuery, sortMode]);
+
+  const totalPages = Math.max(1, Math.ceil(processedLeads.length / ITEMS_PER_PAGE));
+  const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
+
+  const paginatedLeads = useMemo(() => {
+    const startIndex = (safeCurrentPage - 1) * ITEMS_PER_PAGE;
+    return processedLeads.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [processedLeads, safeCurrentPage]);
 
   async function handleQuickStatusChange(leadId: string, newStatus: CrmLeadStatus) {
     await updateLeadAction(leadId, { status: newStatus });
@@ -230,7 +242,10 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
             return (
               <button
                 key={tab.id}
-                onClick={() => setSelectedFilter(tab.id)}
+                onClick={() => {
+                  setSelectedFilter(tab.id);
+                  setCurrentPage(1);
+                }}
                 className={`rounded-xl px-3.5 py-2 font-mono text-xs font-semibold transition-all ${
                   isActive
                     ? "bg-flow text-ink shadow-md"
@@ -251,7 +266,10 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
               placeholder="Search name, phone, service..."
               className="w-full rounded-xl border border-chalk/20 bg-surface px-3.5 py-2 pl-9 font-body text-xs text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
             />
@@ -262,7 +280,10 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
             <ArrowUpDown size={14} className="text-flow" />
             <select
               value={sortMode}
-              onChange={(e) => setSortMode(e.target.value as SortMode)}
+              onChange={(e) => {
+                setSortMode(e.target.value as SortMode);
+                setCurrentPage(1);
+              }}
               className="bg-transparent font-semibold focus:outline-none cursor-pointer"
             >
               <option value="FOLLOWUP_PRIORITY">Follow-up Priority Queue</option>
@@ -315,7 +336,7 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                 </tr>
               </thead>
               <tbody className="divide-y divide-chalk/10">
-                {processedLeads.map((lead) => {
+                {paginatedLeads.map((lead) => {
                   const badge = STATUS_BADGES[lead.status] || STATUS_BADGES.NEW;
                   const payBadge = PAYMENT_BADGES[lead.paymentStatus] || PAYMENT_BADGES.PENDING;
                   const urgencyBadge = getFollowUpBadge(lead.nextFollowUp, lead.status);
@@ -454,7 +475,7 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
         ) : (
           /* GRID CARD VIEW */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {processedLeads.map((lead) => {
+            {paginatedLeads.map((lead) => {
               const badge = STATUS_BADGES[lead.status] || STATUS_BADGES.NEW;
               const urgencyBadge = getFollowUpBadge(lead.nextFollowUp, lead.status);
 
@@ -550,6 +571,43 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
           <p className="font-mono text-xs text-muted max-w-sm mx-auto">
             No leads match your current search query or filter status. Try changing filters or add a manual lead.
           </p>
+        </div>
+      )}
+
+      {/* Pagination Controls */}
+      {processedLeads.length > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-chalk/15 bg-surface px-6 py-4 shadow-xl">
+          <div className="font-mono text-xs text-muted">
+            Showing <span className="font-bold text-chalk">{(safeCurrentPage - 1) * ITEMS_PER_PAGE + 1}</span> to{" "}
+            <span className="font-bold text-chalk">
+              {Math.min(safeCurrentPage * ITEMS_PER_PAGE, processedLeads.length)}
+            </span>{" "}
+            of <span className="font-bold text-flow">{processedLeads.length}</span> leads
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={safeCurrentPage === 1}
+              className="flex items-center gap-1.5 rounded-xl border border-chalk/20 bg-ink px-3.5 py-2 font-mono text-xs text-chalk transition-all hover:bg-chalk/10 hover:border-flow/40 disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
+            >
+              <ChevronLeft size={14} /> Previous
+            </button>
+
+            <div className="flex items-center gap-1 font-mono text-xs px-3">
+              <span className="text-flow font-bold">{safeCurrentPage}</span>
+              <span className="text-muted">/</span>
+              <span className="text-chalk">{totalPages}</span>
+            </div>
+
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={safeCurrentPage >= totalPages}
+              className="flex items-center gap-1.5 rounded-xl border border-chalk/20 bg-ink px-3.5 py-2 font-mono text-xs text-chalk transition-all hover:bg-chalk/10 hover:border-flow/40 disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
+            >
+              Next <ChevronRight size={14} />
+            </button>
+          </div>
         </div>
       )}
 
