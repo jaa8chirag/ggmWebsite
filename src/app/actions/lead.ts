@@ -10,6 +10,7 @@ export interface LeadActionResult {
   message?: string;
   error?: string;
   leadId?: string;
+  notes?: LeadNote[];
 }
 
 /**
@@ -22,6 +23,8 @@ export async function createLeadAction(formData: FormData): Promise<LeadActionRe
     const name = (formData.get("name") as string)?.trim();
     const phone = (formData.get("phone") as string)?.trim();
     const email = (formData.get("email") as string)?.trim() || null;
+    const companyName = (formData.get("companyName") as string)?.trim() || null;
+    const location = (formData.get("location") as string)?.trim() || null;
     const serviceSlug = (formData.get("serviceSlug") as string)?.trim() || "general";
     const serviceTitle = (formData.get("serviceTitle") as string)?.trim() || "General Consultation";
     const source = (formData.get("source") as string)?.trim() || "Manual Lead";
@@ -65,13 +68,15 @@ export async function createLeadAction(formData: FormData): Promise<LeadActionRe
 
     await query(
       `INSERT INTO \`CrmLead\`
-       (\`id\`, \`name\`, \`phone\`, \`email\`, \`serviceSlug\`, \`serviceTitle\`, \`source\`, \`status\`, \`approxAmount\`, \`fixAmount\`, \`advancePaid\`, \`balanceDue\`, \`paymentStatus\`, \`quotationSent\`, \`nextFollowUp\`, \`nextPaymentDate\`, \`timelineNotes\`, \`createdAt\`)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(3))`,
+       (\`id\`, \`name\`, \`phone\`, \`email\`, \`companyName\`, \`location\`, \`serviceSlug\`, \`serviceTitle\`, \`source\`, \`status\`, \`approxAmount\`, \`fixAmount\`, \`advancePaid\`, \`balanceDue\`, \`paymentStatus\`, \`quotationSent\`, \`nextFollowUp\`, \`nextPaymentDate\`, \`timelineNotes\`, \`createdAt\`)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(3))`,
       [
         id,
         name,
         phone,
         email,
+        companyName,
+        location,
         serviceSlug,
         serviceTitle,
         source,
@@ -107,7 +112,7 @@ export async function createLeadAction(formData: FormData): Promise<LeadActionRe
 }
 
 /**
- * Updates lead attributes (amounts, quotation sent, next follow-up, status, client info, payments)
+ * Updates lead attributes (amounts, quotation sent, next follow-up, status, client info, payments, company, location)
  */
 export async function updateLeadAction(
   leadId: string,
@@ -115,6 +120,8 @@ export async function updateLeadAction(
     name?: string;
     phone?: string;
     email?: string | null;
+    companyName?: string | null;
+    location?: string | null;
     serviceSlug?: string;
     serviceTitle?: string;
     source?: string;
@@ -140,6 +147,8 @@ export async function updateLeadAction(
     const name = data.name !== undefined ? data.name.trim() : existing.name;
     const phone = data.phone !== undefined ? data.phone.trim() : existing.phone;
     const email = data.email !== undefined ? data.email : existing.email;
+    const companyName = data.companyName !== undefined ? data.companyName : existing.companyName;
+    const location = data.location !== undefined ? data.location : existing.location;
     const serviceSlug = data.serviceSlug !== undefined ? data.serviceSlug : existing.serviceSlug;
     const serviceTitle = data.serviceTitle !== undefined ? data.serviceTitle : existing.serviceTitle;
     const source = data.source !== undefined ? data.source : existing.source;
@@ -158,6 +167,8 @@ export async function updateLeadAction(
        SET \`name\` = ?,
            \`phone\` = ?,
            \`email\` = ?,
+           \`companyName\` = ?,
+           \`location\` = ?,
            \`serviceSlug\` = ?,
            \`serviceTitle\` = ?,
            \`source\` = ?,
@@ -176,6 +187,8 @@ export async function updateLeadAction(
         name,
         phone,
         email || null,
+        companyName || null,
+        location || null,
         serviceSlug,
         serviceTitle,
         source,
@@ -260,7 +273,7 @@ export async function addLeadNoteAction(
     revalidatePath("/admin/leads");
     revalidatePath("/admin/quotes");
 
-    return { success: true, message: "Note added to lead timeline." };
+    return { success: true, message: "Note added to lead timeline.", notes: updatedNotes };
   } catch (err: any) {
     console.error("Error adding lead note:", err);
     return { success: false, error: err?.message || "Failed to add note." };

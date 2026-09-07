@@ -84,6 +84,8 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
         lead.name.toLowerCase().includes(queryLower) ||
         lead.phone.toLowerCase().includes(queryLower) ||
         (lead.email && lead.email.toLowerCase().includes(queryLower)) ||
+        (lead.companyName && lead.companyName.toLowerCase().includes(queryLower)) ||
+        (lead.location && lead.location.toLowerCase().includes(queryLower)) ||
         lead.serviceTitle.toLowerCase().includes(queryLower);
 
       return matchesFilter && matchesSearch;
@@ -337,7 +339,7 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                               {lead.name}
                             </span>
                           </div>
-                          <div className="flex items-center gap-3 font-mono text-[0.7rem] text-muted">
+                          <div className="flex flex-wrap items-center gap-2.5 font-mono text-[0.7rem] text-muted">
                             <a
                               href={waUrl}
                               target="_blank"
@@ -347,7 +349,9 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                             >
                               <Phone size={11} /> {lead.phone}
                             </a>
-                            {lead.email && <span className="truncate max-w-[120px]">{lead.email}</span>}
+                            {lead.email && <span className="truncate max-w-[130px] text-chalk/90">{lead.email}</span>}
+                            {lead.companyName && <span className="text-amber-400 font-semibold">{lead.companyName}</span>}
+                            {lead.location && <span className="text-cyan-400">📍 {lead.location}</span>}
                             <span className="rounded bg-chalk/10 px-1.5 py-0.2 text-flow">{lead.source}</span>
                           </div>
                         </div>

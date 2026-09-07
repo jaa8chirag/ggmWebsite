@@ -587,6 +587,8 @@ export async function getLeads(statusFilter?: string): Promise<CrmLeadModel[]> {
       name: r.name,
       phone: r.phone,
       email: r.email || null,
+      companyName: r.companyName || null,
+      location: r.location || null,
       serviceSlug: r.serviceSlug || "general",
       serviceTitle: r.serviceTitle || "General Consultation",
       source: r.source || "Website Form",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, User, Phone, Mail, DollarSign, Calendar, FileText, Tag, CreditCard } from "lucide-react";
+import { X, User, Phone, Mail, DollarSign, Calendar, FileText, Tag, CreditCard, Building2, MapPin } from "lucide-react";
 import { createLeadAction } from "@/app/actions/lead";
 
 interface LeadFormModalProps {
@@ -120,7 +120,39 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
                 <input
                   type="email"
                   name="email"
-                  placeholder="e.g. client@example.com"
+                  placeholder="e.g. client@company.com"
+                  className="w-full rounded-xl border border-chalk/20 bg-ink px-3.5 py-2.5 pl-9 font-body text-sm text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Company Name */}
+            <div>
+              <label className="block font-mono text-xs text-muted mb-1 font-semibold uppercase tracking-wider">
+                Company Name
+              </label>
+              <div className="relative">
+                <Building2 size={16} className="absolute left-3 top-3 text-muted" />
+                <input
+                  type="text"
+                  name="companyName"
+                  placeholder="e.g. Apex Enterprises Ltd."
+                  className="w-full rounded-xl border border-chalk/20 bg-ink px-3.5 py-2.5 pl-9 font-body text-sm text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Location / City */}
+            <div>
+              <label className="block font-mono text-xs text-muted mb-1 font-semibold uppercase tracking-wider">
+                Location / City
+              </label>
+              <div className="relative">
+                <MapPin size={16} className="absolute left-3 top-3 text-muted" />
+                <input
+                  type="text"
+                  name="location"
+                  placeholder="e.g. Delhi NCR, India"
                   className="w-full rounded-xl border border-chalk/20 bg-ink px-3.5 py-2.5 pl-9 font-body text-sm text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
                 />
               </div>

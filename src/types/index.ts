@@ -235,6 +235,8 @@ export interface CrmLeadModel {
   name: string;
   phone: string;
   email?: string | null;
+  companyName?: string | null;
+  location?: string | null;
   serviceSlug: string;
   serviceTitle: string;
   source: string;

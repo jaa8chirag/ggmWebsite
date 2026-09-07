@@ -18,8 +18,10 @@ import {
   CheckCircle2,
   AlertCircle,
   HelpCircle,
+  Building2,
+  MapPin,
 } from "lucide-react";
-import { CrmLeadModel, CrmLeadStatus, PaymentStatus } from "@/types";
+import { CrmLeadModel, CrmLeadStatus, PaymentStatus, LeadNote } from "@/types";
 import { updateLeadAction, addLeadNoteAction, deleteLeadAction } from "@/app/actions/lead";
 
 interface LeadDetailDrawerProps {
@@ -47,6 +49,9 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
   const [isSubmittingNote, setIsSubmittingNote] = useState(false);
 
   // Form states initialized on lead change
+  const [email, setEmail] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [location, setLocation] = useState("");
   const [status, setStatus] = useState<CrmLeadStatus>("NEW");
   const [approxAmount, setApproxAmount] = useState("");
   const [fixAmount, setFixAmount] = useState("");
@@ -56,12 +61,16 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
   const [quotationSent, setQuotationSent] = useState(false);
   const [nextFollowUp, setNextFollowUp] = useState("");
   const [nextPaymentDate, setNextPaymentDate] = useState("");
+  const [timelineNotes, setTimelineNotes] = useState<LeadNote[]>([]);
 
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (lead) {
+      setEmail(lead.email || "");
+      setCompanyName(lead.companyName || "");
+      setLocation(lead.location || "");
       setStatus(lead.status || "NEW");
       setApproxAmount(lead.approxAmount || "");
       setFixAmount(lead.fixAmount || "");
@@ -71,6 +80,7 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
       setQuotationSent(lead.quotationSent || false);
       setNextFollowUp(lead.nextFollowUp || "");
       setNextPaymentDate(lead.nextPaymentDate || "");
+      setTimelineNotes(lead.timelineNotes || []);
     }
   }, [lead]);
 
@@ -86,6 +96,11 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
   async function handleSaveLead() {
     setIsUpdating(true);
     await updateLeadAction(lead!.id, {
+      name: lead!.name,
+      phone: lead!.phone,
+      email: email || null,
+      companyName: companyName || null,
+      location: location || null,
       status,
       approxAmount: approxAmount || null,
       fixAmount: fixAmount || null,
@@ -101,13 +116,24 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
 
   async function handleAddNote(e: React.FormEvent) {
     e.preventDefault();
-    if (!newNoteText.trim()) return;
+    const text = newNoteText.trim();
+    if (!text) return;
     setIsSubmittingNote(true);
 
-    const res = await addLeadNoteAction(lead!.id, newNoteText.trim(), "Admin");
+    // Optimistic UI update so note appears instantly below!
+    const tempNote: LeadNote = {
+      id: `temp_${Date.now()}`,
+      text: text,
+      createdAt: new Date().toISOString(),
+      author: "Admin",
+    };
+    setTimelineNotes([tempNote, ...timelineNotes]);
+    setNewNoteText("");
+
+    const res = await addLeadNoteAction(lead!.id, text, "Admin");
     setIsSubmittingNote(false);
-    if (res.success) {
-      setNewNoteText("");
+    if (res.success && res.notes) {
+      setTimelineNotes(res.notes);
     }
   }
 
@@ -188,34 +214,55 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
             {/* LEFT COLUMN: Controls, Pricing & Payments (7 Cols) */}
             <div className="lg:col-span-7 space-y-6 border-r border-chalk/10 pr-0 lg:pr-6">
 
-              {/* Quick Contact Actions */}
-              <div className="grid grid-cols-3 gap-3">
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 py-2.5 px-3 font-mono text-xs font-semibold text-emerald-400 transition-all hover:bg-emerald-500/20"
-                >
-                  <MessageSquare size={14} /> WhatsApp
-                </a>
-                <a
-                  href={`tel:${lead.phone}`}
-                  className="flex items-center justify-center gap-2 rounded-xl border border-blue-500/40 bg-blue-500/10 py-2.5 px-3 font-mono text-xs font-semibold text-blue-400 transition-all hover:bg-blue-500/20"
-                >
-                  <Phone size={14} /> Call Lead
-                </a>
-                {lead.email ? (
-                  <a
-                    href={`mailto:${lead.email}`}
-                    className="flex items-center justify-center gap-2 rounded-xl border border-purple-500/40 bg-purple-500/10 py-2.5 px-3 font-mono text-xs font-semibold text-purple-400 transition-all hover:bg-purple-500/20"
-                  >
-                    <Mail size={14} /> Email
-                  </a>
-                ) : (
-                  <button disabled className="flex items-center justify-center gap-2 rounded-xl border border-chalk/10 bg-ink/30 py-2.5 px-3 font-mono text-xs text-muted/40 cursor-not-allowed">
-                    <Mail size={14} /> No Email
-                  </button>
-                )}
+              {/* Client Contact & Company Details */}
+              <div className="rounded-2xl border border-chalk/15 bg-ink/40 p-4 space-y-3">
+                <h3 className="font-mono text-xs uppercase tracking-wider font-semibold text-chalk flex items-center gap-2">
+                  <User size={14} className="text-flow" /> Client Details & Profile
+                </h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+                  {/* Mail ID */}
+                  <div>
+                    <label className="block text-[0.65rem] text-muted uppercase tracking-wider mb-1 flex items-center gap-1">
+                      <Mail size={11} /> Mail ID
+                    </label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="e.g. client@company.com"
+                      className="w-full rounded-xl border border-chalk/20 bg-surface px-2.5 py-1.5 font-body text-xs text-chalk focus:border-flow focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Company Name */}
+                  <div>
+                    <label className="block text-[0.65rem] text-muted uppercase tracking-wider mb-1 flex items-center gap-1">
+                      <Building2 size={11} /> Company Name
+                    </label>
+                    <input
+                      type="text"
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
+                      placeholder="e.g. Apex Ltd."
+                      className="w-full rounded-xl border border-chalk/20 bg-surface px-2.5 py-1.5 font-body text-xs text-chalk focus:border-flow focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Location */}
+                  <div>
+                    <label className="block text-[0.65rem] text-muted uppercase tracking-wider mb-1 flex items-center gap-1">
+                      <MapPin size={11} /> Location / City
+                    </label>
+                    <input
+                      type="text"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      placeholder="e.g. Delhi NCR"
+                      className="w-full rounded-xl border border-chalk/20 bg-surface px-2.5 py-1.5 font-body text-xs text-chalk focus:border-flow focus:outline-none"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Pipeline Status Selector */}
@@ -437,7 +484,7 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
             <div className="lg:col-span-5 space-y-5">
               <div className="flex items-center justify-between">
                 <h3 className="font-mono text-xs uppercase tracking-wider font-semibold text-chalk flex items-center gap-2">
-                  <Clock size={15} className="text-flow" /> Discussion History & Notes ({lead.timelineNotes?.length || 0})
+                  <Clock size={15} className="text-flow" /> Discussion History & Notes ({timelineNotes.length})
                 </h3>
               </div>
 
@@ -463,8 +510,8 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
 
               {/* Scrollable Notes List */}
               <div className="space-y-3 max-h-[460px] overflow-y-auto pr-1">
-                {lead.timelineNotes && lead.timelineNotes.length > 0 ? (
-                  lead.timelineNotes.map((note, index) => (
+                {timelineNotes && timelineNotes.length > 0 ? (
+                  timelineNotes.map((note, index) => (
                     <div
                       key={note.id || index}
                       className="rounded-2xl border border-chalk/15 bg-ink/60 p-4 space-y-2 transition-all hover:border-chalk/30"
