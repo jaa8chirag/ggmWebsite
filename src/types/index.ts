@@ -228,6 +228,8 @@ export interface LeadNote {
   author?: string | null;
 }
 
+export type PaymentStatus = "PENDING" | "PARTIAL" | "FULLY_PAID";
+
 export interface CrmLeadModel {
   id: string;
   name: string;
@@ -239,8 +241,12 @@ export interface CrmLeadModel {
   status: CrmLeadStatus;
   approxAmount?: string | null;
   fixAmount?: string | null;
+  advancePaid?: string | null;
+  balanceDue?: string | null;
+  paymentStatus: PaymentStatus;
   quotationSent: boolean;
   nextFollowUp?: string | null;
+  nextPaymentDate?: string | null;
   timelineNotes: LeadNote[];
   quoteRequestId?: string | null;
   createdAt: Date | string;
@@ -253,6 +259,8 @@ export interface CrmStats {
   quotationsSentCount: number;
   totalPipelineValue: string;
   totalWonValue: string;
+  totalAdvanceCollected: string;
+  totalBalancePending: string;
 }
 
 

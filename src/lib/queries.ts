@@ -593,8 +593,12 @@ export async function getLeads(statusFilter?: string): Promise<CrmLeadModel[]> {
       status: (r.status as CrmLeadStatus) || "NEW",
       approxAmount: r.approxAmount ? String(r.approxAmount) : null,
       fixAmount: r.fixAmount ? String(r.fixAmount) : null,
+      advancePaid: r.advancePaid ? String(r.advancePaid) : null,
+      balanceDue: r.balanceDue ? String(r.balanceDue) : null,
+      paymentStatus: r.paymentStatus || "PENDING",
       quotationSent: Boolean(r.quotationSent),
       nextFollowUp: r.nextFollowUp ? new Date(r.nextFollowUp).toISOString() : null,
+      nextPaymentDate: r.nextPaymentDate ? new Date(r.nextPaymentDate).toISOString() : null,
       timelineNotes: parseJson<LeadNote[]>(r.timelineNotes, []),
       quoteRequestId: r.quoteRequestId || null,
       createdAt: r.createdAt ? new Date(r.createdAt).toISOString() : new Date().toISOString(),
@@ -604,6 +608,13 @@ export async function getLeads(statusFilter?: string): Promise<CrmLeadModel[]> {
     console.error("Error fetching CRM leads:", err);
     return [];
   }
+}
+
+function parseAmountValue(val: string | null | undefined): number {
+  if (!val) return 0;
+  const match = val.match(/\d[\d,]*/);
+  if (!match) return 0;
+  return parseInt(match[0].replace(/,/g, ""), 10) || 0;
 }
 
 export async function getLeadStats(): Promise<CrmStats> {
@@ -617,12 +628,16 @@ export async function getLeadStats(): Promise<CrmStats> {
     let quotationsSentCount = 0;
     let pipelineSum = 0;
     let wonSum = 0;
+    let advanceSum = 0;
+    let balanceSum = 0;
 
     for (const lead of leads) {
       if (lead.quotationSent) quotationsSentCount++;
 
-      const approxNum = lead.approxAmount ? parseInt(lead.approxAmount.replace(/[^0-9]/g, "")) || 0 : 0;
-      const fixNum = lead.fixAmount ? parseInt(lead.fixAmount.replace(/[^0-9]/g, "")) || 0 : 0;
+      const approxNum = parseAmountValue(lead.approxAmount);
+      const fixNum = parseAmountValue(lead.fixAmount);
+      const advanceNum = parseAmountValue(lead.advancePaid);
+      const balanceNum = parseAmountValue(lead.balanceDue) || (fixNum > 0 ? Math.max(0, fixNum - advanceNum) : 0);
 
       if (lead.status !== "LOST") {
         pipelineSum += fixNum || approxNum;
@@ -630,6 +645,9 @@ export async function getLeadStats(): Promise<CrmStats> {
       if (lead.status === "WON") {
         wonSum += fixNum || approxNum;
       }
+
+      advanceSum += advanceNum;
+      balanceSum += balanceNum;
 
       if (lead.nextFollowUp && lead.status !== "WON" && lead.status !== "LOST") {
         const followUpDateStr = new Date(lead.nextFollowUp).toISOString().slice(0, 10);
@@ -645,6 +663,8 @@ export async function getLeadStats(): Promise<CrmStats> {
       quotationsSentCount,
       totalPipelineValue: pipelineSum > 0 ? `₹${pipelineSum.toLocaleString("en-IN")}` : "₹0",
       totalWonValue: wonSum > 0 ? `₹${wonSum.toLocaleString("en-IN")}` : "₹0",
+      totalAdvanceCollected: advanceSum > 0 ? `₹${advanceSum.toLocaleString("en-IN")}` : "₹0",
+      totalBalancePending: balanceSum > 0 ? `₹${balanceSum.toLocaleString("en-IN")}` : "₹0",
     };
   } catch (err) {
     return {
@@ -653,6 +673,8 @@ export async function getLeadStats(): Promise<CrmStats> {
       quotationsSentCount: 0,
       totalPipelineValue: "₹0",
       totalWonValue: "₹0",
+      totalAdvanceCollected: "₹0",
+      totalBalancePending: "₹0",
     };
   }
 }

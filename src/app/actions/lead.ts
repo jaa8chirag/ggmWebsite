@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { query, queryOne, parseJson } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
-import type { CrmLeadModel, CrmLeadStatus, LeadNote } from "@/types";
+import type { CrmLeadModel, CrmLeadStatus, LeadNote, PaymentStatus } from "@/types";
 
 export interface LeadActionResult {
   success: boolean;
@@ -28,11 +28,18 @@ export async function createLeadAction(formData: FormData): Promise<LeadActionRe
     const status = ((formData.get("status") as string)?.trim() || "NEW") as CrmLeadStatus;
     const initialNoteText = (formData.get("initialNote") as string)?.trim();
     const nextFollowUp = (formData.get("nextFollowUp") as string)?.trim() || null;
+    const nextPaymentDate = (formData.get("nextPaymentDate") as string)?.trim() || null;
 
     const rawApprox = formData.get("approxAmount");
     const rawFix = formData.get("fixAmount");
+    const rawAdvance = formData.get("advancePaid");
+    const rawBalance = formData.get("balanceDue");
+    const paymentStatus = ((formData.get("paymentStatus") as string)?.trim() || "PENDING") as PaymentStatus;
+
     const approxAmount = rawApprox ? (rawApprox as string).trim() : null;
     const fixAmount = rawFix ? (rawFix as string).trim() : null;
+    const advancePaid = rawAdvance ? (rawAdvance as string).trim() : null;
+    const balanceDue = rawBalance ? (rawBalance as string).trim() : null;
     const quotationSent = formData.get("quotationSent") === "true" || formData.get("quotationSent") === "on";
 
     if (!name || name.length < 2) {
@@ -58,8 +65,8 @@ export async function createLeadAction(formData: FormData): Promise<LeadActionRe
 
     await query(
       `INSERT INTO \`CrmLead\`
-       (\`id\`, \`name\`, \`phone\`, \`email\`, \`serviceSlug\`, \`serviceTitle\`, \`source\`, \`status\`, \`approxAmount\`, \`fixAmount\`, \`quotationSent\`, \`nextFollowUp\`, \`timelineNotes\`, \`createdAt\`)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(3))`,
+       (\`id\`, \`name\`, \`phone\`, \`email\`, \`serviceSlug\`, \`serviceTitle\`, \`source\`, \`status\`, \`approxAmount\`, \`fixAmount\`, \`advancePaid\`, \`balanceDue\`, \`paymentStatus\`, \`quotationSent\`, \`nextFollowUp\`, \`nextPaymentDate\`, \`timelineNotes\`, \`createdAt\`)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(3))`,
       [
         id,
         name,
@@ -71,8 +78,12 @@ export async function createLeadAction(formData: FormData): Promise<LeadActionRe
         status,
         approxAmount,
         fixAmount,
+        advancePaid,
+        balanceDue,
+        paymentStatus,
         quotationSent ? 1 : 0,
         nextFollowUp ? new Date(nextFollowUp) : null,
+        nextPaymentDate ? new Date(nextPaymentDate) : null,
         JSON.stringify(notesArray),
       ]
     );
@@ -96,7 +107,7 @@ export async function createLeadAction(formData: FormData): Promise<LeadActionRe
 }
 
 /**
- * Updates lead attributes (amounts, quotation sent, next follow-up, status, client info)
+ * Updates lead attributes (amounts, quotation sent, next follow-up, status, client info, payments)
  */
 export async function updateLeadAction(
   leadId: string,
@@ -110,8 +121,12 @@ export async function updateLeadAction(
     status?: CrmLeadStatus;
     approxAmount?: string | null;
     fixAmount?: string | null;
+    advancePaid?: string | null;
+    balanceDue?: string | null;
+    paymentStatus?: PaymentStatus;
     quotationSent?: boolean;
     nextFollowUp?: string | null;
+    nextPaymentDate?: string | null;
   }
 ): Promise<LeadActionResult> {
   try {
@@ -131,8 +146,12 @@ export async function updateLeadAction(
     const status = data.status !== undefined ? data.status : existing.status;
     const approxAmount = data.approxAmount !== undefined ? data.approxAmount : existing.approxAmount;
     const fixAmount = data.fixAmount !== undefined ? data.fixAmount : existing.fixAmount;
+    const advancePaid = data.advancePaid !== undefined ? data.advancePaid : existing.advancePaid;
+    const balanceDue = data.balanceDue !== undefined ? data.balanceDue : existing.balanceDue;
+    const paymentStatus = data.paymentStatus !== undefined ? data.paymentStatus : existing.paymentStatus;
     const quotationSent = data.quotationSent !== undefined ? data.quotationSent : Boolean(existing.quotationSent);
     const nextFollowUp = data.nextFollowUp !== undefined ? data.nextFollowUp : existing.nextFollowUp;
+    const nextPaymentDate = data.nextPaymentDate !== undefined ? data.nextPaymentDate : existing.nextPaymentDate;
 
     await query(
       `UPDATE \`CrmLead\`
@@ -145,8 +164,12 @@ export async function updateLeadAction(
            \`status\` = ?,
            \`approxAmount\` = ?,
            \`fixAmount\` = ?,
+           \`advancePaid\` = ?,
+           \`balanceDue\` = ?,
+           \`paymentStatus\` = ?,
            \`quotationSent\` = ?,
            \`nextFollowUp\` = ?,
+           \`nextPaymentDate\` = ?,
            \`updatedAt\` = NOW(3)
        WHERE \`id\` = ?`,
       [
@@ -159,8 +182,12 @@ export async function updateLeadAction(
         status,
         approxAmount ?? null,
         fixAmount ?? null,
+        advancePaid ?? null,
+        balanceDue ?? null,
+        paymentStatus || "PENDING",
         quotationSent ? 1 : 0,
         nextFollowUp ? new Date(nextFollowUp) : null,
+        nextPaymentDate ? new Date(nextPaymentDate) : null,
         leadId,
       ]
     );

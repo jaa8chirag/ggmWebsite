@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   X,
   User,
@@ -10,15 +10,16 @@ import {
   MessageSquare,
   Send,
   DollarSign,
-  CheckCircle,
   Clock,
   Trash2,
-  ExternalLink,
-  ShieldAlert,
   Tag,
   Briefcase,
+  CreditCard,
+  CheckCircle2,
+  AlertCircle,
+  HelpCircle,
 } from "lucide-react";
-import { CrmLeadModel, CrmLeadStatus, LeadNote } from "@/types";
+import { CrmLeadModel, CrmLeadStatus, PaymentStatus } from "@/types";
 import { updateLeadAction, addLeadNoteAction, deleteLeadAction } from "@/app/actions/lead";
 
 interface LeadDetailDrawerProps {
@@ -35,16 +36,43 @@ const STATUS_LABELS: Record<CrmLeadStatus, { label: string; color: string; borde
   LOST: { label: "Deal Lost", color: "bg-rose-500/20 text-rose-400", border: "border-rose-500/30" },
 };
 
+const PAYMENT_LABELS: Record<PaymentStatus, { label: string; bg: string; text: string }> = {
+  PENDING: { label: "Pending", bg: "bg-rose-500/20", text: "text-rose-400" },
+  PARTIAL: { label: "Partial Advance", bg: "bg-amber-500/20", text: "text-amber-400" },
+  FULLY_PAID: { label: "Fully Paid 🎉", bg: "bg-emerald-500/20", text: "text-emerald-400" },
+};
+
 export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProps) {
   const [newNoteText, setNewNoteText] = useState("");
   const [isSubmittingNote, setIsSubmittingNote] = useState(false);
-  const [approxAmount, setApproxAmount] = useState(lead?.approxAmount || "");
-  const [fixAmount, setFixAmount] = useState(lead?.fixAmount || "");
-  const [quotationSent, setQuotationSent] = useState(lead?.quotationSent || false);
-  const [nextFollowUp, setNextFollowUp] = useState(lead?.nextFollowUp || "");
-  const [status, setStatus] = useState<CrmLeadStatus>(lead?.status || "NEW");
+
+  // Form states initialized on lead change
+  const [status, setStatus] = useState<CrmLeadStatus>("NEW");
+  const [approxAmount, setApproxAmount] = useState("");
+  const [fixAmount, setFixAmount] = useState("");
+  const [advancePaid, setAdvancePaid] = useState("");
+  const [balanceDue, setBalanceDue] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("PENDING");
+  const [quotationSent, setQuotationSent] = useState(false);
+  const [nextFollowUp, setNextFollowUp] = useState("");
+  const [nextPaymentDate, setNextPaymentDate] = useState("");
+
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    if (lead) {
+      setStatus(lead.status || "NEW");
+      setApproxAmount(lead.approxAmount || "");
+      setFixAmount(lead.fixAmount || "");
+      setAdvancePaid(lead.advancePaid || "");
+      setBalanceDue(lead.balanceDue || "");
+      setPaymentStatus(lead.paymentStatus || "PENDING");
+      setQuotationSent(lead.quotationSent || false);
+      setNextFollowUp(lead.nextFollowUp || "");
+      setNextPaymentDate(lead.nextPaymentDate || "");
+    }
+  }, [lead]);
 
   if (!lead) return null;
 
@@ -55,14 +83,18 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
     `Hello ${lead.name}, thank you for contacting GGM Technologies regarding ${lead.serviceTitle}.`
   )}`;
 
-  async function handleQuickSave() {
+  async function handleSaveLead() {
     setIsUpdating(true);
     await updateLeadAction(lead!.id, {
       status,
       approxAmount: approxAmount || null,
       fixAmount: fixAmount || null,
+      advancePaid: advancePaid || null,
+      balanceDue: balanceDue || null,
+      paymentStatus,
       quotationSent,
       nextFollowUp: nextFollowUp || null,
+      nextPaymentDate: nextPaymentDate || null,
     });
     setIsUpdating(false);
   }
@@ -72,7 +104,7 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
     if (!newNoteText.trim()) return;
     setIsSubmittingNote(true);
 
-    const res = await addLeadNoteAction(lead!.id, newNoteText.trim(), "Super Admin");
+    const res = await addLeadNoteAction(lead!.id, newNoteText.trim(), "Admin");
     setIsSubmittingNote(false);
     if (res.success) {
       setNewNoteText("");
@@ -87,166 +119,161 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
     onClose();
   }
 
-  // Follow up presets
   function setPresetFollowUp(daysFromNow: number, hour: number = 11) {
     const d = new Date();
     d.setDate(d.getDate() + daysFromNow);
     d.setHours(hour, 0, 0, 0);
-    const isoString = d.toISOString().slice(0, 16); // YYYY-MM-THH:mm
-    setNextFollowUp(isoString);
+    setNextFollowUp(d.toISOString().slice(0, 16));
+  }
+
+  function setPresetPaymentDate(daysFromNow: number) {
+    const d = new Date();
+    d.setDate(d.getDate() + daysFromNow);
+    d.setHours(12, 0, 0, 0);
+    setNextPaymentDate(d.toISOString().slice(0, 16));
   }
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-xl bg-surface border-l border-chalk/20 shadow-2xl flex flex-col justify-between">
+    <div className="fixed inset-0 z-50 overflow-hidden bg-black/70 backdrop-blur-md animate-fadeIn">
+      <div className="absolute inset-y-0 right-0 max-w-full flex pl-6">
+        {/* Expanded Drawer Width to max-w-4xl */}
+        <div className="w-screen max-w-4xl bg-surface border-l border-chalk/20 shadow-2xl flex flex-col justify-between">
           
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-chalk/15 px-6 py-5 bg-ink/70">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-flow/20 text-flow border border-flow/30 font-bold font-mono">
-                <User size={22} />
+          <div className="flex items-center justify-between border-b border-chalk/15 px-8 py-5 bg-ink/80">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-flow/20 text-flow border border-flow/30 font-bold font-mono">
+                <User size={24} />
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="font-heading text-lg font-bold text-chalk truncate max-w-[200px]">
+                <div className="flex items-center gap-3">
+                  <h2 className="font-heading text-xl font-bold text-chalk truncate max-w-xs">
                     {lead.name}
                   </h2>
-                  <span className={`rounded-full px-2.5 py-0.5 font-mono text-[0.65rem] uppercase tracking-wider font-semibold border ${STATUS_LABELS[status].color} ${STATUS_LABELS[status].border}`}>
+                  <span className={`rounded-full px-3 py-1 font-mono text-xs uppercase tracking-wider font-semibold border ${STATUS_LABELS[status].color} ${STATUS_LABELS[status].border}`}>
                     {STATUS_LABELS[status].label}
                   </span>
+                  <span className={`rounded-full px-2.5 py-0.5 font-mono text-[0.65rem] uppercase font-bold ${PAYMENT_LABELS[paymentStatus].bg} ${PAYMENT_LABELS[paymentStatus].text}`}>
+                    {PAYMENT_LABELS[paymentStatus].label}
+                  </span>
                 </div>
-                <p className="font-mono text-xs text-muted flex items-center gap-1.5 mt-0.5">
-                  <Briefcase size={12} className="text-flow" /> {lead.serviceTitle}
+                <p className="font-mono text-xs text-muted flex items-center gap-2 mt-1">
+                  <Briefcase size={13} className="text-flow" /> {lead.serviceTitle}
+                  <span className="text-chalk/30">•</span>
+                  <Tag size={13} className="text-muted" /> Source: <strong className="text-chalk">{lead.source}</strong>
                 </p>
               </div>
             </div>
 
-            <button
-              onClick={onClose}
-              className="rounded-lg p-2 text-muted transition-colors hover:bg-ink hover:text-chalk"
-            >
-              <X size={20} />
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleSaveLead}
+                disabled={isUpdating}
+                className="rounded-xl bg-flow px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-ink transition-all hover:bg-flow/90 disabled:opacity-50 shadow-md shadow-flow/20"
+              >
+                {isUpdating ? "Saving..." : "Save All Changes"}
+              </button>
+              <button
+                onClick={onClose}
+                className="rounded-xl p-2 text-muted transition-colors hover:bg-ink hover:text-chalk"
+              >
+                <X size={22} />
+              </button>
+            </div>
           </div>
 
-          {/* Body Content */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          {/* Body Content - 2 Column Layout */}
+          <div className="flex-1 overflow-y-auto p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            {/* LEFT COLUMN: Controls, Pricing & Payments (7 Cols) */}
+            <div className="lg:col-span-7 space-y-6 border-r border-chalk/10 pr-0 lg:pr-6">
 
-            {/* Quick Action Contact Bar */}
-            <div className="grid grid-cols-3 gap-3">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 py-2.5 px-3 font-mono text-xs font-semibold text-emerald-400 transition-all hover:bg-emerald-500/20"
-              >
-                <MessageSquare size={14} /> WhatsApp
-              </a>
-              <a
-                href={`tel:${lead.phone}`}
-                className="flex items-center justify-center gap-2 rounded-xl border border-blue-500/40 bg-blue-500/10 py-2.5 px-3 font-mono text-xs font-semibold text-blue-400 transition-all hover:bg-blue-500/20"
-              >
-                <Phone size={14} /> Call Lead
-              </a>
-              {lead.email ? (
+              {/* Quick Contact Actions */}
+              <div className="grid grid-cols-3 gap-3">
                 <a
-                  href={`mailto:${lead.email}`}
-                  className="flex items-center justify-center gap-2 rounded-xl border border-purple-500/40 bg-purple-500/10 py-2.5 px-3 font-mono text-xs font-semibold text-purple-400 transition-all hover:bg-purple-500/20"
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 py-2.5 px-3 font-mono text-xs font-semibold text-emerald-400 transition-all hover:bg-emerald-500/20"
                 >
-                  <Mail size={14} /> Email
+                  <MessageSquare size={14} /> WhatsApp
                 </a>
-              ) : (
-                <button disabled className="flex items-center justify-center gap-2 rounded-xl border border-chalk/10 bg-ink/30 py-2.5 px-3 font-mono text-xs text-muted/40 cursor-not-allowed">
-                  <Mail size={14} /> No Email
-                </button>
-              )}
-            </div>
-
-            {/* Lead Metadata Info */}
-            <div className="rounded-xl border border-chalk/15 bg-ink/50 p-4 space-y-2.5 font-mono text-xs">
-              <div className="flex justify-between items-center text-muted">
-                <span>Mobile Number:</span>
-                <span className="font-semibold text-chalk">{lead.phone}</span>
-              </div>
-              <div className="flex justify-between items-center text-muted">
-                <span>Lead Source:</span>
-                <span className="rounded-md bg-chalk/10 px-2 py-0.5 text-flow font-semibold">{lead.source}</span>
-              </div>
-              <div className="flex justify-between items-center text-muted">
-                <span>Created Date:</span>
-                <span className="text-chalk">{new Date(lead.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
-              </div>
-            </div>
-
-            {/* Status & Pricing Section */}
-            <div className="rounded-xl border border-chalk/20 bg-ink/40 p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="font-mono text-xs uppercase tracking-wider font-semibold text-flow flex items-center gap-1.5">
-                  <Tag size={14} /> Status & Pricing Deal Controls
-                </h3>
-                <button
-                  onClick={handleQuickSave}
-                  disabled={isUpdating}
-                  className="rounded-lg bg-flow px-3 py-1 font-mono text-xs font-bold text-ink transition-all hover:bg-flow/90 disabled:opacity-50"
+                <a
+                  href={`tel:${lead.phone}`}
+                  className="flex items-center justify-center gap-2 rounded-xl border border-blue-500/40 bg-blue-500/10 py-2.5 px-3 font-mono text-xs font-semibold text-blue-400 transition-all hover:bg-blue-500/20"
                 >
-                  {isUpdating ? "Saving..." : "Save Changes"}
-                </button>
+                  <Phone size={14} /> Call Lead
+                </a>
+                {lead.email ? (
+                  <a
+                    href={`mailto:${lead.email}`}
+                    className="flex items-center justify-center gap-2 rounded-xl border border-purple-500/40 bg-purple-500/10 py-2.5 px-3 font-mono text-xs font-semibold text-purple-400 transition-all hover:bg-purple-500/20"
+                  >
+                    <Mail size={14} /> Email
+                  </a>
+                ) : (
+                  <button disabled className="flex items-center justify-center gap-2 rounded-xl border border-chalk/10 bg-ink/30 py-2.5 px-3 font-mono text-xs text-muted/40 cursor-not-allowed">
+                    <Mail size={14} /> No Email
+                  </button>
+                )}
               </div>
 
-              {/* Status Dropdown */}
-              <div>
-                <label className="block font-mono text-[0.7rem] text-muted uppercase tracking-wider mb-1">Pipeline Status</label>
+              {/* Pipeline Status Selector */}
+              <div className="rounded-2xl border border-chalk/15 bg-ink/40 p-4 space-y-2">
+                <label className="block font-mono text-xs font-bold uppercase tracking-wider text-chalk">
+                  Pipeline Status
+                </label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value as CrmLeadStatus)}
-                  className="w-full rounded-xl border border-chalk/20 bg-surface px-3.5 py-2 font-body text-sm text-chalk focus:border-flow focus:outline-none"
+                  className="w-full rounded-xl border border-chalk/20 bg-surface px-4 py-2.5 font-body text-sm font-semibold text-chalk focus:border-flow focus:outline-none"
                 >
                   <option value="NEW">New Lead (Fresh Inquiry)</option>
                   <option value="IN_DISCUSSION">In Discussion (Talks Ongoing)</option>
                   <option value="QUOTATION_SENT">Quotation Sent</option>
                   <option value="FOLLOWUP_SCHEDULED">Follow-up Scheduled</option>
-                  <option value="WON">Deal Won 🎉</option>
+                  <option value="WON">Deal Won 🎉 (Client Onboarded)</option>
                   <option value="LOST">Deal Lost</option>
                 </select>
               </div>
 
-              {/* Amounts Grid */}
-              <div className="grid grid-cols-2 gap-3">
-                {/* Approx Amount */}
-                <div>
-                  <label className="block font-mono text-[0.7rem] text-muted uppercase tracking-wider mb-1">
-                    Approx Budget / Estimate
-                  </label>
-                  <input
-                    type="text"
-                    value={approxAmount}
-                    onChange={(e) => setApproxAmount(e.target.value)}
-                    placeholder="e.g. ₹25,000"
-                    className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
-                  />
-                  <span className="font-mono text-[0.65rem] text-muted/70 mt-0.5 block">Approx kitna bola hai</span>
+              {/* Pricing & Quotation Details */}
+              <div className="rounded-2xl border border-chalk/15 bg-ink/40 p-4 space-y-4">
+                <h3 className="font-mono text-xs uppercase tracking-wider font-semibold text-flow flex items-center gap-2">
+                  <DollarSign size={14} /> Pricing & Quotation Controls
+                </h3>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-mono text-[0.7rem] text-muted uppercase tracking-wider mb-1">
+                      Approx Budget / Estimate
+                    </label>
+                    <input
+                      type="text"
+                      value={approxAmount}
+                      onChange={(e) => setApproxAmount(e.target.value)}
+                      placeholder="e.g. ₹25,000"
+                      className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
+                    />
+                    <span className="font-mono text-[0.65rem] text-muted/70 mt-0.5 block">Approx kitna bola hai</span>
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-[0.7rem] text-flow font-semibold uppercase tracking-wider mb-1">
+                      Fixed Agreed Price
+                    </label>
+                    <input
+                      type="text"
+                      value={fixAmount}
+                      onChange={(e) => setFixAmount(e.target.value)}
+                      placeholder="e.g. ₹28,000"
+                      className="w-full rounded-xl border border-flow/40 bg-surface px-3 py-2 font-body text-xs text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
+                    />
+                    <span className="font-mono text-[0.65rem] text-muted/70 mt-0.5 block">Fix price final</span>
+                  </div>
                 </div>
 
-                {/* Fix Amount */}
-                <div>
-                  <label className="block font-mono text-[0.7rem] text-flow font-semibold uppercase tracking-wider mb-1">
-                    Fixed Agreed Price
-                  </label>
-                  <input
-                    type="text"
-                    value={fixAmount}
-                    onChange={(e) => setFixAmount(e.target.value)}
-                    placeholder="e.g. ₹28,000"
-                    className="w-full rounded-xl border border-flow/40 bg-surface px-3 py-2 font-body text-xs text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
-                  />
-                  <span className="font-mono text-[0.65rem] text-muted/70 mt-0.5 block">Fix price final</span>
-                </div>
-              </div>
-
-              {/* Quotation Sent Toggle & Next Follow Up */}
-              <div className="space-y-3 pt-1 border-t border-chalk/10">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between pt-2 border-t border-chalk/10">
                   <label className="font-body text-xs text-chalk flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
@@ -256,18 +283,67 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                     />
                     Quotation Sent to Client?
                   </label>
-                  <span className={`px-2 py-0.5 rounded font-mono text-[0.65rem] uppercase font-bold ${quotationSent ? 'bg-emerald-500/20 text-emerald-400' : 'bg-chalk/10 text-muted'}`}>
-                    {quotationSent ? "YES - SENT" : "NO"}
+                  <span className={`px-2.5 py-1 rounded font-mono text-[0.65rem] uppercase font-bold ${quotationSent ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-chalk/10 text-muted'}`}>
+                    {quotationSent ? "YES - SENT" : "NO - PENDING"}
                   </span>
                 </div>
+              </div>
 
-                <div>
+              {/* Advanced Payment Tracker */}
+              <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-mono text-xs uppercase tracking-wider font-semibold text-emerald-400 flex items-center gap-2">
+                    <CreditCard size={15} /> Payment & Advance Tracker
+                  </h3>
+                  <select
+                    value={paymentStatus}
+                    onChange={(e) => setPaymentStatus(e.target.value as PaymentStatus)}
+                    className="rounded-lg border border-emerald-500/40 bg-surface px-3 py-1 font-mono text-xs font-bold text-emerald-400 focus:outline-none"
+                  >
+                    <option value="PENDING">Pending (No Payment)</option>
+                    <option value="PARTIAL">Partial Advance</option>
+                    <option value="FULLY_PAID">Fully Paid 🎉</option>
+                  </select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-mono text-[0.7rem] text-emerald-400 uppercase tracking-wider mb-1 font-semibold">
+                      Advance Paid by Client
+                    </label>
+                    <input
+                      type="text"
+                      value={advancePaid}
+                      onChange={(e) => setAdvancePaid(e.target.value)}
+                      placeholder="e.g. ₹10,000"
+                      className="w-full rounded-xl border border-emerald-500/30 bg-surface px-3 py-2 font-body text-xs text-chalk placeholder-muted/50 focus:border-emerald-400 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-mono text-[0.7rem] text-amber-400 uppercase tracking-wider mb-1 font-semibold">
+                      Balance Pending / Remaining
+                    </label>
+                    <input
+                      type="text"
+                      value={balanceDue}
+                      onChange={(e) => setBalanceDue(e.target.value)}
+                      placeholder="e.g. ₹18,000"
+                      className="w-full rounded-xl border border-amber-500/30 bg-surface px-3 py-2 font-body text-xs text-chalk placeholder-muted/50 focus:border-amber-400 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Next Payment Collection Scheduler */}
+                <div className="pt-2 border-t border-chalk/10">
                   <label className="block font-mono text-[0.7rem] text-muted uppercase tracking-wider mb-1 flex items-center justify-between">
-                    <span className="flex items-center gap-1"><Calendar size={12} /> Next Follow-up Date</span>
-                    {nextFollowUp && (
+                    <span className="flex items-center gap-1.5 text-amber-400 font-semibold">
+                      <Calendar size={12} /> Next Payment Collection Date ("Agla paisa kab lena hai")
+                    </span>
+                    {nextPaymentDate && (
                       <button
                         type="button"
-                        onClick={() => setNextFollowUp("")}
+                        onClick={() => setNextPaymentDate("")}
                         className="text-rose-400 hover:underline text-[0.65rem]"
                       >
                         Clear Date
@@ -276,74 +352,125 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                   </label>
                   <input
                     type="datetime-local"
-                    value={nextFollowUp ? new Date(nextFollowUp).toISOString().slice(0, 16) : ""}
-                    onChange={(e) => setNextFollowUp(e.target.value)}
-                    className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs text-chalk focus:border-flow focus:outline-none"
+                    value={nextPaymentDate ? new Date(nextPaymentDate).toISOString().slice(0, 16) : ""}
+                    onChange={(e) => setNextPaymentDate(e.target.value)}
+                    className="w-full rounded-xl border border-amber-500/30 bg-surface px-3 py-2 font-body text-xs text-chalk focus:border-amber-400 focus:outline-none"
                   />
                   <div className="flex items-center gap-2 mt-2 font-mono text-[0.65rem]">
                     <span className="text-muted">Quick Set:</span>
                     <button
                       type="button"
-                      onClick={() => setPresetFollowUp(1)}
-                      className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20"
-                    >
-                      Tomorrow
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPresetFollowUp(3)}
-                      className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20"
+                      onClick={() => setPresetPaymentDate(3)}
+                      className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-amber-400 border border-chalk/20"
                     >
                       In 3 Days
                     </button>
                     <button
                       type="button"
-                      onClick={() => setPresetFollowUp(7)}
-                      className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20"
+                      onClick={() => setPresetPaymentDate(7)}
+                      className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-amber-400 border border-chalk/20"
                     >
-                      Next Week
+                      In 7 Days
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPresetPaymentDate(15)}
+                      className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-amber-400 border border-chalk/20"
+                    >
+                      In 15 Days
                     </button>
                   </div>
                 </div>
               </div>
+
+              {/* Call Follow-up Scheduler */}
+              <div className="rounded-2xl border border-chalk/15 bg-ink/40 p-4 space-y-3">
+                <label className="block font-mono text-[0.7rem] text-muted uppercase tracking-wider flex items-center justify-between">
+                  <span className="flex items-center gap-1.5 text-flow font-semibold">
+                    <Calendar size={13} /> Next Call / Discussion Follow-up Date
+                  </span>
+                  {nextFollowUp && (
+                    <button
+                      type="button"
+                      onClick={() => setNextFollowUp("")}
+                      className="text-rose-400 hover:underline text-[0.65rem]"
+                    >
+                      Clear Date
+                    </button>
+                  )}
+                </label>
+                <input
+                  type="datetime-local"
+                  value={nextFollowUp ? new Date(nextFollowUp).toISOString().slice(0, 16) : ""}
+                  onChange={(e) => setNextFollowUp(e.target.value)}
+                  className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs text-chalk focus:border-flow focus:outline-none"
+                />
+                <div className="flex items-center gap-2 font-mono text-[0.65rem]">
+                  <span className="text-muted">Quick Set:</span>
+                  <button
+                    type="button"
+                    onClick={() => setPresetFollowUp(1)}
+                    className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20"
+                  >
+                    Tomorrow 11 AM
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPresetFollowUp(3)}
+                    className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20"
+                  >
+                    In 3 Days
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPresetFollowUp(7)}
+                    className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20"
+                  >
+                    Next Week
+                  </button>
+                </div>
+              </div>
+
             </div>
 
-            {/* Client Discussion Notes Timeline */}
-            <div className="space-y-3">
-              <h3 className="font-mono text-xs uppercase tracking-wider font-semibold text-chalk flex items-center gap-1.5">
-                <Clock size={14} className="text-flow" /> Discussion History & Notes ({lead.timelineNotes?.length || 0})
-              </h3>
+            {/* RIGHT COLUMN: Client Discussion Notes & History Timeline (5 Cols) */}
+            <div className="lg:col-span-5 space-y-5">
+              <div className="flex items-center justify-between">
+                <h3 className="font-mono text-xs uppercase tracking-wider font-semibold text-chalk flex items-center gap-2">
+                  <Clock size={15} className="text-flow" /> Discussion History & Notes ({lead.timelineNotes?.length || 0})
+                </h3>
+              </div>
 
-              {/* Add New Note Box */}
+              {/* Add New Note Logger */}
               <form onSubmit={handleAddNote} className="space-y-2">
                 <div className="relative">
                   <textarea
-                    rows={2}
+                    rows={3}
                     value={newNoteText}
                     onChange={(e) => setNewNoteText(e.target.value)}
-                    placeholder="Type discussion details (e.g. Client requested ₹2000 discount, asked for sample portfolio)..."
-                    className="w-full rounded-xl border border-chalk/25 bg-ink p-3 font-body text-xs text-chalk placeholder-muted/50 focus:border-flow focus:outline-none resize-none"
+                    placeholder="Log client talk (e.g. Client agreed on ₹28k fixed price, promised ₹10k advance payment by Friday)..."
+                    className="w-full rounded-2xl border border-chalk/25 bg-ink p-3.5 font-body text-xs text-chalk placeholder-muted/50 focus:border-flow focus:outline-none resize-none"
                   />
                   <button
                     type="submit"
                     disabled={isSubmittingNote || !newNoteText.trim()}
-                    className="absolute right-2.5 bottom-3.5 flex items-center gap-1.5 rounded-lg bg-flow px-3 py-1 font-mono text-xs font-bold text-ink hover:bg-flow/90 disabled:opacity-40"
+                    className="absolute right-3 bottom-3.5 flex items-center gap-1.5 rounded-xl bg-flow px-3.5 py-1.5 font-mono text-xs font-bold text-ink hover:bg-flow/90 disabled:opacity-40 shadow"
                   >
                     <Send size={12} /> Add Note
                   </button>
                 </div>
               </form>
 
-              {/* Notes Timeline List */}
-              <div className="space-y-3 pt-2">
+              {/* Scrollable Notes List */}
+              <div className="space-y-3 max-h-[460px] overflow-y-auto pr-1">
                 {lead.timelineNotes && lead.timelineNotes.length > 0 ? (
                   lead.timelineNotes.map((note, index) => (
                     <div
                       key={note.id || index}
-                      className="rounded-xl border border-chalk/15 bg-ink/60 p-3.5 space-y-1.5 transition-all hover:border-chalk/30"
+                      className="rounded-2xl border border-chalk/15 bg-ink/60 p-4 space-y-2 transition-all hover:border-chalk/30"
                     >
                       <div className="flex items-center justify-between font-mono text-[0.65rem]">
-                        <span className="rounded bg-flow/15 px-2 py-0.5 font-bold text-flow border border-flow/30">
+                        <span className="rounded-md bg-flow/15 px-2 py-0.5 font-bold text-flow border border-flow/30">
                           {note.author || "Admin"}
                         </span>
                         <span className="text-muted/70">
@@ -361,8 +488,8 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                     </div>
                   ))
                 ) : (
-                  <div className="rounded-xl border border-dashed border-chalk/20 p-6 text-center font-mono text-xs text-muted">
-                    No notes recorded yet. Add the first discussion update above.
+                  <div className="rounded-2xl border border-dashed border-chalk/20 p-8 text-center font-mono text-xs text-muted">
+                    No discussion notes recorded yet. Add the first note above.
                   </div>
                 )}
               </div>
@@ -370,21 +497,31 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
 
           </div>
 
-          {/* Drawer Footer Actions */}
-          <div className="border-t border-chalk/15 p-5 bg-ink/80 flex items-center justify-between">
+          {/* Drawer Footer */}
+          <div className="border-t border-chalk/15 px-8 py-4 bg-ink/90 flex items-center justify-between">
             <button
               onClick={handleDelete}
               disabled={isDeleting}
-              className="flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3.5 py-2 font-mono text-xs text-rose-400 transition-colors hover:bg-rose-500/20 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-2 font-mono text-xs text-rose-400 transition-colors hover:bg-rose-500/20 disabled:opacity-50"
             >
-              <Trash2 size={14} /> Delete Lead
+              <Trash2 size={15} /> Delete Lead
             </button>
-            <button
-              onClick={onClose}
-              className="rounded-xl bg-chalk/15 px-5 py-2 font-mono text-xs uppercase tracking-wider text-chalk hover:bg-chalk/20"
-            >
-              Close
-            </button>
+            
+            <div className="flex items-center gap-3">
+              <button
+                onClick={onClose}
+                className="rounded-xl border border-chalk/20 px-5 py-2 font-mono text-xs uppercase tracking-wider text-muted hover:text-chalk"
+              >
+                Close
+              </button>
+              <button
+                onClick={handleSaveLead}
+                disabled={isUpdating}
+                className="rounded-xl bg-flow px-6 py-2 font-mono text-xs font-bold uppercase tracking-wider text-ink transition-all hover:bg-flow/90 disabled:opacity-50"
+              >
+                {isUpdating ? "Saving..." : "Save Changes"}
+              </button>
+            </div>
           </div>
 
         </div>
