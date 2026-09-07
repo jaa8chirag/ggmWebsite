@@ -179,6 +179,8 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
                   <option value="REFERRAL">Client Referral</option>
                   <option value="GOOGLE_ADS">Google Ads Campaign</option>
                   <option value="META_ADS">Meta / Instagram Ads</option>
+                  <option value="INDIAMART">IndiaMart Lead</option>
+                  <option value="JUSTDIAL">Justdial Inquiry</option>
                   <option value="WEBSITE">Website Form</option>
                 </select>
               </div>
