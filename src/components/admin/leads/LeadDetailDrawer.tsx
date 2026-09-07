@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   X,
   User,
@@ -45,6 +46,7 @@ const PAYMENT_LABELS: Record<PaymentStatus, { label: string; bg: string; text: s
 };
 
 export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProps) {
+  const router = useRouter();
   const [newNoteText, setNewNoteText] = useState("");
   const [isSubmittingNote, setIsSubmittingNote] = useState(false);
 
@@ -112,6 +114,7 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
       nextPaymentDate: nextPaymentDate || null,
     });
     setIsUpdating(false);
+    router.refresh();
   }
 
   async function handleAddNote(e: React.FormEvent) {
@@ -134,6 +137,7 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
     setIsSubmittingNote(false);
     if (res.success && res.notes) {
       setTimelineNotes(res.notes);
+      router.refresh();
     }
   }
 
@@ -142,6 +146,7 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
     setIsDeleting(true);
     await deleteLeadAction(lead!.id);
     setIsDeleting(false);
+    router.refresh();
     onClose();
   }
 

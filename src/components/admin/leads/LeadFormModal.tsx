@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { X, User, Phone, Mail, DollarSign, Calendar, FileText, Tag, CreditCard, Building2, MapPin } from "lucide-react";
 import { createLeadAction } from "@/app/actions/lead";
 
@@ -23,6 +24,7 @@ const SERVICE_OPTIONS = [
 ];
 
 export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,6 +40,7 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
 
     setLoading(false);
     if (res.success) {
+      router.refresh();
       onClose();
     } else {
       setError(res.error || "Failed to create lead.");
