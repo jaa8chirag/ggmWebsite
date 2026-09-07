@@ -135,12 +135,12 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-black/70 backdrop-blur-md animate-fadeIn">
-      <div className="absolute inset-y-0 right-0 max-w-full flex pl-6">
+      <div className="absolute inset-y-0 right-0 max-w-full flex pl-0 sm:pl-6">
         {/* Expanded Drawer Width to max-w-4xl */}
-        <div className="w-screen max-w-4xl bg-surface border-l border-chalk/20 shadow-2xl flex flex-col justify-between">
+        <div className="w-screen max-w-full lg:max-w-4xl bg-surface border-l border-chalk/20 shadow-2xl flex flex-col justify-between">
           
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-chalk/15 px-8 py-5 bg-ink/80">
+          <div className="flex items-center justify-between border-b border-chalk/15 px-4 py-4 sm:px-8 sm:py-5 bg-ink/80">
             <div className="flex items-center gap-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-flow/20 text-flow border border-flow/30 font-bold font-mono">
                 <User size={24} />
@@ -183,7 +183,7 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
           </div>
 
           {/* Body Content - 2 Column Layout */}
-          <div className="flex-1 overflow-y-auto p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
             
             {/* LEFT COLUMN: Controls, Pricing & Payments (7 Cols) */}
             <div className="lg:col-span-7 space-y-6 border-r border-chalk/10 pr-0 lg:pr-6">

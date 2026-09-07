@@ -181,41 +181,41 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
       </div>
 
       {/* KPI Stats Bar */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-6">
-        <div className="rounded-2xl border border-chalk/15 bg-surface p-4 space-y-1">
-          <p className="font-mono text-[0.65rem] uppercase tracking-wider text-muted font-semibold">Total Leads</p>
-          <p className="font-heading text-2xl font-bold text-chalk">{stats.totalLeads}</p>
-          <span className="font-mono text-[0.65rem] text-flow">Website + Manual</span>
+      <div className="grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-6">
+        <div className="rounded-2xl border border-chalk/15 bg-surface p-3 sm:p-4 space-y-0.5">
+          <p className="font-mono text-[0.6rem] sm:text-[0.65rem] uppercase tracking-wider text-muted font-semibold">Total Leads</p>
+          <p className="font-heading text-lg sm:text-2xl font-bold text-chalk">{stats.totalLeads}</p>
+          <span className="font-mono text-[0.6rem] sm:text-[0.65rem] text-flow">Website + Manual</span>
         </div>
 
-        <div className="rounded-2xl border border-chalk/15 bg-surface p-4 space-y-1">
-          <p className="font-mono text-[0.65rem] uppercase tracking-wider text-muted font-semibold">Follow-ups Due Today</p>
-          <p className="font-heading text-2xl font-bold text-amber-400">{stats.dueTodayCount}</p>
-          <span className="font-mono text-[0.65rem] text-amber-400/80">Requires immediate call</span>
+        <div className="rounded-2xl border border-chalk/15 bg-surface p-3 sm:p-4 space-y-0.5">
+          <p className="font-mono text-[0.6rem] sm:text-[0.65rem] uppercase tracking-wider text-muted font-semibold">Due Today</p>
+          <p className="font-heading text-lg sm:text-2xl font-bold text-amber-400">{stats.dueTodayCount}</p>
+          <span className="font-mono text-[0.6rem] sm:text-[0.65rem] text-amber-400/80">Follow-up call</span>
         </div>
 
-        <div className="rounded-2xl border border-chalk/15 bg-surface p-4 space-y-1">
-          <p className="font-mono text-[0.65rem] uppercase tracking-wider text-muted font-semibold">Quotations Sent</p>
-          <p className="font-heading text-2xl font-bold text-purple-400">{stats.quotationsSentCount}</p>
-          <span className="font-mono text-[0.65rem] text-purple-400/80">Proposals active</span>
+        <div className="rounded-2xl border border-chalk/15 bg-surface p-3 sm:p-4 space-y-0.5">
+          <p className="font-mono text-[0.6rem] sm:text-[0.65rem] uppercase tracking-wider text-muted font-semibold">Quotations</p>
+          <p className="font-heading text-lg sm:text-2xl font-bold text-purple-400">{stats.quotationsSentCount}</p>
+          <span className="font-mono text-[0.6rem] sm:text-[0.65rem] text-purple-400/80">Sent active</span>
         </div>
 
-        <div className="rounded-2xl border border-chalk/15 bg-surface p-4 space-y-1">
-          <p className="font-mono text-[0.65rem] uppercase tracking-wider text-muted font-semibold">Total Pipeline Value</p>
-          <p className="font-heading text-2xl font-bold text-flow">{stats.totalPipelineValue}</p>
-          <span className="font-mono text-[0.65rem] text-muted">Est. active deals</span>
+        <div className="rounded-2xl border border-chalk/15 bg-surface p-3 sm:p-4 space-y-0.5">
+          <p className="font-mono text-[0.6rem] sm:text-[0.65rem] uppercase tracking-wider text-muted font-semibold">Pipeline Value</p>
+          <p className="font-heading text-lg sm:text-2xl font-bold text-flow">{stats.totalPipelineValue}</p>
+          <span className="font-mono text-[0.6rem] sm:text-[0.65rem] text-muted">Active deals</span>
         </div>
 
-        <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4 space-y-1">
-          <p className="font-mono text-[0.65rem] uppercase tracking-wider text-emerald-400 font-semibold">Advance Collected</p>
-          <p className="font-heading text-2xl font-bold text-emerald-400">{stats.totalAdvanceCollected}</p>
-          <span className="font-mono text-[0.65rem] text-emerald-400/80">Total received</span>
+        <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-3 sm:p-4 space-y-0.5">
+          <p className="font-mono text-[0.6rem] sm:text-[0.65rem] uppercase tracking-wider text-emerald-400 font-semibold">Advance</p>
+          <p className="font-heading text-lg sm:text-2xl font-bold text-emerald-400">{stats.totalAdvanceCollected}</p>
+          <span className="font-mono text-[0.6rem] sm:text-[0.65rem] text-emerald-400/80">Collected</span>
         </div>
 
-        <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 space-y-1">
-          <p className="font-mono text-[0.65rem] uppercase tracking-wider text-amber-400 font-semibold">Balance Pending</p>
-          <p className="font-heading text-2xl font-bold text-amber-400">{stats.totalBalancePending}</p>
-          <span className="font-mono text-[0.65rem] text-amber-400/80">Remaining to collect</span>
+        <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-3 sm:p-4 space-y-0.5">
+          <p className="font-mono text-[0.6rem] sm:text-[0.65rem] uppercase tracking-wider text-amber-400 font-semibold">Balance</p>
+          <p className="font-heading text-lg sm:text-2xl font-bold text-amber-400">{stats.totalBalancePending}</p>
+          <span className="font-mono text-[0.6rem] sm:text-[0.65rem] text-amber-400/80">Pending</span>
         </div>
       </div>
 
