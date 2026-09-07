@@ -213,5 +213,47 @@ export interface QuoteRequest {
   createdAt: Date | string;
 }
 
+export type CrmLeadStatus =
+  | "NEW"
+  | "IN_DISCUSSION"
+  | "QUOTATION_SENT"
+  | "FOLLOWUP_SCHEDULED"
+  | "WON"
+  | "LOST";
+
+export interface LeadNote {
+  id: string;
+  text: string;
+  createdAt: string;
+  author?: string | null;
+}
+
+export interface CrmLeadModel {
+  id: string;
+  name: string;
+  phone: string;
+  email?: string | null;
+  serviceSlug: string;
+  serviceTitle: string;
+  source: string;
+  status: CrmLeadStatus;
+  approxAmount?: string | null;
+  fixAmount?: string | null;
+  quotationSent: boolean;
+  nextFollowUp?: string | null;
+  timelineNotes: LeadNote[];
+  quoteRequestId?: string | null;
+  createdAt: Date | string;
+  updatedAt?: Date | string;
+}
+
+export interface CrmStats {
+  totalLeads: number;
+  dueTodayCount: number;
+  quotationsSentCount: number;
+  totalPipelineValue: string;
+  totalWonValue: string;
+}
+
 
 

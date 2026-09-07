@@ -21,6 +21,10 @@ import type {
   LegalPage,
   CertificateDocument,
   QuoteRequest,
+  CrmLeadModel,
+  CrmLeadStatus,
+  LeadNote,
+  CrmStats,
 } from "@/types";
 
 export const DEFAULT_SERVICES = DB_SERVICES;
@@ -519,6 +523,137 @@ export async function getQuoteStats(): Promise<{ total: number; pending: number;
     return stats;
   } catch (err) {
     return { total: 0, pending: 0, contacted: 0, converted: 0 };
+  }
+}
+
+/**
+ * Lead Management CRM Queries
+ */
+export async function getLeads(statusFilter?: string): Promise<CrmLeadModel[]> {
+  try {
+    // 1. Sync unsynced QuoteRequests into CrmLead automatically
+    const unsyncedQuotes = await query<any>(
+      `SELECT q.* FROM \`QuoteRequest\` q
+       LEFT JOIN \`CrmLead\` c ON c.\`quoteRequestId\` = q.\`id\` OR c.\`id\` = q.\`id\`
+       WHERE c.\`id\` IS NULL`
+    );
+
+    if (unsyncedQuotes && unsyncedQuotes.length > 0) {
+      for (const q of unsyncedQuotes) {
+        const initialNotes = q.notes
+          ? [{ id: `note_init_${Date.now()}`, text: q.notes, createdAt: new Date(q.createdAt || Date.now()).toISOString(), author: "Website System" }]
+          : q.message
+          ? [{ id: `note_msg_${Date.now()}`, text: `Initial Inquiry: ${q.message}`, createdAt: new Date(q.createdAt || Date.now()).toISOString(), author: "Website Form" }]
+          : [];
+
+        let crmStatus: CrmLeadStatus = "NEW";
+        if (q.status === "CONTACTED") crmStatus = "IN_DISCUSSION";
+        if (q.status === "CONVERTED") crmStatus = "WON";
+        if (q.status === "ARCHIVED") crmStatus = "LOST";
+
+        await query(
+          `INSERT INTO \`CrmLead\`
+           (\`id\`, \`name\`, \`phone\`, \`email\`, \`serviceSlug\`, \`serviceTitle\`, \`source\`, \`status\`, \`timelineNotes\`, \`quoteRequestId\`, \`createdAt\`)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            q.id,
+            q.name,
+            q.phone,
+            q.email || null,
+            q.serviceSlug || "general",
+            q.serviceTitle || "General Consultation",
+            "Website Form",
+            crmStatus,
+            JSON.stringify(initialNotes),
+            q.id,
+            q.createdAt || new Date(),
+          ]
+        );
+      }
+    }
+
+    // 2. Fetch CrmLead rows
+    let sql = "SELECT * FROM `CrmLead`";
+    const params: any[] = [];
+    if (statusFilter && statusFilter !== "ALL") {
+      sql += " WHERE `status` = ?";
+      params.push(statusFilter);
+    }
+    sql += " ORDER BY `createdAt` DESC";
+
+    const rows = await query<any>(sql, params);
+    return (rows || []).map((r) => ({
+      id: r.id,
+      name: r.name,
+      phone: r.phone,
+      email: r.email || null,
+      serviceSlug: r.serviceSlug || "general",
+      serviceTitle: r.serviceTitle || "General Consultation",
+      source: r.source || "Website Form",
+      status: (r.status as CrmLeadStatus) || "NEW",
+      approxAmount: r.approxAmount ? String(r.approxAmount) : null,
+      fixAmount: r.fixAmount ? String(r.fixAmount) : null,
+      quotationSent: Boolean(r.quotationSent),
+      nextFollowUp: r.nextFollowUp ? new Date(r.nextFollowUp).toISOString() : null,
+      timelineNotes: parseJson<LeadNote[]>(r.timelineNotes, []),
+      quoteRequestId: r.quoteRequestId || null,
+      createdAt: r.createdAt ? new Date(r.createdAt).toISOString() : new Date().toISOString(),
+      updatedAt: r.updatedAt ? new Date(r.updatedAt).toISOString() : new Date().toISOString(),
+    }));
+  } catch (err) {
+    console.error("Error fetching CRM leads:", err);
+    return [];
+  }
+}
+
+export async function getLeadStats(): Promise<CrmStats> {
+  try {
+    const leads = await getLeads();
+    const now = new Date();
+    const todayStr = now.toISOString().slice(0, 10);
+
+    let totalLeads = leads.length;
+    let dueTodayCount = 0;
+    let quotationsSentCount = 0;
+    let pipelineSum = 0;
+    let wonSum = 0;
+
+    for (const lead of leads) {
+      if (lead.quotationSent) quotationsSentCount++;
+
+      const approxNum = lead.approxAmount ? parseInt(lead.approxAmount.replace(/[^0-9]/g, "")) || 0 : 0;
+      const fixNum = lead.fixAmount ? parseInt(lead.fixAmount.replace(/[^0-9]/g, "")) || 0 : 0;
+
+      if (lead.status !== "LOST") {
+        pipelineSum += fixNum || approxNum;
+      }
+      if (lead.status === "WON") {
+        wonSum += fixNum || approxNum;
+      }
+
+      if (lead.nextFollowUp && lead.status !== "WON" && lead.status !== "LOST") {
+        const followUpDateStr = new Date(lead.nextFollowUp).toISOString().slice(0, 10);
+        if (followUpDateStr <= todayStr) {
+          dueTodayCount++;
+        }
+      }
+    }
+
+    return {
+      totalLeads,
+      dueTodayCount,
+      quotationsSentCount,
+      totalPipelineValue: pipelineSum > 0 ? `₹${pipelineSum.toLocaleString("en-IN")}` : "₹0",
+      totalWonValue: wonSum > 0 ? `₹${wonSum.toLocaleString("en-IN")}` : "₹0",
+    };
+  } catch (err) {
+    return {
+      totalLeads: 0,
+      dueTodayCount: 0,
+      quotationsSentCount: 0,
+      totalPipelineValue: "₹0",
+      totalWonValue: "₹0",
+    };
   }
 }
 

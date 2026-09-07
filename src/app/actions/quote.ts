@@ -38,8 +38,21 @@ export async function submitQuoteRequest(formData: FormData): Promise<QuoteActio
       [id, name, phone, email, serviceSlug, serviceTitle, message, pageUrl]
     );
 
+    // Also auto-sync directly into CrmLead CRM table
+    const leadId = `lead_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const initialNotes = message
+      ? JSON.stringify([{ id: `note_1`, text: `Website Form Message: ${message}`, createdAt: new Date().toISOString(), author: "Website Form" }])
+      : JSON.stringify([]);
+
+    await query(
+      `INSERT INTO \`CrmLead\` (\`id\`, \`name\`, \`phone\`, \`email\`, \`serviceSlug\`, \`serviceTitle\`, \`source\`, \`status\`, \`timelineNotes\`, \`quoteRequestId\`, \`createdAt\`, \`updatedAt\`)
+       VALUES (?, ?, ?, ?, ?, ?, 'WEBSITE', 'NEW', ?, ?, NOW(3), NOW(3))`,
+      [leadId, name, phone, email, serviceSlug, serviceTitle, initialNotes, id]
+    );
+
     revalidatePath("/admin");
     revalidatePath("/admin/quotes");
+    revalidatePath("/admin/leads");
 
     return {
       success: true,
