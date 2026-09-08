@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { query, queryOne } from "@/lib/db";
-import ToggleButton from "@/components/admin/ToggleButton";
-import { cardClass } from "@/components/admin/styles";
 import { enableLocation, disableLocation } from "./actions";
+import ServiceLocationsManager from "@/components/admin/locations/ServiceLocationsManager";
 
 export default async function ServiceLocationsPage({
   params,
@@ -16,10 +15,6 @@ export default async function ServiceLocationsPage({
 
   const serviceLocations = await query<any>("SELECT * FROM `ServiceLocation` WHERE `serviceId` = ?", [id]);
   const locations = await query<any>("SELECT * FROM `Location` WHERE `isActive` = 1 ORDER BY `name` ASC");
-
-  const enabledMap = new Map(
-    serviceLocations.map((sl) => [sl.locationId, sl])
-  );
 
   return (
     <div>
@@ -39,56 +34,13 @@ export default async function ServiceLocationsPage({
         reads as thin/duplicate content to Google.
       </p>
 
-      {locations.length === 0 ? (
-        <div className={`${cardClass} mt-8`}>
-          <p className="font-body text-sm text-muted">
-            No locations yet.{" "}
-            <Link href="/admin/locations" className="text-flow">
-              Add one first
-            </Link>
-            .
-          </p>
-        </div>
-      ) : (
-        <div className="mt-8 space-y-3">
-          {locations.map((location) => {
-            const sl = enabledMap.get(location.id);
-            return (
-              <div
-                key={location.id}
-                className={`${cardClass} flex items-center justify-between`}
-              >
-                <div>
-                  <p className="font-display text-lg text-chalk">
-                    {location.name}
-                  </p>
-                  <p className="mt-1 font-mono text-xs text-muted">
-                    /services/{service.slug}/{location.slug}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  {sl && (
-                    <Link
-                      href={`/admin/services/${service.id}/locations/${sl.id}/edit`}
-                      className="rounded-lg border border-chalk/15 px-3 py-2 font-mono text-xs uppercase tracking-widest text-muted hover:border-flow hover:text-flow"
-                    >
-                      Edit content
-                    </Link>
-                  )}
-                  <ToggleButton
-                    enabled={Boolean(sl)}
-                    action={
-                      sl
-                        ? disableLocation.bind(null, service.id, location.id)
-                        : enableLocation.bind(null, service.id, location.id)
-                    }
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      <ServiceLocationsManager
+        service={service}
+        locations={locations}
+        serviceLocations={serviceLocations}
+        enableAction={enableLocation}
+        disableAction={disableLocation}
+      />
     </div>
   );
 }
