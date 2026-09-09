@@ -4,6 +4,7 @@ import RepeatingText from "@/components/admin/RepeatingText";
 import RepeatingPairs from "@/components/admin/RepeatingPairs";
 import RepeatingMetrics from "@/components/admin/settings/RepeatingMetrics";
 import RichTextEditor from "@/components/admin/RichTextEditor";
+import SettingsImageUploader from "@/components/admin/settings/SettingsImageUploader";
 import { labelClass, inputClass, cardClass } from "@/components/admin/styles";
 import { updateSettings } from "./actions";
 
@@ -48,6 +49,17 @@ export default async function AdminSettingsPage() {
               Eyebrow (Hero Label)
             </label>
             <input id="eyebrow" name="eyebrow" defaultValue={settings.eyebrow} className={inputClass} />
+          </div>
+
+          <div className="mt-5">
+            <SettingsImageUploader
+              id="logoUrl"
+              name="logoUrl"
+              label="Website & Brand Logo Image"
+              defaultValue={settings.logoUrl}
+              helpText="Primary brand logo image displayed in navbar, footer, and header."
+              aspectRatio="square"
+            />
           </div>
 
           <div className="mt-4 grid grid-cols-2 gap-4">
@@ -299,6 +311,16 @@ export default async function AdminSettingsPage() {
                 <input id="ceoTitle" name="ceoTitle" defaultValue={settings.ceoTitle ?? "Founder & Chief Executive Officer"} className={inputClass} />
               </div>
             </div>
+            <div className="mb-4">
+              <SettingsImageUploader
+                id="ceoImage"
+                name="ceoImage"
+                label="CEO / Founder Official Photo"
+                defaultValue={settings.ceoImage}
+                helpText="Executive portrait displayed on the /about page and founder credentials."
+                aspectRatio="square"
+              />
+            </div>
             <RichTextEditor
               id="ceoBio"
               name="ceoBio"
@@ -310,6 +332,16 @@ export default async function AdminSettingsPage() {
           </div>
 
           <div className="mt-5 border-t border-chalk/15 pt-5">
+            <div className="mb-4">
+              <SettingsImageUploader
+                id="aboutImage"
+                name="aboutImage"
+                label="About Company Infrastructure / Office Banner Photo"
+                defaultValue={settings.aboutImage}
+                helpText="Banner or office infrastructure image displayed in the company history section on /about."
+                aspectRatio="banner"
+              />
+            </div>
             <RichTextEditor
               id="companyStory"
               name="companyStory"

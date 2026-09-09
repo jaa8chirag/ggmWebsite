@@ -39,6 +39,16 @@ async function ensureSchema() {
       "ALTER TABLE `BlogPost` MODIFY `ogImage` LONGTEXT",
       "ALTER TABLE `Product` MODIFY `ogImage` LONGTEXT",
       "ALTER TABLE `ServiceLocation` MODIFY `ogImage` LONGTEXT",
+      "ALTER TABLE `Testimonial` ADD COLUMN `avatar` LONGTEXT",
+      "ALTER TABLE `Testimonial` MODIFY `avatar` LONGTEXT",
+      "ALTER TABLE `SiteSettings` ADD COLUMN `logoUrl` LONGTEXT",
+      "ALTER TABLE `SiteSettings` MODIFY `logoUrl` LONGTEXT",
+      "ALTER TABLE `SiteSettings` ADD COLUMN `ceoImage` LONGTEXT",
+      "ALTER TABLE `SiteSettings` MODIFY `ceoImage` LONGTEXT",
+      "ALTER TABLE `SiteSettings` ADD COLUMN `aboutImage` LONGTEXT",
+      "ALTER TABLE `SiteSettings` MODIFY `aboutImage` LONGTEXT",
+      "ALTER TABLE `CertificateDocument` ADD COLUMN `imageUrl` LONGTEXT",
+      "ALTER TABLE `CertificateDocument` MODIFY `imageUrl` LONGTEXT",
     ];
     for (const sql of alterStatements) {
       await pool.query(sql).catch(() => {});

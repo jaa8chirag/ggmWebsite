@@ -1,26 +1,47 @@
+import Image from "next/image";
 import Eyebrow from "@/components/ui/Eyebrow";
 
 interface TestimonialData {
   quote: string;
   name: string;
   role: string;
+  avatar?: string | null;
 }
 
 function QuoteCard({
   quote,
   name,
   role,
+  avatar,
 }: {
   quote: string;
   name: string;
   role: string;
+  avatar?: string | null;
 }) {
   return (
-    <div className="w-[320px] shrink-0 rounded-2xl border-2 border-chalk/30 bg-surface p-6 shadow-md shadow-chalk/10 sm:w-[380px]">
-      <p className="font-body text-sm text-chalk">&ldquo;{quote}&rdquo;</p>
-      <p className="mt-6 font-mono text-xs uppercase tracking-widest text-muted">
-        {name} — {role}
-      </p>
+    <div className="w-[320px] shrink-0 rounded-2xl border-2 border-chalk/30 bg-surface p-6 shadow-md shadow-chalk/10 sm:w-[380px] flex flex-col justify-between">
+      <p className="font-body text-sm text-chalk leading-relaxed">&ldquo;{quote}&rdquo;</p>
+      <div className="mt-6 flex items-center gap-3 border-t border-chalk/10 pt-4">
+        {avatar ? (
+          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full border border-chalk/20 bg-ink">
+            <Image
+              src={avatar}
+              alt={name}
+              fill
+              className="object-cover"
+            />
+          </div>
+        ) : (
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-flow/20 font-display text-xs font-bold text-flow border border-flow/30">
+            {name?.charAt(0) || "C"}
+          </div>
+        )}
+        <div>
+          <p className="font-display text-sm font-bold text-chalk">{name}</p>
+          <p className="font-mono text-[11px] uppercase tracking-wider text-muted">{role}</p>
+        </div>
+      </div>
     </div>
   );
 }

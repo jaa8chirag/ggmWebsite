@@ -314,6 +314,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
     quote: t.quote,
     name: t.name,
     role: t.role,
+    avatar: t.avatar || null,
     published: Boolean(t.published),
   }));
 }
@@ -350,6 +351,9 @@ export async function getSettings(): Promise<SiteSettingsModel> {
     indiamartSeal: settings.indiamartSeal ?? "Verified Trust Seal Member",
     justdialSeal: settings.justdialSeal ?? "Justdial Verified Enterprise",
     googleBusinessUrl: settings.googleBusinessUrl ?? "https://maps.google.com/?cid=ggmtechnologies",
+    logoUrl: settings.logoUrl ?? null,
+    ceoImage: settings.ceoImage ?? null,
+    aboutImage: settings.aboutImage ?? null,
     aboutEyebrow: settings.aboutEyebrow,
     aboutTitle: settings.aboutTitle,
     aboutIntro: settings.aboutIntro,
@@ -474,7 +478,7 @@ export async function getCertificates(): Promise<CertificateDocument[]> {
     issuer: c.issuer,
     certificateNo: c.certificateNo,
     pdfUrl: c.pdfUrl,
-    imageUrl: null,
+    imageUrl: c.imageUrl || null,
     description: c.description,
     issueDate: c.issueDate,
     order: Number(c.order || 0),

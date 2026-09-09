@@ -62,6 +62,7 @@ export interface Testimonial {
   quote: string;
   name: string;
   role: string;
+  avatar?: string | null;
   published?: boolean;
 }
 
@@ -155,6 +156,10 @@ export interface SiteSettingsModel {
   indiamartSeal?: string | null;
   justdialSeal?: string | null;
   googleBusinessUrl?: string | null;
+  // Branding & Images
+  logoUrl?: string | null;
+  ceoImage?: string | null;
+  aboutImage?: string | null;
   // About & Company Hub
   aboutEyebrow: string;
   aboutTitle: string;

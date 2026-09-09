@@ -38,6 +38,7 @@ export async function updateSettings(id: string, formData: FormData) {
      \`gst\` = ?, \`businessHours\` = ?, 
      \`whatsapp\` = ?, \`facebook\` = ?, \`twitter\` = ?, \`instagram\` = ?, \`youtube\` = ?, \`linkedin\` = ?,
      \`msme\` = ?, \`indiamartSeal\` = ?, \`justdialSeal\` = ?, \`googleBusinessUrl\` = ?,
+     \`logoUrl\` = ?, \`ceoImage\` = ?, \`aboutImage\` = ?,
      \`aboutEyebrow\` = ?, \`aboutTitle\` = ?, \`aboutIntro\` = ?, \`mission\` = ?, \`vision\` = ?, 
      \`ceoName\` = ?, \`ceoTitle\` = ?, \`ceoBio\` = ?, \`companyStory\` = ?, \`qualityCompliance\` = ?,
      \`clients\` = ?
@@ -64,6 +65,9 @@ export async function updateSettings(id: string, formData: FormData) {
       str(formData, "indiamartSeal"),
       str(formData, "justdialSeal"),
       str(formData, "googleBusinessUrl"),
+      str(formData, "logoUrl"),
+      str(formData, "ceoImage"),
+      str(formData, "aboutImage"),
       str(formData, "aboutEyebrow"),
       str(formData, "aboutTitle"),
       str(formData, "aboutIntro"),

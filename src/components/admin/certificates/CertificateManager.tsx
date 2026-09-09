@@ -16,6 +16,8 @@ import { labelClass, inputClass, cardClass } from "@/components/admin/styles";
 import { createCertificate, deleteCertificate } from "@/app/admin/(dashboard)/certificates/actions";
 import type { CertificateDocument } from "@/types";
 
+import { compressImageFile } from "@/lib/image-compress";
+
 interface CertificateManagerProps {
   initialCertificates: CertificateDocument[];
 }
@@ -25,6 +27,7 @@ export default function CertificateManager({
 }: CertificateManagerProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedPdfUrl, setUploadedPdfUrl] = useState("");
+  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState("");
   const [uploadError, setUploadError] = useState("");
 
@@ -62,6 +65,42 @@ export default function CertificateManager({
       setUploadSuccess(`Uploaded "${file.name}" successfully!`);
     } catch (err: any) {
       setUploadError(err.message || "Failed to upload PDF");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawFile = e.target.files?.[0];
+    if (!rawFile) return;
+
+    if (!rawFile.type.startsWith("image/")) {
+      setUploadError("Please select a valid image file.");
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError("");
+
+    try {
+      const file = await compressImageFile(rawFile);
+      const data = new FormData();
+      data.append("file", file);
+      data.append("folder", "certificates");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: data,
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Upload failed");
+      }
+
+      setUploadedImageUrl(json.url);
+    } catch (err: any) {
+      setUploadError(err.message || "Failed to upload image");
     } finally {
       setIsUploading(false);
     }
@@ -237,6 +276,34 @@ export default function CertificateManager({
               id="cert-desc"
               name="description"
               placeholder="Short note about what this certification verifies"
+              className={inputClass}
+            />
+          </div>
+
+          {/* Certificate Badge / Icon / Seal Image Uploader */}
+          <div className="rounded-2xl border border-chalk/20 bg-ink/40 p-4 space-y-3">
+            <label className={labelClass} htmlFor="cert-imageUrl">
+              Certificate Badge / Logo Image (Optional)
+            </label>
+            <div className="flex items-center gap-3">
+              <label className="flex items-center gap-2 rounded-xl border border-chalk/25 bg-surface px-4 py-2 font-mono text-xs text-chalk hover:border-flow hover:text-flow cursor-pointer transition-colors">
+                <Upload size={15} className="text-flow" />
+                <span>Upload Badge Image</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  disabled={isUploading}
+                  className="hidden"
+                />
+              </label>
+            </div>
+            <input
+              id="cert-imageUrl"
+              name="imageUrl"
+              value={uploadedImageUrl}
+              onChange={(e) => setUploadedImageUrl(e.target.value)}
+              placeholder="/uploads/certificates/badge.png or https://..."
               className={inputClass}
             />
           </div>

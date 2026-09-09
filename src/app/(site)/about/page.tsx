@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ShieldCheck,
   Award,
@@ -145,10 +146,21 @@ export default async function AboutPage() {
           <div className="mt-8 grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
             <div className="lg:col-span-5">
               <div className="rounded-3xl border-2 border-chalk/20 bg-surface p-8 shadow-xl">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-flow text-white font-display text-2xl font-bold shadow-lg shadow-flow/30">
-                  {settings.ceoName?.charAt(0) ?? "G"}
-                </div>
-                <h3 className="mt-6 font-display text-2xl font-bold text-chalk">
+                {settings.ceoImage ? (
+                  <div className="relative aspect-square w-full max-w-[240px] overflow-hidden rounded-2xl border-2 border-flow/30 shadow-lg mb-6">
+                    <Image
+                      src={settings.ceoImage}
+                      alt={settings.ceoName ?? "CEO Photo"}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-flow text-white font-display text-2xl font-bold shadow-lg shadow-flow/30">
+                    {settings.ceoName?.charAt(0) ?? "G"}
+                  </div>
+                )}
+                <h3 className="mt-4 font-display text-2xl font-bold text-chalk">
                   {settings.ceoName ?? "Guru Govind Mahesh"}
                 </h3>
                 <p className="font-mono text-xs uppercase tracking-wider text-flow font-semibold mt-1">
@@ -197,7 +209,18 @@ export default async function AboutPage() {
             Born in New Delhi, Delivering Globally
           </h2>
 
-          <div className="mt-8 rounded-3xl border border-chalk/15 bg-surface p-8 sm:p-10 shadow-sm">
+          <div className="mt-8 rounded-3xl border border-chalk/15 bg-surface p-8 sm:p-10 shadow-sm space-y-6">
+            {settings.aboutImage && (
+              <div className="relative aspect-[21/9] w-full overflow-hidden rounded-2xl border border-chalk/20 bg-ink">
+                <Image
+                  src={settings.aboutImage}
+                  alt="Company Infrastructure & Office"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
+
             <FormattedText
               text={
                 settings.companyStory ||
