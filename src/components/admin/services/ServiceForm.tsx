@@ -178,7 +178,7 @@ export default function ServiceForm({
               <img
                 src={imageUrl}
                 alt="Service visual banner preview"
-                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                className="h-full w-full object-contain p-1 transition-transform duration-500 hover:scale-105"
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center font-mono text-xs text-muted">
