@@ -49,6 +49,9 @@ async function ensureSchema() {
       "ALTER TABLE `SiteSettings` MODIFY `aboutImage` LONGTEXT",
       "ALTER TABLE `CertificateDocument` ADD COLUMN `imageUrl` LONGTEXT",
       "ALTER TABLE `CertificateDocument` MODIFY `imageUrl` LONGTEXT",
+      "UPDATE `Service` SET `slug` = 'website-development-services' WHERE `slug` IN ('website-development', 'web-development')",
+      "UPDATE `Service` SET `slug` = 'e-commerce-Development' WHERE `slug` IN ('e-commerce', 'ecommerce', 'e-commerce-development')",
+      "UPDATE `Service` SET `slug` = 'shopify-website-development' WHERE `slug` IN ('shopify-development', 'shopify', 'shopify-wordpress')",
     ];
     for (const sql of alterStatements) {
       await pool.query(sql).catch(() => {});

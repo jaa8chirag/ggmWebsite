@@ -2520,7 +2520,15 @@ export const SERVICE_DETAILS: Record<string, ServiceDetailContent> = {
   },
 };
 
-// Backwards-compatible aliases
+// Service details alias pointers (guarantees 100% data availability for all slug variations)
+SERVICE_DETAILS["website-development"] = SERVICE_DETAILS["website-development-services"];
+SERVICE_DETAILS["web-development"] = SERVICE_DETAILS["website-development-services"];
+SERVICE_DETAILS["e-commerce"] = SERVICE_DETAILS["e-commerce-Development"];
+SERVICE_DETAILS["e-commerce-development"] = SERVICE_DETAILS["e-commerce-Development"];
+SERVICE_DETAILS["ecommerce"] = SERVICE_DETAILS["e-commerce-Development"];
+SERVICE_DETAILS["shopify-development"] = SERVICE_DETAILS["shopify-website-development"];
+SERVICE_DETAILS["shopify"] = SERVICE_DETAILS["shopify-website-development"];
+SERVICE_DETAILS["shopify-wordpress"] = SERVICE_DETAILS["shopify-website-development"];
 SERVICE_DETAILS["wordpress"] = SERVICE_DETAILS["wordpress-development"];
 SERVICE_DETAILS["wp"] = SERVICE_DETAILS["wordpress-development"];
 SERVICE_DETAILS["mobile-application-development"] = SERVICE_DETAILS["mobile-app-development"];

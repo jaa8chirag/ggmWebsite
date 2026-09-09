@@ -45,21 +45,33 @@ export async function getServices(): Promise<Service[]> {
     });
   }
 
-  return services.map((s) => ({
-    id: s.id,
-    slug: s.slug,
-    index: s.index,
-    title: s.title,
-    promise: s.promise,
-    description: s.description,
-    bullets: parseJson<string[]>(s.bullets, []),
-    faqs: faqsByServiceId.get(s.id) || [],
-    metaTitle: s.metaTitle,
-    metaDescription: s.metaDescription,
-    ogImage: s.ogImage,
-    canonicalOverride: s.canonicalOverride,
-    noIndex: Boolean(s.noIndex),
-  }));
+  return services.map((s) => {
+    let canonicalSlug = s.slug;
+    const lower = (s.slug || "").toLowerCase();
+    if (lower === "website-development" || lower === "web-development" || lower === "website-development-services") {
+      canonicalSlug = "website-development-services";
+    } else if (lower === "e-commerce" || lower === "ecommerce" || lower === "e-commerce-development") {
+      canonicalSlug = "e-commerce-Development";
+    } else if (lower === "shopify-development" || lower === "shopify" || lower === "shopify-wordpress" || lower === "shopify-website-development") {
+      canonicalSlug = "shopify-website-development";
+    }
+
+    return {
+      id: s.id,
+      slug: canonicalSlug,
+      index: s.index,
+      title: s.title,
+      promise: s.promise,
+      description: s.description,
+      bullets: parseJson<string[]>(s.bullets, []),
+      faqs: faqsByServiceId.get(s.id) || [],
+      metaTitle: s.metaTitle,
+      metaDescription: s.metaDescription,
+      ogImage: s.ogImage,
+      canonicalOverride: s.canonicalOverride,
+      noIndex: Boolean(s.noIndex),
+    };
+  });
 }
 
 export async function getServiceBySlug(slug: string): Promise<Service | null> {
