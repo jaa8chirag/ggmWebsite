@@ -28,12 +28,33 @@ if (process.env.NODE_ENV !== "production") {
   globalForDb.pool = pool;
 }
 
+let schemaMigrated = false;
+async function ensureSchema() {
+  if (schemaMigrated) return;
+  schemaMigrated = true;
+  try {
+    const alterStatements = [
+      "ALTER TABLE `CaseStudy` MODIFY `ogImage` LONGTEXT",
+      "ALTER TABLE `Service` MODIFY `ogImage` LONGTEXT",
+      "ALTER TABLE `BlogPost` MODIFY `ogImage` LONGTEXT",
+      "ALTER TABLE `Product` MODIFY `ogImage` LONGTEXT",
+      "ALTER TABLE `ServiceLocation` MODIFY `ogImage` LONGTEXT",
+    ];
+    for (const sql of alterStatements) {
+      await pool.query(sql).catch(() => {});
+    }
+  } catch (err) {
+    // Ignore schema check errors
+  }
+}
+
 export async function query<T = any>(
   sql: string,
   params?: any[]
 ): Promise<T[]> {
   try {
-    const [rows] = await pool.execute(sql, params);
+    await ensureSchema();
+    const [rows] = await pool.query(sql, params);
     return rows as T[];
   } catch (error: any) {
     console.warn(`[DB WARNING] Query failed (${sql.slice(0, 40)}...):`, error?.message || error);

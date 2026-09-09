@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Image as ImageIcon, CheckCircle2, Sparkles } from "lucide-react";
+import { Image as ImageIcon, CheckCircle2, Sparkles, Upload, Loader2, AlertCircle } from "lucide-react";
 import Button from "@/components/ui/Button";
 import RepeatingText from "@/components/admin/RepeatingText";
 import RepeatingPairs from "@/components/admin/RepeatingPairs";
 import SeoFieldset from "@/components/admin/SeoFieldset";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import { labelClass, inputClass, cardClass } from "@/components/admin/styles";
+import { compressImageFile } from "@/lib/image-compress";
 
 export interface ServiceFormValues {
   slug?: string;
@@ -46,6 +47,47 @@ export default function ServiceForm({
   const [imageUrl, setImageUrl] = useState(
     values?.ogImage ?? "/images/services/seo.jpg"
   );
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const rawFile = e.target.files?.[0];
+    if (!rawFile) return;
+
+    if (!rawFile.type.startsWith("image/")) {
+      setUploadError("Please select a valid image file.");
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError(null);
+    setUploadSuccess(false);
+
+    try {
+      const file = await compressImageFile(rawFile);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "services");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data.success && data.url) {
+        setImageUrl(data.url);
+        setUploadSuccess(true);
+      } else {
+        setUploadError(data.error || "Failed to upload image.");
+      }
+    } catch (err: any) {
+      setUploadError(err.message || "Failed to upload image.");
+    } finally {
+      setIsUploading(false);
+    }
+  }
 
   return (
     <form action={action} className="max-w-2xl space-y-6">
@@ -121,7 +163,7 @@ export default function ServiceForm({
               <ImageIcon size={18} className="text-flow" /> Service Card & Banner Image
             </p>
             <p className="mt-1 font-body text-xs text-muted">
-              Select or paste a high-resolution image to show on the &ldquo;What We Do&rdquo; cards, service pages, and SEO previews.
+              Select or upload a high-resolution image to show on cards, service pages, and SEO previews.
             </p>
           </div>
           <span className="flex items-center gap-1 rounded-full border border-flow/30 bg-flow/15 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-widest text-flow font-semibold">
@@ -146,15 +188,53 @@ export default function ServiceForm({
           </div>
         </div>
 
+        {/* Upload Button */}
+        <div className="mt-4 space-y-2">
+          <label className="block font-mono text-[0.7rem] text-muted uppercase">
+            Upload Custom Image From Device:
+          </label>
+          <div className="flex items-center gap-3">
+            <label className="flex items-center gap-2 rounded-xl border border-chalk/25 bg-surface px-4 py-2 font-mono text-xs text-chalk hover:border-flow hover:text-flow cursor-pointer transition-colors">
+              {isUploading ? (
+                <Loader2 size={15} className="animate-spin text-flow" />
+              ) : (
+                <Upload size={15} className="text-flow" />
+              )}
+              <span>{isUploading ? "Uploading..." : "Choose Image File"}</span>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileUpload}
+                disabled={isUploading}
+                className="hidden"
+              />
+            </label>
+
+            {uploadSuccess && (
+              <span className="flex items-center gap-1 font-mono text-xs text-emerald-400">
+                <CheckCircle2 size={13} /> Image Uploaded!
+              </span>
+            )}
+          </div>
+          {uploadError && (
+            <p className="font-mono text-xs text-rose-400 flex items-center gap-1">
+              <AlertCircle size={13} /> {uploadError}
+            </p>
+          )}
+        </div>
+
         {/* Preset Image Selector */}
         <div className="mt-4 space-y-2">
-          <label className={labelClass}>Quick Pick Service Visuals</label>
+          <label className={labelClass}>Or Quick Pick Service Visuals</label>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {SERVICE_PRESET_IMAGES.map((preset) => (
               <button
                 key={preset.url}
                 type="button"
-                onClick={() => setImageUrl(preset.url)}
+                onClick={() => {
+                  setImageUrl(preset.url);
+                  setUploadSuccess(false);
+                }}
                 className={`flex items-center justify-between rounded-xl border-2 p-3 font-mono text-xs text-left transition-all ${
                   imageUrl === preset.url
                     ? "border-flow bg-flow/10 text-flow font-bold"
@@ -204,7 +284,7 @@ export default function ServiceForm({
         />
       </div>
 
-      <SeoFieldset values={{ ...values, ogImage: imageUrl }} />
+      <SeoFieldset values={{ ...values, ogImage: imageUrl }} hideOgImage />
 
       <div className="flex items-center gap-4">
         <Button type="submit" variant="signal">

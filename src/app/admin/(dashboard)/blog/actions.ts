@@ -103,45 +103,70 @@ export async function updateBlogPost(id: string, formData: FormData) {
   await requireAdmin();
   const data = parseBlogForm(formData);
 
-  await query(
-    `UPDATE \`BlogPost\` SET 
-     \`slug\` = ?, \`title\` = ?, \`excerpt\` = ?, \`date\` = ?, \`category\` = ?, 
-     \`status\` = ?, \`metaTitle\` = ?, \`metaDescription\` = ?, \`ogImage\` = ?, 
-     \`canonicalOverride\` = ?, \`noIndex\` = ?
-     WHERE \`id\` = ?`,
-    [
-      data.slug,
-      data.title,
-      data.excerpt,
-      data.date,
-      data.category,
-      data.status,
-      data.metaTitle,
-      data.metaDescription,
-      data.ogImage,
-      data.canonicalOverride,
-      data.noIndex ? 1 : 0,
-      id,
-    ]
-  );
+  const existing = await queryOne<any>("SELECT `id` FROM `BlogPost` WHERE `id` = ? OR `slug` = ?", [id, id]);
+  const targetId = existing?.id || id || `post_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
-  await query("DELETE FROM `BlogBlock` WHERE `postId` = ?", [id]);
+  if (!existing) {
+    await query(
+      `INSERT INTO \`BlogPost\` 
+       (\`id\`, \`slug\`, \`title\`, \`excerpt\`, \`date\`, \`category\`, \`status\`, \`metaTitle\`, \`metaDescription\`, \`ogImage\`, \`canonicalOverride\`, \`noIndex\`, \`createdAt\`, \`updatedAt\`) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(3), CURRENT_TIMESTAMP(3))`,
+      [
+        targetId,
+        data.slug,
+        data.title,
+        data.excerpt,
+        data.date,
+        data.category,
+        data.status,
+        data.metaTitle,
+        data.metaDescription,
+        data.ogImage,
+        data.canonicalOverride,
+        data.noIndex ? 1 : 0,
+      ]
+    );
+  } else {
+    await query(
+      `UPDATE \`BlogPost\` SET 
+       \`slug\` = ?, \`title\` = ?, \`excerpt\` = ?, \`date\` = ?, \`category\` = ?, 
+       \`status\` = ?, \`metaTitle\` = ?, \`metaDescription\` = ?, \`ogImage\` = ?, 
+       \`canonicalOverride\` = ?, \`noIndex\` = ?
+       WHERE \`id\` = ?`,
+      [
+        data.slug,
+        data.title,
+        data.excerpt,
+        data.date,
+        data.category,
+        data.status,
+        data.metaTitle,
+        data.metaDescription,
+        data.ogImage,
+        data.canonicalOverride,
+        data.noIndex ? 1 : 0,
+        targetId,
+      ]
+    );
+  }
+
+  await query("DELETE FROM `BlogBlock` WHERE `postId` = ?", [targetId]);
   for (let i = 0; i < data.blocks.length; i++) {
     const b = data.blocks[i];
     const blockId = `blk_${Date.now()}_${i}`;
     await query(
       "INSERT INTO `BlogBlock` (`id`, `postId`, `type`, `text`, `items`, `order`) VALUES (?, ?, ?, ?, ?, ?)",
-      [blockId, id, b.type, b.text, JSON.stringify(b.items), i]
+      [blockId, targetId, b.type, b.text, JSON.stringify(b.items), i]
     );
   }
 
-  await query("DELETE FROM `BlogFaq` WHERE `postId` = ?", [id]);
+  await query("DELETE FROM `BlogFaq` WHERE `postId` = ?", [targetId]);
   for (let i = 0; i < data.faqs.length; i++) {
     const f = data.faqs[i];
     const faqId = `blogfaq_${Date.now()}_${i}`;
     await query(
       "INSERT INTO `BlogFaq` (`id`, `postId`, `question`, `answer`, `order`) VALUES (?, ?, ?, ?, ?)",
-      [faqId, id, f.a, f.b, i]
+      [faqId, targetId, f.a, f.b, i]
     );
   }
 

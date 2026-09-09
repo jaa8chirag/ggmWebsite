@@ -66,35 +66,60 @@ export async function updateService(id: string, formData: FormData) {
   await requireAdmin();
   const data = parseServiceForm(formData);
 
-  await query(
-    `UPDATE \`Service\` SET 
-     \`slug\` = ?, \`index\` = ?, \`title\` = ?, \`promise\` = ?, \`description\` = ?, 
-     \`bullets\` = ?, \`metaTitle\` = ?, \`metaDescription\` = ?, \`ogImage\` = ?, 
-     \`canonicalOverride\` = ?, \`noIndex\` = ?
-     WHERE \`id\` = ?`,
-    [
-      data.slug,
-      data.index,
-      data.title,
-      data.promise,
-      data.description,
-      JSON.stringify(data.bullets),
-      data.metaTitle,
-      data.metaDescription,
-      data.ogImage,
-      data.canonicalOverride,
-      data.noIndex ? 1 : 0,
-      id,
-    ]
-  );
+  const existing = await queryOne<any>("SELECT `id` FROM `Service` WHERE `id` = ? OR `slug` = ?", [id, id]);
+  const targetId = existing?.id || id || `srv_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
-  await query("DELETE FROM `ServiceFaq` WHERE `serviceId` = ?", [id]);
+  if (!existing) {
+    await query(
+      `INSERT INTO \`Service\` 
+       (\`id\`, \`slug\`, \`index\`, \`title\`, \`promise\`, \`description\`, \`bullets\`, \`metaTitle\`, \`metaDescription\`, \`ogImage\`, \`canonicalOverride\`, \`noIndex\`, \`createdAt\`, \`updatedAt\`) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(3), CURRENT_TIMESTAMP(3))`,
+      [
+        targetId,
+        data.slug,
+        data.index,
+        data.title,
+        data.promise,
+        data.description,
+        JSON.stringify(data.bullets),
+        data.metaTitle,
+        data.metaDescription,
+        data.ogImage,
+        data.canonicalOverride,
+        data.noIndex ? 1 : 0,
+      ]
+    );
+  } else {
+    await query(
+      `UPDATE \`Service\` SET 
+       \`slug\` = ?, \`index\` = ?, \`title\` = ?, \`promise\` = ?, \`description\` = ?, 
+       \`bullets\` = ?, \`metaTitle\` = ?, \`metaDescription\` = ?, \`ogImage\` = ?, 
+       \`canonicalOverride\` = ?, \`noIndex\` = ?
+       WHERE \`id\` = ?`,
+      [
+        data.slug,
+        data.index,
+        data.title,
+        data.promise,
+        data.description,
+        JSON.stringify(data.bullets),
+        data.metaTitle,
+        data.metaDescription,
+        data.ogImage,
+        data.canonicalOverride,
+        data.noIndex ? 1 : 0,
+        targetId,
+      ]
+    );
+  }
+
+  await query("DELETE FROM `ServiceFaq` WHERE `serviceId` = ?", [targetId]);
   for (let i = 0; i < data.faqs.length; i++) {
     const f = data.faqs[i];
     const faqId = `srvfaq_${Date.now()}_${i}`;
     await query(
       "INSERT INTO `ServiceFaq` (`id`, `serviceId`, `question`, `answer`, `order`) VALUES (?, ?, ?, ?, ?)",
-      [faqId, id, f.a, f.b, i]
+      [faqId, targetId, f.a, f.b, i]
     );
   }
 

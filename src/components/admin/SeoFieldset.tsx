@@ -12,7 +12,13 @@ export interface SeoValues {
   noIndex?: boolean;
 }
 
-export default function SeoFieldset({ values }: { values?: SeoValues }) {
+export default function SeoFieldset({
+  values,
+  hideOgImage = false,
+}: {
+  values?: SeoValues;
+  hideOgImage?: boolean;
+}) {
   const [title, setTitle] = useState(values?.metaTitle ?? "");
   const [desc, setDesc] = useState(values?.metaDescription ?? "");
 
@@ -91,19 +97,21 @@ export default function SeoFieldset({ values }: { values?: SeoValues }) {
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
-            <label className={labelClass} htmlFor="ogImage">
-              OG / Social Share Image
-            </label>
-            <input
-              id="ogImage"
-              name="ogImage"
-              defaultValue={values?.ogImage ?? ""}
-              className={inputClass}
-              placeholder="/logo/ggm-mark.png"
-            />
-          </div>
+        <div className={`grid grid-cols-1 gap-4 ${hideOgImage ? "" : "sm:grid-cols-2"}`}>
+          {!hideOgImage && (
+            <div>
+              <label className={labelClass} htmlFor="ogImage">
+                OG / Social Share Image
+              </label>
+              <input
+                id="ogImage"
+                name="ogImage"
+                defaultValue={values?.ogImage ?? ""}
+                className={inputClass}
+                placeholder="/logo/ggm-mark.png"
+              />
+            </div>
+          )}
 
           <div>
             <label className={labelClass} htmlFor="canonicalOverride">

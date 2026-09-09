@@ -140,6 +140,7 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                       src={item.ogImage!}
                       alt={item.client}
                       fill
+                      unoptimized
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -243,6 +244,7 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                   src={activeModalItem.ogImage}
                   alt={activeModalItem.client}
                   fill
+                  unoptimized
                   className="object-cover"
                 />
               </div>

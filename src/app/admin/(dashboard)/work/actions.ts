@@ -63,27 +63,56 @@ export async function updateCaseStudy(id: string, formData: FormData) {
   await requireAdmin();
   const data = parseWorkForm(formData);
 
-  await query(
-    `UPDATE \`CaseStudy\` SET 
-     \`slug\` = ?, \`client\` = ?, \`category\` = ?, \`summary\` = ?, 
-     \`resultLabel\` = ?, \`variant\` = ?, \`metaTitle\` = ?, \`metaDescription\` = ?, 
-     \`ogImage\` = ?, \`canonicalOverride\` = ?, \`noIndex\` = ?
-     WHERE \`id\` = ?`,
-    [
-      data.slug,
-      data.client,
-      data.category,
-      data.summary,
-      data.resultLabel,
-      data.variant,
-      data.metaTitle,
-      data.metaDescription,
-      data.ogImage,
-      data.canonicalOverride,
-      data.noIndex ? 1 : 0,
-      id,
-    ]
-  );
+  const existing = await queryOne<any>("SELECT `id` FROM `CaseStudy` WHERE `id` = ? OR `slug` = ?", [id, id]);
+
+  if (!existing) {
+    const countRow = await queryOne<any>("SELECT COUNT(*) as c FROM `CaseStudy`");
+    const order = countRow ? Number(countRow.c) : 0;
+    const targetId = id || `work_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+    await query(
+      `INSERT INTO \`CaseStudy\` 
+       (\`id\`, \`slug\`, \`client\`, \`category\`, \`summary\`, \`resultLabel\`, \`variant\`, \`order\`, \`metaTitle\`, \`metaDescription\`, \`ogImage\`, \`canonicalOverride\`, \`noIndex\`, \`createdAt\`, \`updatedAt\`) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(3), CURRENT_TIMESTAMP(3))`,
+      [
+        targetId,
+        data.slug,
+        data.client,
+        data.category,
+        data.summary,
+        data.resultLabel,
+        data.variant,
+        order,
+        data.metaTitle,
+        data.metaDescription,
+        data.ogImage,
+        data.canonicalOverride,
+        data.noIndex ? 1 : 0,
+      ]
+    );
+  } else {
+    await query(
+      `UPDATE \`CaseStudy\` SET 
+       \`slug\` = ?, \`client\` = ?, \`category\` = ?, \`summary\` = ?, 
+       \`resultLabel\` = ?, \`variant\` = ?, \`metaTitle\` = ?, \`metaDescription\` = ?, 
+       \`ogImage\` = ?, \`canonicalOverride\` = ?, \`noIndex\` = ?
+       WHERE \`id\` = ?`,
+      [
+        data.slug,
+        data.client,
+        data.category,
+        data.summary,
+        data.resultLabel,
+        data.variant,
+        data.metaTitle,
+        data.metaDescription,
+        data.ogImage,
+        data.canonicalOverride,
+        data.noIndex ? 1 : 0,
+        existing.id,
+      ]
+    );
+  }
 
   revalidatePath("/admin/work");
   revalidatePath("/work");

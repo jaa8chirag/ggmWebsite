@@ -70,37 +70,64 @@ export async function updateProduct(id: string, formData: FormData) {
   await requireAdmin();
   const data = parseProductForm(formData);
 
-  await query(
-    `UPDATE \`Product\` SET 
-     \`slug\` = ?, \`name\` = ?, \`category\` = ?, \`price\` = ?, \`originalPrice\` = ?, 
-     \`description\` = ?, \`features\` = ?, \`benefits\` = ?, \`metaTitle\` = ?, 
-     \`metaDescription\` = ?, \`ogImage\` = ?, \`canonicalOverride\` = ?, \`noIndex\` = ?
-     WHERE \`id\` = ?`,
-    [
-      data.slug,
-      data.name,
-      data.category,
-      data.price,
-      data.originalPrice,
-      data.description,
-      JSON.stringify(data.features),
-      JSON.stringify(data.benefits),
-      data.metaTitle,
-      data.metaDescription,
-      data.ogImage,
-      data.canonicalOverride,
-      data.noIndex ? 1 : 0,
-      id,
-    ]
-  );
+  const existing = await queryOne<any>("SELECT `id` FROM `Product` WHERE `id` = ? OR `slug` = ?", [id, id]);
+  const targetId = existing?.id || id || `prod_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
-  await query("DELETE FROM `ProductSpec` WHERE `productId` = ?", [id]);
+  if (!existing) {
+    await query(
+      `INSERT INTO \`Product\` 
+       (\`id\`, \`slug\`, \`name\`, \`category\`, \`price\`, \`originalPrice\`, \`description\`, \`features\`, \`benefits\`, \`metaTitle\`, \`metaDescription\`, \`ogImage\`, \`canonicalOverride\`, \`noIndex\`, \`createdAt\`, \`updatedAt\`) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(3), CURRENT_TIMESTAMP(3))`,
+      [
+        targetId,
+        data.slug,
+        data.name,
+        data.category,
+        data.price,
+        data.originalPrice,
+        data.description,
+        JSON.stringify(data.features),
+        JSON.stringify(data.benefits),
+        data.metaTitle,
+        data.metaDescription,
+        data.ogImage,
+        data.canonicalOverride,
+        data.noIndex ? 1 : 0,
+      ]
+    );
+  } else {
+    await query(
+      `UPDATE \`Product\` SET 
+       \`slug\` = ?, \`name\` = ?, \`category\` = ?, \`price\` = ?, \`originalPrice\` = ?, 
+       \`description\` = ?, \`features\` = ?, \`benefits\` = ?, \`metaTitle\` = ?, 
+       \`metaDescription\` = ?, \`ogImage\` = ?, \`canonicalOverride\` = ?, \`noIndex\` = ?
+       WHERE \`id\` = ?`,
+      [
+        data.slug,
+        data.name,
+        data.category,
+        data.price,
+        data.originalPrice,
+        data.description,
+        JSON.stringify(data.features),
+        JSON.stringify(data.benefits),
+        data.metaTitle,
+        data.metaDescription,
+        data.ogImage,
+        data.canonicalOverride,
+        data.noIndex ? 1 : 0,
+        targetId,
+      ]
+    );
+  }
+
+  await query("DELETE FROM `ProductSpec` WHERE `productId` = ?", [targetId]);
   for (let i = 0; i < data.specs.length; i++) {
     const s = data.specs[i];
     const specId = `spec_${Date.now()}_${i}`;
     await query(
       "INSERT INTO `ProductSpec` (`id`, `productId`, `label`, `value`, `order`) VALUES (?, ?, ?, ?, ?)",
-      [specId, id, s.a, s.b, i]
+      [specId, targetId, s.a, s.b, i]
     );
   }
 

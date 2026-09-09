@@ -8,6 +8,7 @@ import Button from "@/components/ui/Button";
 import SeoFieldset from "@/components/admin/SeoFieldset";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import { labelClass, inputClass, cardClass } from "@/components/admin/styles";
+import { compressImageFile } from "@/lib/image-compress";
 
 export interface CaseStudyFormValues {
   slug?: string;
@@ -37,10 +38,10 @@ export default function CaseStudyForm({
   const [uploadError, setUploadError] = useState<string | null>(null);
 
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const rawFile = e.target.files?.[0];
+    if (!rawFile) return;
 
-    if (!file.type.startsWith("image/")) {
+    if (!rawFile.type.startsWith("image/")) {
       setUploadError("Please select a valid image file (PNG, JPG, WebP, GIF, etc.).");
       return;
     }
@@ -50,6 +51,7 @@ export default function CaseStudyForm({
     setUploadSuccess(false);
 
     try {
+      const file = await compressImageFile(rawFile);
       const formData = new FormData();
       formData.append("file", file);
       formData.append("folder", "work");
@@ -294,7 +296,7 @@ export default function CaseStudyForm({
         </div>
       </div>
 
-      <SeoFieldset values={values} />
+      <SeoFieldset values={values} hideOgImage />
 
       <div className="flex items-center gap-4">
         <Button type="submit" variant="signal">
