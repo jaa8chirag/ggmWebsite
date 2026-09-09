@@ -51,7 +51,7 @@ export function ServiceCard({
   return (
     <Link
       href={`/services/${slug}`}
-      className="group relative flex min-h-[445px] w-[345px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-chalk/15 bg-surface/90 p-3.5 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-flow hover:shadow-2xl sm:w-[390px] sm:p-4"
+      className="group relative flex min-h-[445px] w-[345px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-chalk/20 bg-surface/95 p-3.5 shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-flow hover:shadow-2xl sm:w-[390px] sm:p-4 transform-gpu"
     >
       <div>
         {/* Clean Visual Banner Header */}
@@ -129,12 +129,14 @@ export default function Services({ services }: { services: ServiceCardData[] }) 
           gsap.to(trackRef.current, {
             x: () => -getDistance(),
             ease: "none",
+            force3D: true,
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top top",
               end: () => `+=${getDistance()}`,
               pin: true,
-              scrub: 1,
+              scrub: 0.3,
+              anticipatePin: 1,
               invalidateOnRefresh: true,
               onUpdate: (self) => {
                 if (progressRef.current) {
@@ -178,7 +180,8 @@ export default function Services({ services }: { services: ServiceCardData[] }) 
         >
           <div
             ref={trackRef}
-            className="absolute inset-y-0 left-0 flex items-center gap-8 pr-20 will-change-transform"
+            className="absolute inset-y-0 left-0 flex items-center gap-8 pr-20 will-change-transform transform-gpu"
+            style={{ transform: "translateZ(0)" }}
           >
             {services.map((service) => (
               <ServiceCard key={service.slug} {...service} />

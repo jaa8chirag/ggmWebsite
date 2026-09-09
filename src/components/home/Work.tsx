@@ -3,6 +3,8 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import Eyebrow from "@/components/ui/Eyebrow";
 
 interface CaseStudyData {
@@ -24,6 +26,7 @@ const defaultWorkImages: Record<string, string> = {
 export default function Work({ work }: { work: CaseStudyData[] }) {
   const sectionRef = useRef<HTMLElement>(null);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const displayedWork = work.slice(0, 3);
 
   useGSAP(
     () => {
@@ -79,7 +82,7 @@ export default function Work({ work }: { work: CaseStudyData[] }) {
         </h2>
 
         <div className="mt-16 space-y-20 md:space-y-28">
-          {work.map((item, i) => {
+          {displayedWork.map((item, i) => {
             const imgSrc = item.ogImage || defaultWorkImages[item.variant] || "/images/lead-generation-banner.png";
             return (
               <article
@@ -122,6 +125,17 @@ export default function Work({ work }: { work: CaseStudyData[] }) {
               </article>
             );
           })}
+        </div>
+
+        {/* View More Button */}
+        <div className="mt-16 sm:mt-20 flex justify-center">
+          <Link
+            href="/work"
+            className="group inline-flex items-center gap-3 rounded-full border border-flow/40 bg-surface/80 px-8 py-4 font-mono text-xs font-bold uppercase tracking-widest text-flow shadow-xl backdrop-blur-md transition-all duration-300 hover:border-flow hover:bg-flow hover:text-ink hover:shadow-flow/20"
+          >
+            <span>View All Case Studies</span>
+            <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
         </div>
       </div>
     </section>

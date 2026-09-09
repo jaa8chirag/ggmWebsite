@@ -19,8 +19,9 @@ export default function Process() {
         if (!step) return;
         ScrollTrigger.create({
           trigger: step,
-          start: "top center",
-          end: "bottom center",
+          start: "top 60%",
+          end: "bottom 40%",
+          fastScrollEnd: true,
           onToggle: (self) => {
             if (self.isActive) setActiveIndex(i);
           },
