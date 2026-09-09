@@ -142,7 +142,7 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                       fill
                       unoptimized
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      className="object-contain transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
                     <div className="h-full w-full p-4 flex items-center justify-center bg-gradient-to-br from-ink via-surface to-ink">
@@ -150,7 +150,7 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                     </div>
                   )}
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface/80 via-transparent to-transparent opacity-40 pointer-events-none" />
 
                   {/* Result Badge floating on top */}
                   <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
@@ -245,7 +245,7 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                   alt={activeModalItem.client}
                   fill
                   unoptimized
-                  className="object-cover object-top"
+                  className="object-contain p-1"
                 />
               </div>
             )}
