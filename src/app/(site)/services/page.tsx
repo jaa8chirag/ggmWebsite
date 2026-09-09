@@ -19,9 +19,12 @@ export const metadata: Metadata = buildMetadata({
 });
 
 const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
+  "website-development-services": "/images/services/website-development.jpg",
   "website-development": "/images/services/website-development.jpg",
   "web-development": "/images/services/website-development.jpg",
   seo: "/images/services/seo.jpg",
+  "e-commerce-Development": "/images/services/e-commerce.jpg",
+  "e-commerce-development": "/images/services/e-commerce.jpg",
   "e-commerce": "/images/services/e-commerce.jpg",
   ecommerce: "/images/services/e-commerce.jpg",
   ppc: "/images/services/ppc.jpg",
@@ -31,6 +34,7 @@ const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
   "mobile-application-development": "/images/services/mobile-app-development.jpg",
   "lead-generation": "/images/services/lead-generation.jpg",
   "social-media-marketing": "/images/services/social-media-marketing.jpg",
+  "shopify-website-development": "/images/services/shopify-development.jpg",
   "shopify-development": "/images/services/shopify-development.jpg",
   "wordpress-development": "/images/services/wordpress-development.jpg",
   "shopify-wordpress": "/images/services/shopify-development.jpg",

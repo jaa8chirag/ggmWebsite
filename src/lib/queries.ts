@@ -63,26 +63,37 @@ export async function getServices(): Promise<Service[]> {
 }
 
 export async function getServiceBySlug(slug: string): Promise<Service | null> {
-  // Support helpful aliases
-  let targetSlug = slug;
-  if (slug === "web-development") targetSlug = "website-development";
-  if (slug === "shopify" || slug === "shopify-wordpress") targetSlug = "shopify-development";
-  if (slug === "wordpress" || slug === "wp") targetSlug = "wordpress-development";
-  if (slug === "mobile-app" || slug === "mobile-application-development" || slug === "app-development") targetSlug = "mobile-app-development";
-  if (slug === "adsense" || slug === "google-ads") targetSlug = "google-adsense";
-  if (slug === "pay-per-click" || slug === "pay-per-click-advertising") targetSlug = "ppc";
+  const normalized = decodeURIComponent(slug).toLowerCase().trim().replace(/\s+/g, "-");
 
-  let s = await queryOne<any>("SELECT * FROM `Service` WHERE `slug` = ?", [targetSlug]);
+  // Service slug matching
+  let targetSlug = slug;
+  if (normalized === "website-development-services") {
+    targetSlug = "website-development-services";
+  } else if (normalized === "e-commerce-development") {
+    targetSlug = "e-commerce-Development";
+  } else if (normalized === "shopify-website-development") {
+    targetSlug = "shopify-website-development";
+  } else if (normalized === "wordpress" || normalized === "wp") {
+    targetSlug = "wordpress-development";
+  } else if (normalized === "mobile-app" || normalized === "mobile-application-development" || normalized === "app-development") {
+    targetSlug = "mobile-app-development";
+  } else if (normalized === "adsense" || normalized === "google-ads") {
+    targetSlug = "google-adsense";
+  } else if (normalized === "pay-per-click" || normalized === "pay-per-click-advertising") {
+    targetSlug = "ppc";
+  }
+
+  let s = await queryOne<any>("SELECT * FROM `Service` WHERE `slug` = ? OR LOWER(`slug`) = LOWER(?)", [targetSlug, normalized]);
   if (!s && targetSlug !== slug) {
-    s = await queryOne<any>("SELECT * FROM `Service` WHERE `slug` = ?", [slug]);
+    s = await queryOne<any>("SELECT * FROM `Service` WHERE `slug` = ? OR LOWER(`slug`) = LOWER(?)", [slug, normalized]);
   }
   if (!s) {
     return (
       DB_SERVICES.find(
         (srv) =>
-          srv.slug === targetSlug ||
-          srv.slug === slug ||
-          (targetSlug === "website-development" && srv.slug === "web-development")
+          srv.slug.toLowerCase() === targetSlug.toLowerCase() ||
+          srv.slug.toLowerCase() === normalized ||
+          srv.slug === slug
       ) || null
     );
   }

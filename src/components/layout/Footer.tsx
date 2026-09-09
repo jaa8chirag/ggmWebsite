@@ -95,11 +95,11 @@ export default async function Footer() {
             </p>
             <ul className="mt-4 space-y-2.5">
               {[
-                { title: "Website Development Service", href: "/services/website-development" },
+                { title: "Website Development Service", href: "/services/website-development-services" },
                 { title: "Mobile Application", href: "/services/mobile-app-development" },
                 { title: "SEO", href: "/services/seo" },
                 { title: "Google AdSense Service", href: "/services/google-adsense" },
-                { title: "Shopify", href: "/services/shopify-development" },
+                { title: "Shopify Website Development", href: "/services/shopify-website-development" },
               ].map((s) => (
                 <li key={s.href}>
                   <Link

@@ -17,7 +17,7 @@ import FormattedText from "@/components/ui/FormattedText";
 // blog post can link back to the service it supports.
 const BLOG_CATEGORY_SERVICE: Record<string, string> = {
   SEO: "seo",
-  "Web Development": "website-development",
+  "Web Development": "website-development-services",
   "Lead Generation": "lead-generation",
 };
 

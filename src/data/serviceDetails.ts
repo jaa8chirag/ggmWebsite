@@ -369,8 +369,8 @@ export const SERVICE_DETAILS: Record<string, ServiceDetailContent> = {
     focusKeywords: ["SEO services in Delhi", "technical SEO agency", "local SEO Delhi", "Core Web Vitals", "link building agency India"],
   },
 
-  "e-commerce": {
-    slug: "e-commerce",
+  "e-commerce-Development": {
+    slug: "e-commerce-Development",
     badge: "E-COMMERCE WEBSITE DEVELOPMENT COMPANY",
     heroH1: "E-commerce Website Development Company",
     heroSubtitle: "Your Products Deserve a Store That Sells",
@@ -781,8 +781,8 @@ export const SERVICE_DETAILS: Record<string, ServiceDetailContent> = {
     focusKeywords: ["Google Ads agency Delhi", "PPC company Delhi", "Performance marketing agency", "ROAS optimization", "Meta ads agency Delhi"],
   },
 
-  "website-development": {
-    slug: "website-development",
+  "website-development-services": {
+    slug: "website-development-services",
     badge: "WEB DEVELOPMENT THAT WORKS FOR YOUR BUSINESS",
     heroH1: "Website Development Service",
     heroSubtitle:
@@ -1646,8 +1646,8 @@ export const SERVICE_DETAILS: Record<string, ServiceDetailContent> = {
     focusKeywords: ["social media marketing agency Delhi", "SMM company Delhi", "Instagram marketing agency", "LinkedIn growth agency", "video content production"],
   },
 
-  "shopify-development": {
-    slug: "shopify-development",
+  "shopify-website-development": {
+    slug: "shopify-website-development",
     badge: "SHOPIFY & SHOPIFY PLUS ENGINEERING",
     heroH1: "Shopify Development Company in Delhi | High-Conversion D2C Stores",
     heroSubtitle:
@@ -2521,8 +2521,6 @@ export const SERVICE_DETAILS: Record<string, ServiceDetailContent> = {
 };
 
 // Backwards-compatible aliases
-SERVICE_DETAILS["shopify"] = SERVICE_DETAILS["shopify-development"];
-SERVICE_DETAILS["shopify-wordpress"] = SERVICE_DETAILS["shopify-development"];
 SERVICE_DETAILS["wordpress"] = SERVICE_DETAILS["wordpress-development"];
 SERVICE_DETAILS["wp"] = SERVICE_DETAILS["wordpress-development"];
 SERVICE_DETAILS["mobile-application-development"] = SERVICE_DETAILS["mobile-app-development"];

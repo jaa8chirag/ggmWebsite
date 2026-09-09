@@ -32,9 +32,12 @@ import SeoScopeOfWorkSection from "@/components/services/SeoScopeOfWorkSection";
 import { SERVICE_DETAILS } from "@/data/serviceDetails";
 
 const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
+  "website-development-services": "/images/services/website-development.jpg",
   "website-development": "/images/services/website-development.jpg",
   "web-development": "/images/services/website-development.jpg",
   seo: "/images/services/seo.jpg",
+  "e-commerce-Development": "/images/services/e-commerce.jpg",
+  "e-commerce-development": "/images/services/e-commerce.jpg",
   "e-commerce": "/images/services/e-commerce.jpg",
   ecommerce: "/images/services/e-commerce.jpg",
   ppc: "/images/services/ppc.jpg",
@@ -44,6 +47,7 @@ const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
   "mobile-application-development": "/images/services/mobile-app-development.jpg",
   "lead-generation": "/images/services/lead-generation.jpg",
   "social-media-marketing": "/images/services/social-media-marketing.jpg",
+  "shopify-website-development": "/images/services/shopify-development.jpg",
   "shopify-development": "/images/services/shopify-development.jpg",
   "wordpress-development": "/images/services/wordpress-development.jpg",
   "shopify-wordpress": "/images/services/shopify-development.jpg",
@@ -52,12 +56,16 @@ const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
 // Maps a service to the blog category covering it, for internal linking.
 const SERVICE_BLOG_CATEGORY: Record<string, string> = {
   seo: "SEO",
+  "website-development-services": "Web Development",
   "website-development": "Web Development",
+  "e-commerce-Development": "Web Development",
+  "e-commerce-development": "Web Development",
   "e-commerce": "Web Development",
   ecommerce: "Web Development",
   "lead-generation": "Lead Generation",
   "ppc": "PPC",
   "social-media-marketing": "Social Media",
+  "shopify-website-development": "Web Development",
   "shopify-development": "Web Development",
   "wordpress-development": "Web Development",
   "shopify-wordpress": "Web Development",
@@ -70,7 +78,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const service = await getServiceBySlug(slug);
-  const details = SERVICE_DETAILS[slug];
+  const details = SERVICE_DETAILS[slug] || (service ? SERVICE_DETAILS[service.slug] : undefined);
 
   if (!service && !details) return {};
 
@@ -87,7 +95,7 @@ export async function generateMetadata({
   return buildMetadata({
     title,
     description,
-    path: `/services/${slug}`,
+    path: `/services/${service?.slug || slug}`,
     overrides: service || undefined,
   });
 }
@@ -101,11 +109,11 @@ export default async function ServiceDetailPage({
   const service = await getServiceBySlug(slug);
   if (!service) notFound();
 
-  const details = SERVICE_DETAILS[slug];
+  const details = SERVICE_DETAILS[slug] || SERVICE_DETAILS[service.slug];
   const isWebDev =
-    service.slug === "website-development" || service.slug === "web-development";
+    service.slug === "website-development-services" || service.slug === "website-development" || service.slug === "web-development";
   const isEcommerce =
-    service.slug === "e-commerce" || service.slug === "ecommerce";
+    service.slug === "e-commerce-Development" || service.slug === "e-commerce-development" || service.slug === "e-commerce" || service.slug === "ecommerce";
   const isSeo = service.slug === "seo";
 
   const imageSrc =
