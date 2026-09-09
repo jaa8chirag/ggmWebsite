@@ -53,6 +53,8 @@ export default function BlockEditor({ initial = [] }: { initial?: InitialBlock[]
   const [rows, setRows] = useState<Row[]>(() =>
     initial.length ? initial.map((b, i) => toRow(i, b)) : [toRow(0)]
   );
+  const [showQuickPaste, setShowQuickPaste] = useState(false);
+  const [pastedText, setPastedText] = useState("");
   const nextId = useRef(rows.length);
 
   const update = (id: number, patch: Partial<Row>) =>
@@ -66,6 +68,92 @@ export default function BlockEditor({ initial = [] }: { initial?: InitialBlock[]
       [next[index], next[target]] = [next[target], next[index]];
       return next;
     });
+  };
+
+  const parseQuickPaste = () => {
+    if (!pastedText.trim()) return;
+
+    const lines = pastedText.split("\n");
+    const newRows: Row[] = [];
+    let currentListItems: string[] = [];
+
+    const flushList = () => {
+      if (currentListItems.length > 0) {
+        newRows.push({
+          id: nextId.current++,
+          type: "list",
+          text: "",
+          items: currentListItems.join("\n"),
+        });
+        currentListItems = [];
+      }
+    };
+
+    let currentParagraph: string[] = [];
+    const flushParagraph = () => {
+      if (currentParagraph.length > 0) {
+        newRows.push({
+          id: nextId.current++,
+          type: "paragraph",
+          text: currentParagraph.join(" "),
+          items: "",
+        });
+        currentParagraph = [];
+      }
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+      const raw = lines[i];
+      const trimmed = raw.trim();
+
+      if (!trimmed) {
+        flushParagraph();
+        flushList();
+        continue;
+      }
+
+      if (trimmed.startsWith("## ")) {
+        flushParagraph();
+        flushList();
+        newRows.push({
+          id: nextId.current++,
+          type: "h2",
+          text: trimmed.replace(/^##\s+/, ""),
+          items: "",
+        });
+        continue;
+      }
+
+      if (trimmed.startsWith("### ") || trimmed.startsWith("# ")) {
+        flushParagraph();
+        flushList();
+        newRows.push({
+          id: nextId.current++,
+          type: "h3",
+          text: trimmed.replace(/^#+\s+/, ""),
+          items: "",
+        });
+        continue;
+      }
+
+      if (/^[-*]\s+/.test(trimmed) || /^\d+\.\s+/.test(trimmed)) {
+        flushParagraph();
+        currentListItems.push(trimmed.replace(/^([-*]|\d+\.)\s+/, ""));
+        continue;
+      }
+
+      flushList();
+      currentParagraph.push(trimmed);
+    }
+
+    flushParagraph();
+    flushList();
+
+    if (newRows.length > 0) {
+      setRows(newRows);
+      setPastedText("");
+      setShowQuickPaste(false);
+    }
   };
 
   const insertHelper = (rowId: number, prefix: string, suffix: string = prefix) => {
@@ -98,11 +186,65 @@ export default function BlockEditor({ initial = [] }: { initial?: InitialBlock[]
   return (
     <div>
       <div className="flex items-center justify-between">
-        <p className={labelClass}>Content blocks &amp; Rich Body</p>
-        <span className="font-mono text-[11px] text-muted">
-          Markdown formatting &amp; Links supported
-        </span>
+        <div>
+          <p className={labelClass}>Content blocks &amp; Rich Body</p>
+          <span className="font-mono text-[11px] text-muted">
+            Markdown formatting &amp; Links supported
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowQuickPaste(true)}
+          className="rounded-lg border border-flow/40 bg-flow/10 px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-flow hover:bg-flow hover:text-ink transition-colors cursor-pointer"
+        >
+          ⚡ Quick Paste Full Article
+        </button>
       </div>
+
+      {showQuickPaste && (
+        <div className="mt-4 rounded-xl border border-flow/40 bg-surface p-4 shadow-xl space-y-3">
+          <div className="flex items-center justify-between">
+            <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-chalk">
+              Paste Entire Article (Auto-Parses Headings &amp; Lists)
+            </h4>
+            <button
+              type="button"
+              onClick={() => setShowQuickPaste(false)}
+              className="text-muted hover:text-signal"
+            >
+              <X size={14} />
+            </button>
+          </div>
+          <textarea
+            value={pastedText}
+            onChange={(e) => setPastedText(e.target.value)}
+            rows={8}
+            placeholder="Paste raw article text or markdown here...
+## Heading 2
+Paragraph text here...
+### Heading 3
+- Bullet item 1
+- Bullet item 2"
+            className={inputClass}
+          />
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setShowQuickPaste(false)}
+              className="rounded-lg border border-chalk/20 px-3 py-1.5 font-mono text-xs text-muted hover:text-chalk"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={parseQuickPaste}
+              className="rounded-lg bg-flow px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-ink hover:bg-flow/90 cursor-pointer"
+            >
+              Convert to Blocks
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="mt-2 space-y-4">
         {rows.map((row, i) => (

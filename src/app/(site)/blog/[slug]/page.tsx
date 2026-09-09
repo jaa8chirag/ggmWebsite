@@ -71,9 +71,26 @@ export default async function BlogPostPage({
 
   const allPosts = await getPublishedPosts();
 
-  const headings = post.blocks
-    .filter((block) => block.type === "h2")
-    .map((block) => block.text ?? "");
+  const tocHeadings: { id: string; text: string; level: "h2" | "h3" }[] = [];
+  for (const block of post.blocks) {
+    if (block.type === "h2" && block.text) {
+      tocHeadings.push({ id: slugify(block.text), text: block.text, level: "h2" });
+    } else if (block.type === "h3" && block.text) {
+      tocHeadings.push({ id: slugify(block.text), text: block.text, level: "h3" });
+    } else if (block.text) {
+      const lines = block.text.split("\n");
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith("## ")) {
+          const text = trimmed.replace(/^##\s+/, "");
+          tocHeadings.push({ id: slugify(text), text, level: "h2" });
+        } else if (trimmed.startsWith("### ")) {
+          const text = trimmed.replace(/^###\s+/, "");
+          tocHeadings.push({ id: slugify(text), text, level: "h3" });
+        }
+      }
+    }
+  }
 
   const relatedPosts = allPosts
     .filter((p) => p.slug !== post.slug && p.category === post.category)
@@ -132,7 +149,7 @@ export default async function BlogPostPage({
             </p>
 
             <div className="mt-6 lg:hidden">
-              <TableOfContents headings={headings} />
+              <TableOfContents headings={tocHeadings} />
             </div>
 
             <div className="mt-16 space-y-6">
@@ -152,7 +169,8 @@ export default async function BlogPostPage({
                   return (
                     <h3
                       key={block.id}
-                      className="pt-2 font-display text-xl text-chalk"
+                      id={slugify(block.text ?? "")}
+                      className="scroll-mt-32 pt-4 font-display text-xl text-chalk"
                     >
                       <FormattedText text={block.text} as="span" />
                     </h3>
@@ -259,7 +277,7 @@ export default async function BlogPostPage({
 
           <aside className="hidden lg:block">
             <div className="sticky top-32">
-              <TableOfContents headings={headings} />
+              <TableOfContents headings={tocHeadings} />
             </div>
           </aside>
         </div>
