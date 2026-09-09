@@ -200,7 +200,7 @@ export default function CaseStudyForm({
                   src={coverImageUrl}
                   alt="Cover Preview"
                   fill
-                  className="object-cover"
+                  className="object-cover object-top"
                   onError={() => {}}
                 />
               </div>
