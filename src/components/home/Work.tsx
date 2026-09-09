@@ -87,7 +87,7 @@ export default function Work({ work }: { work: CaseStudyData[] }) {
                 className="group grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-16"
               >
                 <div
-                  className="aspect-[9/16] w-full max-w-[340px] md:max-w-[420px] mx-auto md:mx-0 overflow-hidden rounded-3xl border-2 border-chalk/30 shadow-2xl bg-ink/80"
+                  className="aspect-[16/10] w-full overflow-hidden rounded-3xl border-2 border-chalk/30 shadow-2xl bg-ink"
                   style={{ willChange: "transform" }}
                 >
                   <div
@@ -99,7 +99,7 @@ export default function Work({ work }: { work: CaseStudyData[] }) {
                     <img
                       src={imgSrc}
                       alt={`${item.client} case study showcase`}
-                      className="h-full w-full object-contain p-1 transition-transform duration-700 group-hover:scale-105"
+                      className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                     />
                   </div>
                 </div>

@@ -134,7 +134,7 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                 className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-chalk/15 bg-surface/70 transition-all duration-300 hover:-translate-y-1.5 hover:border-flow/40 hover:shadow-2xl hover:shadow-flow/10"
               >
                 {/* Top Media Showcase */}
-                <div className="relative aspect-[9/16] w-full overflow-hidden bg-ink/80">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink">
                   {hasCoverImage ? (
                     <Image
                       src={item.ogImage!}
@@ -142,7 +142,7 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                       fill
                       unoptimized
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-contain transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
                     <div className="h-full w-full p-4 flex items-center justify-center bg-gradient-to-br from-ink via-surface to-ink">
@@ -239,13 +239,13 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
 
             {/* Cover Image if available */}
             {activeModalItem.ogImage && (
-              <div className="relative aspect-[9/16] w-full max-w-[320px] mx-auto overflow-hidden rounded-2xl border border-chalk/15">
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-chalk/15 bg-ink">
                 <Image
                   src={activeModalItem.ogImage}
                   alt={activeModalItem.client}
                   fill
                   unoptimized
-                  className="object-contain p-1"
+                  className="object-cover object-top"
                 />
               </div>
             )}
