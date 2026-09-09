@@ -45,6 +45,20 @@ const PAYMENT_LABELS: Record<PaymentStatus, { label: string; bg: string; text: s
   FULLY_PAID: { label: "Fully Paid 🎉", bg: "bg-emerald-500/20", text: "text-emerald-400" },
 };
 
+function formatToDateTimeLocal(dateVal?: string | Date | null): string {
+  if (!dateVal) return "";
+  const d = typeof dateVal === "string" ? new Date(dateVal) : dateVal;
+  if (isNaN(d.getTime())) return "";
+
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const hours = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
 export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProps) {
   const router = useRouter();
   const [newNoteText, setNewNoteText] = useState("");
@@ -80,8 +94,8 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
       setBalanceDue(lead.balanceDue || "");
       setPaymentStatus(lead.paymentStatus || "PENDING");
       setQuotationSent(lead.quotationSent || false);
-      setNextFollowUp(lead.nextFollowUp || "");
-      setNextPaymentDate(lead.nextPaymentDate || "");
+      setNextFollowUp(formatToDateTimeLocal(lead.nextFollowUp));
+      setNextPaymentDate(formatToDateTimeLocal(lead.nextPaymentDate));
       setTimelineNotes(lead.timelineNotes || []);
     }
   }, [lead]);
@@ -154,14 +168,14 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
     const d = new Date();
     d.setDate(d.getDate() + daysFromNow);
     d.setHours(hour, 0, 0, 0);
-    setNextFollowUp(d.toISOString().slice(0, 16));
+    setNextFollowUp(formatToDateTimeLocal(d));
   }
 
   function setPresetPaymentDate(daysFromNow: number) {
     const d = new Date();
     d.setDate(d.getDate() + daysFromNow);
     d.setHours(12, 0, 0, 0);
-    setNextPaymentDate(d.toISOString().slice(0, 16));
+    setNextPaymentDate(formatToDateTimeLocal(d));
   }
 
   return (
@@ -404,7 +418,7 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                   </label>
                   <input
                     type="datetime-local"
-                    value={nextPaymentDate ? new Date(nextPaymentDate).toISOString().slice(0, 16) : ""}
+                    value={nextPaymentDate}
                     onChange={(e) => setNextPaymentDate(e.target.value)}
                     className="w-full rounded-xl border border-amber-500/30 bg-surface px-3 py-2 font-body text-xs text-chalk focus:border-amber-400 focus:outline-none"
                   />
@@ -453,7 +467,7 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                 </label>
                 <input
                   type="datetime-local"
-                  value={nextFollowUp ? new Date(nextFollowUp).toISOString().slice(0, 16) : ""}
+                  value={nextFollowUp}
                   onChange={(e) => setNextFollowUp(e.target.value)}
                   className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs text-chalk focus:border-flow focus:outline-none"
                 />
