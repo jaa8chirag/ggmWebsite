@@ -99,7 +99,7 @@ export default function Work({ work }: { work: CaseStudyData[] }) {
                     <img
                       src={imgSrc}
                       alt={`${item.client} case study showcase`}
-                      className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                      className="h-full w-full object-contain p-2 transition-transform duration-700 group-hover:scale-105"
                     />
                   </div>
                 </div>

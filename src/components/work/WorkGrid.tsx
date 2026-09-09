@@ -134,7 +134,7 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                 className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-chalk/15 bg-surface/70 transition-all duration-300 hover:-translate-y-1.5 hover:border-flow/40 hover:shadow-2xl hover:shadow-flow/10"
               >
                 {/* Top Media Showcase */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink/90 border-b border-chalk/10">
                   {hasCoverImage ? (
                     <Image
                       src={item.ogImage!}
@@ -142,30 +142,28 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                       fill
                       unoptimized
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      className="object-contain p-2 transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
                     <div className="h-full w-full p-4 flex items-center justify-center bg-gradient-to-br from-ink via-surface to-ink">
                       <WorkIllustration variant={item.variant} />
                     </div>
                   )}
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface/80 via-transparent to-transparent opacity-40 pointer-events-none" />
-
-                  {/* Result Badge floating on top */}
-                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                    <span className="rounded-full bg-ink/80 backdrop-blur-md px-3 py-1 font-mono text-[0.65rem] uppercase tracking-wider font-semibold text-chalk border border-chalk/20">
-                      {item.category}
-                    </span>
-                    <span className="flex items-center gap-1 rounded-full bg-emerald-500/20 backdrop-blur-md px-3 py-1 font-mono text-[0.7rem] font-bold text-emerald-400 border border-emerald-500/40 shadow-lg">
-                      <TrendingUp size={12} /> {item.resultLabel}
-                    </span>
-                  </div>
                 </div>
 
                 {/* Content Body */}
                 <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
-                  <div className="space-y-2">
+                  <div className="space-y-3">
+                    {/* Category & Result Badges */}
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="rounded-full bg-chalk/10 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-wider font-semibold text-flow border border-chalk/15">
+                        {item.category}
+                      </span>
+                      <span className="flex items-center gap-1 rounded-full bg-emerald-500/15 px-3 py-1 font-mono text-[0.7rem] font-bold text-emerald-400 border border-emerald-500/30">
+                        <TrendingUp size={12} /> {item.resultLabel}
+                      </span>
+                    </div>
+
                     <h3 className="font-heading text-xl font-bold text-chalk group-hover:text-flow transition-colors">
                       {item.client}
                     </h3>
