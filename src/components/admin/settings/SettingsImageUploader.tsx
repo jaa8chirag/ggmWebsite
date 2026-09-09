@@ -13,7 +13,7 @@ interface SettingsImageUploaderProps {
   defaultValue?: string | null;
   helpText?: string;
   folder?: string;
-  aspectRatio?: "square" | "banner" | "wide";
+  aspectRatio?: "square" | "banner" | "wide" | "portrait";
 }
 
 export default function SettingsImageUploader({
@@ -69,7 +69,9 @@ export default function SettingsImageUploader({
   }
 
   const aspectClass =
-    aspectRatio === "square"
+    aspectRatio === "portrait"
+      ? "aspect-[9/16] w-full max-w-[200px] rounded-2xl"
+      : aspectRatio === "square"
       ? "h-24 w-24 rounded-2xl"
       : aspectRatio === "banner"
       ? "aspect-[21/9] w-full max-w-lg rounded-2xl"

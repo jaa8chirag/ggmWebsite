@@ -195,7 +195,7 @@ export default function CaseStudyForm({
                   <X size={12} /> Clear Image
                 </button>
               </div>
-              <div className="relative aspect-[16/9] w-full max-w-md overflow-hidden rounded-xl border border-chalk/20 bg-ink">
+              <div className="relative aspect-[9/16] w-full max-w-[240px] overflow-hidden rounded-xl border border-chalk/20 bg-ink">
                 <Image
                   src={coverImageUrl}
                   alt="Cover Preview"

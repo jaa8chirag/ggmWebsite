@@ -4,9 +4,9 @@
  */
 export async function compressImageFile(
   file: File,
-  maxWidth = 900,
-  maxHeight = 900,
-  quality = 0.7
+  maxWidth = 1080,
+  maxHeight = 1920,
+  quality = 0.75
 ): Promise<File> {
   // If not an image or SVG, return original
   if (!file.type.startsWith("image/") || file.type === "image/svg+xml") {

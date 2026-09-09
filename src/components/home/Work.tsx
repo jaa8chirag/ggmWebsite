@@ -87,7 +87,7 @@ export default function Work({ work }: { work: CaseStudyData[] }) {
                 className="group grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-16"
               >
                 <div
-                  className="aspect-[16/10] overflow-hidden rounded-2xl border-2 border-chalk/30 shadow-xl bg-ink"
+                  className="aspect-[9/16] w-full max-w-[340px] md:max-w-[420px] mx-auto md:mx-0 overflow-hidden rounded-3xl border-2 border-chalk/30 shadow-2xl bg-ink/80"
                   style={{ willChange: "transform" }}
                 >
                   <div
