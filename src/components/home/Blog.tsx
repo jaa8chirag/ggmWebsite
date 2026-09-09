@@ -32,7 +32,7 @@ export default function Blog({ posts }: { posts: PostData[] }) {
     <section className="border-t border-chalk/20 bg-ink py-24 md:py-32">
       <div className="mx-auto max-w-[1440px] px-6 md:px-10">
         <Eyebrow>From the blog</Eyebrow>
-        <h2 className="mt-4 max-w-2xl font-display text-h2 text-chalk">
+        <h2 className="mt-4 max-w-2xl font-display text-2xl sm:text-3xl md:text-4xl text-chalk">
           Notes from inside the campaigns.
         </h2>
 
@@ -60,7 +60,7 @@ export default function Blog({ posts }: { posts: PostData[] }) {
                     <span className="font-mono text-mono-label uppercase tracking-widest text-muted">
                       {formatDate(post.date)} · {post.category}
                     </span>
-                    <h3 className="mt-1 font-display text-2xl text-chalk transition-colors duration-300 group-hover:text-flow">
+                    <h3 className="mt-1 font-display text-lg sm:text-xl font-bold text-chalk transition-colors duration-300 group-hover:text-flow">
                       {post.title}
                     </h3>
                   </div>

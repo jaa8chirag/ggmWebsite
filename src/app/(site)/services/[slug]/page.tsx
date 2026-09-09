@@ -183,7 +183,7 @@ export default async function ServiceDetailPage({
               </div>
 
               {/* Main DB Title */}
-              <h1 className="mt-4 font-display text-display-l leading-tight text-chalk">
+              <h1 className="mt-4 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-chalk">
                 {service.title}
               </h1>
 

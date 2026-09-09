@@ -109,7 +109,7 @@ export default async function BlogPostPage({
               {estimateReadingMinutes(post)} min read
             </p>
 
-            <h1 className="mt-4 font-display text-display-l">{post.title}</h1>
+            <h1 className="mt-4 font-display text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">{post.title}</h1>
 
             <FormattedText
               text={post.excerpt}

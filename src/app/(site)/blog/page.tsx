@@ -34,7 +34,7 @@ export default async function BlogPage() {
           <span className="h-px w-6 bg-signal" aria-hidden="true" />
           From the blog
         </p>
-        <h1 className="mt-4 max-w-2xl font-display text-display-l">
+        <h1 className="mt-4 max-w-2xl font-display text-3xl sm:text-4xl md:text-5xl font-bold">
           Notes from inside the campaigns.
         </h1>
 
@@ -62,7 +62,7 @@ export default async function BlogPage() {
                   <span className="font-mono text-mono-label uppercase tracking-widest text-muted">
                     {formatDate(post.date)} · {post.category}
                   </span>
-                  <h2 className="mt-1 font-display text-2xl transition-colors duration-300 group-hover:text-signal">
+                  <h2 className="mt-1 font-display text-lg sm:text-xl font-bold transition-colors duration-300 group-hover:text-signal">
                     {post.title}
                   </h2>
                   <p className="mt-2 max-w-xl font-body text-sm text-muted line-clamp-2">

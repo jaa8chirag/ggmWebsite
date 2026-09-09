@@ -63,7 +63,7 @@ export function ServiceCard({
 
         {/* Title & Tagline */}
         <div className="mt-4 px-1">
-          <h3 className="font-display text-2xl font-bold tracking-tight text-chalk transition-colors duration-300 group-hover:text-flow">
+          <h3 className="font-display text-xl font-bold tracking-tight text-chalk transition-colors duration-300 group-hover:text-flow">
             {title}
           </h3>
           <p className="mt-2 font-body text-sm leading-relaxed text-muted line-clamp-2">
@@ -152,7 +152,7 @@ export default function Services({ services }: { services: ServiceCardData[] }) 
       <div className="flex flex-col overflow-hidden md:h-screen md:flex-row md:items-center">
         <div className="shrink-0 px-6 pt-24 pb-10 md:w-[440px] md:px-12 md:py-0 lg:w-[490px] lg:px-16">
           <Eyebrow>What we do</Eyebrow>
-          <h2 className="mt-4 font-display text-3xl md:text-4xl lg:text-[42px] leading-tight text-chalk">
+          <h2 className="mt-4 font-display text-2xl md:text-3xl lg:text-[34px] leading-tight text-chalk">
             Six services, one engagement sequence.
           </h2>
           <p className="mt-5 max-w-md font-body text-base text-muted">

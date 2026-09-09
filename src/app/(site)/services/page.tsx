@@ -46,7 +46,7 @@ export default async function ServicesPage() {
         <div className="mt-6">
           <Eyebrow>What we do</Eyebrow>
         </div>
-        <h1 className="mt-4 max-w-2xl font-display text-display-l text-chalk">
+        <h1 className="mt-4 max-w-2xl font-display text-3xl sm:text-4xl md:text-5xl font-bold text-chalk">
           Services
         </h1>
         <p className="mt-6 max-w-xl font-body text-body-l text-muted">
@@ -81,7 +81,7 @@ export default async function ServicesPage() {
 
                   {/* Title & Tagline */}
                   <div className="mt-4 px-1">
-                    <h2 className="font-display text-2xl font-bold tracking-tight text-chalk transition-colors duration-300 group-hover:text-flow">
+                    <h2 className="font-display text-xl font-bold tracking-tight text-chalk transition-colors duration-300 group-hover:text-flow">
                       {service.title}
                     </h2>
                     <p className="mt-2 font-body text-sm leading-relaxed text-muted line-clamp-2">
