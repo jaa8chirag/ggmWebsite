@@ -72,7 +72,7 @@ export async function query<T = any>(
   try {
     const queryPromise = pool.query(sql, params);
     const timeoutPromise = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("DB_TIMEOUT")), 1500)
+      setTimeout(() => reject(new Error("DB_TIMEOUT")), 10000)
     );
 
     const [rows] = (await Promise.race([queryPromise, timeoutPromise])) as any;

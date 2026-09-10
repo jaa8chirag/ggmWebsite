@@ -2,10 +2,14 @@ import mysql from "mysql2/promise";
 import fs from "fs";
 import path from "path";
 
+const TIDB_CLOUD_URL = "mysql://iSRsEqH2SkyvMby.root:bTD5FvytknLlrY9i@gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/ggmwebsite";
+const dbUrl = process.env.DATABASE_URL || TIDB_CLOUD_URL;
+
 async function main() {
-  const conn = await mysql.createConnection(
-    process.env.DATABASE_URL || "mysql://root:Chirag30kum%40r@localhost:3306/ggmwebsite"
-  );
+  const conn = await mysql.createConnection({
+    uri: dbUrl,
+    ssl: { rejectUnauthorized: false },
+  });
 
   console.log("Connected to MySQL. Exporting fresh database state to dbSeedData.ts...");
 
