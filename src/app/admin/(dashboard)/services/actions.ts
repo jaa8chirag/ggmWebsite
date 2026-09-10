@@ -57,6 +57,7 @@ export async function createService(formData: FormData) {
     );
   }
 
+  revalidatePath("/", "layout");
   revalidatePath("/admin/services");
   revalidatePath("/services");
   redirect("/admin/services");
@@ -123,6 +124,7 @@ export async function updateService(id: string, formData: FormData) {
     );
   }
 
+  revalidatePath("/", "layout");
   revalidatePath("/admin/services");
   revalidatePath("/services");
   revalidatePath(`/services/${data.slug}`);
@@ -133,6 +135,7 @@ export async function deleteService(id: string) {
   await requireAdmin();
   const service = await queryOne<any>("SELECT `slug` FROM `Service` WHERE `id` = ?", [id]);
   await query("DELETE FROM `Service` WHERE `id` = ?", [id]);
+  revalidatePath("/", "layout");
   revalidatePath("/admin/services");
   revalidatePath("/services");
   if (service) {
