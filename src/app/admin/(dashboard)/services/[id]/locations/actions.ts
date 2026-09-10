@@ -21,6 +21,7 @@ export async function enableLocation(serviceId: string, locationId: string) {
       [id, serviceId, locationId]
     );
   }
+  revalidatePath("/", "layout");
   revalidatePath(`/admin/services/${serviceId}/locations`);
   revalidatePath("/sitemap.xml");
 }
@@ -28,6 +29,7 @@ export async function enableLocation(serviceId: string, locationId: string) {
 export async function disableLocation(serviceId: string, locationId: string) {
   await requireAdmin();
   await query("DELETE FROM `ServiceLocation` WHERE `serviceId` = ? AND `locationId` = ?", [serviceId, locationId]);
+  revalidatePath("/", "layout");
   revalidatePath(`/admin/services/${serviceId}/locations`);
   revalidatePath("/sitemap.xml");
 }
@@ -65,6 +67,7 @@ export async function updateServiceLocation(
     [serviceLocationId]
   );
 
+  revalidatePath("/", "layout");
   if (sl) {
     revalidatePath(`/admin/services/${sl.serviceId}/locations`);
     revalidatePath(`/services/${sl.serviceSlug}/${sl.locationSlug}`);

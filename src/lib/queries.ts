@@ -143,19 +143,48 @@ export async function getServiceLocation(
 ): Promise<ServiceLocationModel | null> {
   return unstable_cache(
     async (sSlug: string, lSlug: string) => {
-      const sl = await queryOne<any>(
-        `SELECT sl.*, 
-                s.id as s_id, s.slug as s_slug, s.index as s_index, s.title as s_title, 
-                s.promise as s_promise, s.description as s_description, s.bullets as s_bullets, 
-                s.metaTitle as s_metaTitle, s.metaDescription as s_metaDescription, 
-                s.ogImage as s_ogImage, s.canonicalOverride as s_canonicalOverride, s.noIndex as s_noIndex,
-                l.id as l_id, l.slug as l_slug, l.name as l_name, l.region as l_region, l.isActive as l_isActive
-         FROM \`ServiceLocation\` sl
-         JOIN \`Service\` s ON sl.serviceId = s.id
-         JOIN \`Location\` l ON sl.locationId = l.id
-         WHERE sl.published = 1 AND s.slug = ? AND l.slug = ?`,
-        [sSlug, lSlug]
-      );
+      const normalizedService = decodeURIComponent(sSlug).toLowerCase().trim().replace(/\s+/g, "-");
+      const normalizedLocation = decodeURIComponent(lSlug).toLowerCase().trim().replace(/\s+/g, "-");
+
+      const serviceObj = await getServiceBySlug(sSlug);
+      
+      let sl: any = null;
+      if (serviceObj?.id) {
+        sl = await queryOne<any>(
+          `SELECT sl.*, 
+                  s.id as s_id, s.slug as s_slug, s.index as s_index, s.title as s_title, 
+                  s.promise as s_promise, s.description as s_description, s.bullets as s_bullets, 
+                  s.metaTitle as s_metaTitle, s.metaDescription as s_metaDescription, 
+                  s.ogImage as s_ogImage, s.canonicalOverride as s_canonicalOverride, s.noIndex as s_noIndex,
+                  l.id as l_id, l.slug as l_slug, l.name as l_name, l.region as l_region, l.isActive as l_isActive
+           FROM \`ServiceLocation\` sl
+           JOIN \`Service\` s ON sl.serviceId = s.id
+           JOIN \`Location\` l ON sl.locationId = l.id
+           WHERE sl.published = 1 
+             AND sl.serviceId = ? 
+             AND (l.slug = ? OR LOWER(l.slug) = ?)`,
+          [serviceObj.id, lSlug, normalizedLocation]
+        );
+      }
+
+      if (!sl) {
+        sl = await queryOne<any>(
+          `SELECT sl.*, 
+                  s.id as s_id, s.slug as s_slug, s.index as s_index, s.title as s_title, 
+                  s.promise as s_promise, s.description as s_description, s.bullets as s_bullets, 
+                  s.metaTitle as s_metaTitle, s.metaDescription as s_metaDescription, 
+                  s.ogImage as s_ogImage, s.canonicalOverride as s_canonicalOverride, s.noIndex as s_noIndex,
+                  l.id as l_id, l.slug as l_slug, l.name as l_name, l.region as l_region, l.isActive as l_isActive
+           FROM \`ServiceLocation\` sl
+           JOIN \`Service\` s ON sl.serviceId = s.id
+           JOIN \`Location\` l ON sl.locationId = l.id
+           WHERE sl.published = 1 
+             AND (s.slug = ? OR LOWER(s.slug) = ?) 
+             AND (l.slug = ? OR LOWER(l.slug) = ?)`,
+          [sSlug, normalizedService, lSlug, normalizedLocation]
+        );
+      }
+
       if (!sl) return null;
 
       const faqs = await query<any>("SELECT * FROM `ServiceFaq` WHERE `serviceId` = ? ORDER BY `order` ASC", [sl.s_id]);
@@ -179,7 +208,7 @@ export async function getServiceLocation(
           promise: sl.s_promise,
           description: sl.s_description,
           bullets: parseJson<string[]>(sl.s_bullets, []),
-          faqs: faqs.map((f) => ({ question: f.question, answer: f.answer })),
+          faqs: (faqs || []).map((f) => ({ question: f.question, answer: f.answer })),
           metaTitle: sl.s_metaTitle,
           metaDescription: sl.s_metaDescription,
           ogImage: sl.s_ogImage,
