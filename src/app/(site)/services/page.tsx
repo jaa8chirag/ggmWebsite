@@ -78,6 +78,7 @@ export default async function ServicesPage() {
                       src={imageSrc}
                       alt={service.title}
                       fill
+                      unoptimized={Boolean(imageSrc?.startsWith("data:") || imageSrc?.startsWith("http"))}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-contain p-1 transition-transform duration-500 ease-out group-hover:scale-105"
                     />

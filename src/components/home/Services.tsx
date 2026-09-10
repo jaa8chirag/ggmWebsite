@@ -60,6 +60,7 @@ export function ServiceCard({
             src={imageSrc}
             alt={title}
             fill
+            unoptimized={Boolean(imageSrc?.startsWith("data:") || imageSrc?.startsWith("http"))}
             sizes="(max-width: 768px) 345px, 390px"
             className="object-contain p-1 transition-transform duration-500 ease-out group-hover:scale-105"
           />

@@ -246,6 +246,7 @@ export default async function ServiceLocationDetailPage({
                     alt={`${service.title} in ${loc.name}`}
                     fill
                     priority
+                    unoptimized={Boolean(imageSrc?.startsWith("data:") || imageSrc?.startsWith("http"))}
                     sizes="(max-width: 1024px) 100vw, 40vw"
                     className="object-contain p-1"
                   />
