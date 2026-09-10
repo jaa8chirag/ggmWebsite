@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { X, User, Phone, Mail, DollarSign, Calendar, FileText, Tag, CreditCard, Building2, MapPin } from "lucide-react";
+import CountryCodeSelect from "@/components/ui/CountryCodeSelect";
 import { createLeadAction } from "@/app/actions/lead";
 
 interface LeadFormModalProps {
@@ -25,6 +26,7 @@ const SERVICE_OPTIONS = [
 
 export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
   const router = useRouter();
+  const [countryCode, setCountryCode] = useState("+91");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -101,14 +103,18 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
               <label className="block font-mono text-xs text-muted mb-1 font-semibold uppercase tracking-wider">
                 Mobile / WhatsApp *
               </label>
-              <div className="relative">
-                <Phone size={16} className="absolute left-3 top-3 text-muted" />
+              <div className="flex items-center rounded-xl border border-chalk/20 bg-ink overflow-hidden focus-within:border-flow">
+                <CountryCodeSelect
+                  selectedCode={countryCode}
+                  onChange={setCountryCode}
+                  className="border-0 px-3 py-2.5 font-mono text-xs font-bold text-chalk border-r border-chalk/15"
+                />
                 <input
                   type="text"
                   name="phone"
                   required
-                  placeholder="e.g. +91 9876543210"
-                  className="w-full rounded-xl border border-chalk/20 bg-ink px-3.5 py-2.5 pl-9 font-body text-sm text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
+                  placeholder="9876543210"
+                  className="w-full bg-transparent px-3.5 py-2.5 font-body text-sm text-chalk placeholder-muted/50 focus:outline-none"
                 />
               </div>
             </div>

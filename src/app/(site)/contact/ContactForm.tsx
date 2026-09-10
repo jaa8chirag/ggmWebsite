@@ -5,6 +5,7 @@ import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Phone, Mail, User, MessageSquare, Briefcase, Loader2 } from "lucide-react";
 import Button from "@/components/ui/Button";
+import CountryCodeSelect from "@/components/ui/CountryCodeSelect";
 import { submitQuoteRequest } from "@/app/actions/quote";
 
 interface FormValues {
@@ -35,8 +36,8 @@ function validate(values: FormValues): FormErrors {
   const cleanPhone = values.phone.replace(/[\s\-\(\)]/g, "");
   if (!cleanPhone) {
     errors.phone = "Please enter your mobile / WhatsApp number.";
-  } else if (cleanPhone.length < 10 || !/^[+]?[0-9]{10,15}$/.test(cleanPhone)) {
-    errors.phone = "Please enter a valid 10-digit mobile number.";
+  } else if (!/^[0-9]{7,15}$/.test(cleanPhone)) {
+    errors.phone = "Please enter a valid mobile number.";
   }
 
   if (!values.email.trim()) {
@@ -54,6 +55,7 @@ export default function ContactForm({
   services: { slug: string; title: string }[];
 }) {
   const router = useRouter();
+  const [countryCode, setCountryCode] = useState("+91");
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Partial<Record<keyof FormValues, boolean>>>({});
@@ -91,9 +93,10 @@ export default function ContactForm({
         ? `Start a Project - ${selectedService.title}`
         : "Start a Project - General Inquiry";
 
+      const fullPhoneNumber = `${countryCode} ${values.phone.trim()}`;
       const formData = new FormData();
       formData.set("name", values.name);
-      formData.set("phone", values.phone);
+      formData.set("phone", fullPhoneNumber);
       formData.set("email", values.email);
       formData.set("serviceSlug", values.service || "general");
       formData.set("serviceTitle", serviceTitle);
@@ -202,10 +205,13 @@ export default function ContactForm({
         >
           <Phone size={13} className="text-signal" /> Mobile / WhatsApp Number *
         </label>
-        <div className="relative mt-2">
-          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-mono text-xs font-bold text-muted">
-            +91
-          </span>
+        <div className="relative mt-2 flex items-center rounded-xl border border-chalk/20 bg-surface overflow-hidden focus-within:border-flow focus-within:ring-1 focus-within:ring-flow transition-all">
+          <CountryCodeSelect
+            selectedCode={countryCode}
+            onChange={setCountryCode}
+            disabled={isSubmitting}
+            className="border-0 px-3 py-3 font-mono text-xs font-bold text-chalk border-r border-chalk/15"
+          />
           <input
             id="phone"
             name="phone"
@@ -214,8 +220,8 @@ export default function ContactForm({
             onChange={(e) => handleChange("phone", e.target.value)}
             onBlur={() => handleBlur("phone")}
             aria-invalid={Boolean(touched.phone && errors.phone)}
-            toolparamdescription="The user's 10-digit Indian phone or WhatsApp number."
-            className="w-full rounded-xl border border-chalk/20 bg-surface py-3 pl-14 pr-4 font-mono text-sm text-chalk placeholder:text-muted/50 focus:border-flow focus:ring-1 focus:ring-flow transition-all"
+            toolparamdescription="The user's direct mobile or WhatsApp number."
+            className="w-full bg-transparent px-4 py-3 font-mono text-sm text-chalk placeholder:text-muted/50 focus:outline-none"
             placeholder="98765 43210"
           />
         </div>

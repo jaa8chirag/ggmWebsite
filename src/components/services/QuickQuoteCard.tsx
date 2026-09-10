@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Zap, Phone, User, CheckCircle2, AlertCircle, ArrowRight, Loader2, ShieldCheck } from "lucide-react";
+import CountryCodeSelect from "@/components/ui/CountryCodeSelect";
 import { submitQuoteRequest, type QuoteActionResult } from "@/app/actions/quote";
 
 interface QuickQuoteCardProps {
@@ -17,6 +18,7 @@ export default function QuickQuoteCard({
   className = "",
 }: QuickQuoteCardProps) {
   const router = useRouter();
+  const [countryCode, setCountryCode] = useState("+91");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [pageUrl, setPageUrl] = useState("");
@@ -36,9 +38,10 @@ export default function QuickQuoteCard({
     setIsSubmitting(true);
     setResult(null);
 
+    const fullPhoneNumber = `${countryCode} ${phone.trim()}`;
     const formData = new FormData();
     formData.append("name", name.trim());
-    formData.append("phone", phone.trim());
+    formData.append("phone", fullPhoneNumber);
     formData.append("serviceSlug", serviceSlug);
     formData.append("serviceTitle", serviceTitle);
     formData.append("pageUrl", pageUrl || `/services/${serviceSlug}`);
@@ -146,10 +149,13 @@ export default function QuickQuoteCard({
               </div>
 
               {/* Phone */}
-              <div className="relative">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-muted">
-                  <Phone size={13} />
-                </div>
+              <div className="flex items-center rounded-lg border border-chalk/20 bg-ink/70 overflow-hidden focus-within:border-signal">
+                <CountryCodeSelect
+                  selectedCode={countryCode}
+                  onChange={setCountryCode}
+                  disabled={isSubmitting}
+                  className="border-0 px-2 py-2 font-mono text-[11px] font-bold text-chalk border-r border-chalk/15"
+                />
                 <input
                   type="tel"
                   name="phone"
@@ -160,7 +166,7 @@ export default function QuickQuoteCard({
                   placeholder="Phone / WhatsApp *"
                   aria-label="Phone or WhatsApp Number"
                   toolparamdescription="The user's direct phone or WhatsApp contact number for quote delivery."
-                  className="w-full rounded-lg border border-chalk/20 bg-ink/70 py-2 pl-8 pr-2.5 font-body text-xs text-chalk placeholder-muted/60 focus:border-signal focus:outline-none"
+                  className="w-full bg-transparent py-2 px-2.5 font-body text-xs text-chalk placeholder-muted/60 focus:outline-none"
                   disabled={isSubmitting}
                 />
               </div>
