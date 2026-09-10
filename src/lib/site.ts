@@ -1,5 +1,5 @@
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL || "https://ggm-web-seven.vercel.app"
+  process.env.NEXT_PUBLIC_SITE_URL || "https://ggmtechnologies.com"
 ).replace(/\/$/, "");
 
 export function absoluteUrl(path: string) {
