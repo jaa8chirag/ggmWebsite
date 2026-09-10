@@ -205,8 +205,8 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
 
       {/* Detail Modal Drawer */}
       {activeModalItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border border-chalk/20 bg-surface shadow-2xl p-6 sm:p-8 space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 sm:p-6 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl border border-chalk/20 bg-surface shadow-2xl p-6 sm:p-8 space-y-6">
             {/* Modal Header */}
             <div className="flex items-start justify-between gap-4 border-b border-chalk/15 pb-4">
               <div>
@@ -243,7 +243,7 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                   alt={activeModalItem.client}
                   fill
                   unoptimized
-                  className="object-cover object-top"
+                  className="object-contain p-2"
                 />
               </div>
             )}

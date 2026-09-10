@@ -112,7 +112,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-ink text-chalk font-body">
+      <body suppressHydrationWarning className="min-h-full flex flex-col bg-ink text-chalk font-body">
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
