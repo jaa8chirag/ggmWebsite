@@ -109,8 +109,9 @@ export default function CookieConsent() {
     <>
       {/* 1. Compact Bottom-Right Floating Card */}
       {!showPreferences && (
-        <aside
+        <div
           role="dialog"
+          aria-modal="false"
           aria-live="polite"
           aria-label="Cookie consent card"
           className="fixed bottom-4 right-4 z-50 w-[calc(100vw-2rem)] max-w-[380px] animate-in fade-in slide-in-from-bottom-4 duration-300 sm:bottom-6 sm:right-6"
@@ -146,6 +147,7 @@ export default function CookieConsent() {
               We use cookies to ensure optimal security, analyze traffic, and improve site performance. Learn more in our{" "}
               <Link
                 href="/cookie-policy"
+                prefetch={false}
                 className="font-semibold text-flow underline decoration-flow/40 hover:text-signal"
               >
                 Cookie Policy
@@ -180,7 +182,7 @@ export default function CookieConsent() {
               </div>
             </div>
           </div>
-        </aside>
+        </div>
       )}
 
       {/* 2. Detailed Granular Preferences Modal */}
