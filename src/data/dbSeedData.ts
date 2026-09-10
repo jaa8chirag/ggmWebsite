@@ -5,7 +5,7 @@ import type { Service, Post, CaseStudy, Product, Testimonial, SiteSettingsModel,
 export const DB_SERVICES: Service[] = [
   {
     "id": "srv_1002",
-    "slug": "website-development-services",
+    "slug": "website-development",
     "index": "01",
     "title": "Website Development Service",
     "promise": "Web Development That Works for Your Business",
@@ -69,7 +69,7 @@ export const DB_SERVICES: Service[] = [
   },
   {
     "id": "srv_1001",
-    "slug": "e-commerce-Development",
+    "slug": "e-commerce",
     "index": "03",
     "title": "E-commerce Website Development Company",
     "promise": "Your Products Deserve a Store That Sells",
@@ -241,7 +241,7 @@ export const DB_SERVICES: Service[] = [
   },
   {
     "id": "srv_1005",
-    "slug": "shopify-website-development",
+    "slug": "shopify-development",
     "index": "08",
     "title": "Shopify Development",
     "promise": "High-converting storefronts built for scale.",
