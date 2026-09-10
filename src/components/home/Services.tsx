@@ -51,6 +51,7 @@ export function ServiceCard({
   return (
     <Link
       href={`/services/${slug}`}
+      prefetch={false}
       className="group relative flex min-h-[445px] w-[345px] shrink-0 flex-col justify-between overflow-hidden rounded-3xl border border-chalk/20 bg-surface/95 p-3.5 shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-flow hover:shadow-2xl sm:w-[390px] sm:p-4 transform-gpu"
     >
       <div>

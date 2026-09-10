@@ -131,6 +131,7 @@ export default function Work({ work }: { work: CaseStudyData[] }) {
         <div className="mt-16 sm:mt-20 flex justify-center">
           <Link
             href="/work"
+            prefetch={false}
             className="group inline-flex items-center gap-3 rounded-full border border-flow/40 bg-surface/80 px-8 py-4 font-mono text-xs font-bold uppercase tracking-widest text-flow shadow-xl backdrop-blur-md transition-all duration-300 hover:border-flow hover:bg-flow hover:text-ink hover:shadow-flow/20"
           >
             <span>View All Case Studies</span>

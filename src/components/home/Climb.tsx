@@ -348,6 +348,7 @@ export default function Climb({ services }: { services: ClimbService[] }) {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
+                prefetch={false}
                 ref={(el) => {
                   rowRefs.current[i] = el;
                 }}

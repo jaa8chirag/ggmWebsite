@@ -682,6 +682,7 @@ export default async function ServiceDetailPage({
                 <Link
                   key={sl.id}
                   href={`/services/${service.slug}/${sl.location.slug}`}
+                  prefetch={false}
                   className="flex items-center gap-1.5 rounded-full border border-chalk/20 px-4 py-2 font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:border-flow hover:text-flow"
                 >
                   <MapPin size={12} />

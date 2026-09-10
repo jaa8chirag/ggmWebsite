@@ -81,6 +81,7 @@ export default async function Footer() {
             <div className="mt-6 flex flex-wrap gap-2">
               <Link
                 href="/certifications"
+                prefetch={false}
                 className="inline-flex items-center gap-1.5 rounded-full border border-flow/30 bg-flow/10 px-3 py-1 font-mono text-[11px] font-semibold text-flow transition-colors hover:bg-flow hover:text-white"
               >
                 <ShieldCheck size={12} /> MSME &amp; Partner Certifications
@@ -104,6 +105,7 @@ export default async function Footer() {
                 <li key={s.href}>
                   <Link
                     href={s.href}
+                    prefetch={false}
                     className="font-body text-sm text-muted transition-colors hover:text-chalk"
                   >
                     {s.title}
@@ -122,6 +124,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/certifications"
+                  prefetch={false}
                   className="font-body text-sm text-muted transition-colors hover:text-chalk"
                 >
                   Certifications &amp; Accreditations
@@ -130,6 +133,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/privacy-policy"
+                  prefetch={false}
                   className="font-body text-sm text-muted transition-colors hover:text-chalk"
                 >
                   Privacy Policy
@@ -138,6 +142,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/refund-policy"
+                  prefetch={false}
                   className="font-body text-sm text-muted transition-colors hover:text-chalk"
                 >
                   Refund &amp; Returns Policy
@@ -146,6 +151,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/cookie-policy"
+                  prefetch={false}
                   className="font-body text-sm text-muted transition-colors hover:text-chalk"
                 >
                   Cookie Policy
@@ -154,6 +160,7 @@ export default async function Footer() {
               <li>
                 <Link
                   href="/disclaimer"
+                  prefetch={false}
                   className="font-body text-sm text-muted transition-colors hover:text-chalk"
                 >
                   Disclaimer &amp; Terms
@@ -212,16 +219,16 @@ export default async function Footer() {
             © {new Date().getFullYear()} {settings.name}. All rights reserved.
           </p>
           <div className="flex flex-wrap items-center gap-3 text-[11px]">
-            <Link href="/privacy-policy" className="hover:text-chalk transition-colors">
+            <Link href="/privacy-policy" prefetch={false} className="hover:text-chalk transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/refund-policy" className="hover:text-chalk transition-colors">
+            <Link href="/refund-policy" prefetch={false} className="hover:text-chalk transition-colors">
               Refund &amp; Returns
             </Link>
-            <Link href="/cookie-policy" className="hover:text-chalk transition-colors">
+            <Link href="/cookie-policy" prefetch={false} className="hover:text-chalk transition-colors">
               Cookie Policy
             </Link>
-            <Link href="/disclaimer" className="hover:text-chalk transition-colors">
+            <Link href="/disclaimer" prefetch={false} className="hover:text-chalk transition-colors">
               Disclaimer
             </Link>
             <span className="text-chalk/20">|</span>

@@ -45,6 +45,7 @@ export default function Blog({ posts }: { posts: PostData[] }) {
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
+                prefetch={false}
                 className="group flex flex-col gap-6 rounded-2xl border-2 border-chalk/30 bg-surface p-6 shadow-md transition-all duration-300 hover:border-flow hover:shadow-xl md:flex-row md:items-center md:justify-between"
               >
                 <div className="flex flex-col gap-6 md:flex-row md:items-center">

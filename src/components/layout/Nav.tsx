@@ -251,6 +251,7 @@ export default function Nav() {
                           <Link
                             key={item.href}
                             href={item.href}
+                            prefetch={false}
                             onClick={() => setAboutDropdownOpen(false)}
                             className={cn(
                               "group flex items-start gap-3 rounded-2xl p-2.5 transition-all",
@@ -286,6 +287,7 @@ export default function Nav() {
             <li>
               <Link
                 href="/certifications"
+                prefetch={false}
                 className={cn(
                   "rounded-full px-3.5 py-1.5 font-mono text-[14px] uppercase tracking-wider transition-all duration-200",
                   pathname.startsWith("/certifications")

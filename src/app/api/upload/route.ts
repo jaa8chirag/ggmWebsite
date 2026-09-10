@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
+import { put } from "@vercel/blob";
 import { getCurrentAdmin } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
@@ -18,15 +19,34 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_").toLowerCase();
+    const ext = path.extname(originalName) || ".jpg";
+    const base = path.basename(originalName, ext);
+    const uniqueFilename = `${base}_${Date.now()}${ext}`;
 
-    // 1. Try writing to local filesystem (works on local environment)
+    // 1. Priority: Vercel Blob Cloud CDN (Permanent, Edge-cached)
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      try {
+        const blobPath = `${folder}/${uniqueFilename}`;
+        const blob = await put(blobPath, file, {
+          access: "public",
+        });
+
+        return NextResponse.json({
+          success: true,
+          url: blob.url,
+          filename: uniqueFilename,
+          size: file.size,
+        });
+      } catch (blobError: any) {
+        console.error("Vercel Blob upload failed, trying local fallback:", blobError);
+      }
+    }
+
+    // 2. Local Environment: Write to public/uploads directory
     try {
-      const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_").toLowerCase();
-      const ext = path.extname(originalName) || ".jpg";
-      const base = path.basename(originalName, ext);
-      const uniqueFilename = `${base}_${Date.now()}${ext}`;
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
 
       const uploadDir = path.join(process.cwd(), "public", "uploads", folder);
       await mkdir(uploadDir, { recursive: true });
@@ -43,20 +63,15 @@ export async function POST(req: NextRequest) {
         size: file.size,
       });
     } catch (fsError: any) {
-      console.warn("Read-only filesystem detected on Vercel Serverless. Fallback to Data URI Base64:", fsError);
-
-      // 2. Fallback for Vercel Serverless (Read-only filesystem /var/task):
-      // Convert image to clean Base64 Data URI string
-      const mimeType = file.type || "image/jpeg";
-      const base64Data = buffer.toString("base64");
-      const dataUri = `data:${mimeType};base64,${base64Data}`;
-
-      return NextResponse.json({
-        success: true,
-        url: dataUri,
-        filename: file.name,
-        size: file.size,
-      });
+      // If filesystem is read-only (e.g. Vercel before token is connected), notify admin to connect Blob
+      console.error("Local filesystem write failed (Read-only filesystem detected):", fsError);
+      return NextResponse.json(
+        {
+          error:
+            "Vercel Serverless environment requires Vercel Blob. Please connect a Blob store in your Vercel Dashboard under the Storage tab.",
+        },
+        { status: 500 }
+      );
     }
   } catch (error: any) {
     console.error("Upload error:", error);
