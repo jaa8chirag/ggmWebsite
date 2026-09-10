@@ -82,43 +82,58 @@ export const getServices = unstable_cache(
 export async function getServiceBySlug(slug: string): Promise<Service | null> {
   return unstable_cache(
     async (targetSlugInput: string) => {
-      const normalized = decodeURIComponent(targetSlugInput).toLowerCase().trim().replace(/\s+/g, "-");
+      const raw = decodeURIComponent(targetSlugInput).trim();
+      const normalized = raw.toLowerCase().replace(/\s+/g, "-");
 
-      let targetSlug = targetSlugInput;
-      if (normalized === "website-development-services") {
-        targetSlug = "website-development-services";
-      } else if (normalized === "e-commerce-development") {
-        targetSlug = "e-commerce-Development";
-      } else if (normalized === "shopify-website-development") {
-        targetSlug = "shopify-website-development";
-      } else if (normalized === "wordpress" || normalized === "wp") {
-        targetSlug = "wordpress-development";
-      } else if (normalized === "mobile-app" || normalized === "mobile-application-development" || normalized === "app-development") {
-        targetSlug = "mobile-app-development";
-      } else if (normalized === "adsense" || normalized === "google-ads") {
-        targetSlug = "google-adsense";
-      } else if (normalized === "pay-per-click" || normalized === "pay-per-click-advertising") {
-        targetSlug = "ppc";
+      const candidateSlugs = Array.from(new Set([targetSlugInput, raw, normalized]));
+
+      if (normalized === "website-development-services" || normalized === "website-development" || normalized === "web-development") {
+        candidateSlugs.push("website-development-services", "website-development", "web-development");
+      } else if (normalized === "e-commerce-development" || normalized === "e-commerce" || normalized === "ecommerce" || normalized === "e-commerce-Development") {
+        candidateSlugs.push("e-commerce-Development", "e-commerce-development", "e-commerce", "ecommerce");
+      } else if (normalized === "shopify-website-development" || normalized === "shopify-development" || normalized === "shopify") {
+        candidateSlugs.push("shopify-website-development", "shopify-development", "shopify", "shopify-wordpress");
+      } else if (normalized === "wordpress-development" || normalized === "wordpress" || normalized === "wp") {
+        candidateSlugs.push("wordpress-development", "wordpress", "shopify-wordpress");
+      } else if (normalized === "mobile-app-development" || normalized === "mobile-app" || normalized === "mobile-application-development" || normalized === "app-development") {
+        candidateSlugs.push("mobile-app-development", "mobile-application-development", "mobile-app", "app-development");
+      } else if (normalized === "google-adsense" || normalized === "google-ads" || normalized === "adsense") {
+        candidateSlugs.push("google-adsense", "google-ads", "adsense");
+      } else if (normalized === "ppc" || normalized === "pay-per-click" || normalized === "pay-per-click-advertising") {
+        candidateSlugs.push("ppc", "pay-per-click", "pay-per-click-advertising");
       }
 
-      let s = await queryOne<any>("SELECT * FROM `Service` WHERE `slug` = ? OR LOWER(`slug`) = LOWER(?)", [targetSlug, normalized]);
-      if (!s && targetSlug !== targetSlugInput) {
-        s = await queryOne<any>("SELECT * FROM `Service` WHERE `slug` = ? OR LOWER(`slug`) = LOWER(?)", [targetSlugInput, normalized]);
-      }
+      let s = await queryOne<any>(
+        `SELECT * FROM \`Service\` WHERE \`slug\` IN (${candidateSlugs.map(() => "?").join(",")}) OR LOWER(\`slug\`) IN (${candidateSlugs.map(() => "?").join(",")})`,
+        [...candidateSlugs, ...candidateSlugs.map((c) => c.toLowerCase())]
+      );
+
       if (!s) {
-        return (
-          DB_SERVICES.find(
-            (srv) =>
-              srv.slug.toLowerCase() === targetSlug.toLowerCase() ||
-              srv.slug.toLowerCase() === normalized ||
-              srv.slug === targetSlugInput
-          ) || null
+        const seedMatch = DB_SERVICES.find(
+          (srv) => candidateSlugs.some((c) => c.toLowerCase() === srv.slug.toLowerCase())
         );
+        if (seedMatch) {
+          s = { ...seedMatch };
+        }
       }
+
+      if (!s) return null;
+
       const faqs = await query<any>("SELECT * FROM `ServiceFaq` WHERE `serviceId` = ? ORDER BY `order` ASC", [s.id]);
+
+      let canonicalSlug = s.slug;
+      const lower = (s.slug || "").toLowerCase();
+      if (lower === "website-development" || lower === "web-development" || lower === "website-development-services") {
+        canonicalSlug = "website-development-services";
+      } else if (lower === "e-commerce" || lower === "ecommerce" || lower === "e-commerce-development") {
+        canonicalSlug = "e-commerce-Development";
+      } else if (lower === "shopify-development" || lower === "shopify" || lower === "shopify-wordpress" || lower === "shopify-website-development") {
+        canonicalSlug = "shopify-website-development";
+      }
+
       return {
         id: s.id,
-        slug: s.slug,
+        slug: canonicalSlug,
         index: s.index,
         title: s.title,
         promise: s.promise,
