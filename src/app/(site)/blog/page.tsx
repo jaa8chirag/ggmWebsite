@@ -15,8 +15,10 @@ export const metadata: Metadata = buildMetadata({
   path: "/blog",
 });
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString("en-IN", {
+function formatDate(date: Date | string) {
+  const d = typeof date === "string" ? new Date(date) : date;
+  if (!d || isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-IN", {
     day: "2-digit",
     month: "short",
     year: "numeric",

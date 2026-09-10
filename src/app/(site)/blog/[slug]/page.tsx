@@ -39,8 +39,10 @@ export async function generateMetadata({
   });
 }
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString("en-IN", {
+function formatDate(date: Date | string) {
+  const d = typeof date === "string" ? new Date(date) : date;
+  if (!d || isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-IN", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -98,6 +100,8 @@ export default async function BlogPostPage({
 
   const relatedServiceSlug = BLOG_CATEGORY_SERVICE[post.category];
 
+  const postDate = typeof post.date === "string" ? new Date(post.date) : post.date;
+
   return (
     <>
       <JsonLd
@@ -105,7 +109,7 @@ export default async function BlogPostPage({
           title: post.title,
           description: post.excerpt,
           path: `/blog/${post.slug}`,
-          datePublished: post.date.toISOString(),
+          datePublished: postDate.toISOString(),
         })}
       />
       {post.faqs.length > 0 && <JsonLd data={faqSchema(post.faqs)} />}
