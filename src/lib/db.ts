@@ -65,9 +65,17 @@ export async function query<T = any>(
   sql: string,
   params?: any[]
 ): Promise<T[]> {
+  if (!schemaMigrated) {
+    ensureSchema().catch(() => {});
+  }
+
   try {
-    await ensureSchema();
-    const [rows] = await pool.query(sql, params);
+    const queryPromise = pool.query(sql, params);
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("DB_TIMEOUT")), 1500)
+    );
+
+    const [rows] = (await Promise.race([queryPromise, timeoutPromise])) as any;
     return rows as T[];
   } catch (error: any) {
     console.warn(`[DB WARNING] Query failed (${sql.slice(0, 40)}...):`, error?.message || error);
