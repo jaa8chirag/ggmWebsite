@@ -45,10 +45,60 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
 
-      // 2. Service & Category legacy URLs
+      // 2. Service & Category legacy URLs -> Canonical Active Routes
+      {
+        source: "/services/website-development",
+        destination: "/services/website-development-services",
+        permanent: true,
+      },
+      {
+        source: "/services/web-development",
+        destination: "/services/website-development-services",
+        permanent: true,
+      },
+      {
+        source: "/services/e-commerce",
+        destination: "/services/e-commerce-Development",
+        permanent: true,
+      },
+      {
+        source: "/services/e-commerce-development",
+        destination: "/services/e-commerce-Development",
+        permanent: true,
+      },
+      {
+        source: "/services/ecommerce",
+        destination: "/services/e-commerce-Development",
+        permanent: true,
+      },
       {
         source: "/services/ppc",
-        destination: "/services/e-commerce",
+        destination: "/services/e-commerce-Development",
+        permanent: true,
+      },
+      {
+        source: "/services/shopify-development",
+        destination: "/services/shopify-website-development",
+        permanent: true,
+      },
+      {
+        source: "/services/shopify",
+        destination: "/services/shopify-website-development",
+        permanent: true,
+      },
+      {
+        source: "/services/shopify-wordpress",
+        destination: "/services/shopify-website-development",
+        permanent: true,
+      },
+      {
+        source: "/services/mobile-application-development",
+        destination: "/services/mobile-app-development",
+        permanent: true,
+      },
+      {
+        source: "/services/google-ads",
+        destination: "/services/google-adsense",
         permanent: true,
       },
       {
@@ -58,7 +108,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/category/website-development",
-        destination: "/services/website-development",
+        destination: "/services/website-development-services",
         permanent: true,
       },
       {
@@ -68,7 +118,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/category/e-commerce",
-        destination: "/services/e-commerce",
+        destination: "/services/e-commerce-Development",
         permanent: true,
       },
       {
