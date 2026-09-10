@@ -64,11 +64,11 @@ export default function CountryCodeSelect({
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
       aria-label="Select Country Dial Code"
-      className={`rounded-l-xl border-r-0 bg-surface/90 font-mono text-xs text-chalk focus:outline-none focus:ring-1 focus:ring-flow cursor-pointer ${className}`}
+      className={`shrink-0 w-[78px] max-w-[85px] border-0 bg-transparent font-mono text-[11px] font-bold text-chalk focus:outline-none cursor-pointer ${className}`}
     >
       {COUNTRY_CODES.map((c) => (
         <option key={`${c.iso}-${c.code}`} value={c.code} className="bg-ink text-chalk">
-          {c.flag} {c.code} ({c.iso})
+          {c.code} ({c.iso})
         </option>
       ))}
     </select>

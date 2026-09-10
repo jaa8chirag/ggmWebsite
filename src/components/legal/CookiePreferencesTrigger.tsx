@@ -14,6 +14,7 @@ export default function CookiePreferencesTrigger() {
     <button
       type="button"
       onClick={handleClick}
+      suppressHydrationWarning
       className="inline-flex items-center gap-1 hover:text-flow transition-colors cursor-pointer"
     >
       <Cookie size={11} />

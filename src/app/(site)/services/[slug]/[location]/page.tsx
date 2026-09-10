@@ -105,6 +105,7 @@ export default async function ServiceLocationDetailPage({
 
   const { service, location: loc } = sl;
   const details = SERVICE_DETAILS[slug] || SERVICE_DETAILS[service.slug];
+  const cleanTitle = service.title.replace(/\s+in\s+.*$/i, "").replace(/\s+service$/i, " Service");
 
   const isWebDev =
     service.slug === "website-development-services" || service.slug === "website-development" || service.slug === "web-development";
@@ -157,36 +158,36 @@ export default async function ServiceLocationDetailPage({
     <>
       <JsonLd
         data={serviceLocationSchema({
-          serviceName: service.title,
+          serviceName: cleanTitle,
           locationName: loc.name,
-          description: sl.customIntro ?? service.description,
-          path: `/services/${service.slug}/${loc.slug}`,
+          description: sl.metaDescription || service.description || "",
+          path: `/services/${slug}/${location}`,
         })}
       />
-      {combinedFaqs.length > 0 && <JsonLd data={faqSchema(combinedFaqs)} />}
+      {combinedFaqs.length > 0 && (
+        <JsonLd data={faqSchema(combinedFaqs)} />
+      )}
 
-      <div className="bg-ink text-chalk">
+      <div className="bg-ink pt-32 pb-16 md:pt-40 md:pb-24">
         {/* =================================================================== */}
-        {/* 1. HERO & STRATEGIC OVERVIEW (WITH LOCATION CONTEXT)                 */}
+        {/* 1. HERO SECTION                                                     */}
         {/* =================================================================== */}
-        <section className="relative mx-auto max-w-[1440px] px-6 pt-32 pb-12 md:px-10 md:pt-40">
+        <section className="mx-auto max-w-[1440px] px-6 md:px-10">
           <Breadcrumbs
             items={[
               { name: "Services", path: "/services" },
-              { name: service.title, path: `/services/${service.slug}` },
-              {
-                name: loc.name,
-                path: `/services/${service.slug}/${loc.slug}`,
-              },
+              { name: cleanTitle, path: `/services/${service.slug}` },
+              { name: loc.name, path: `/services/${slug}/${location}` },
             ]}
           />
 
-          <div className="mt-8 grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
+          <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-start">
             <div className="lg:col-span-7">
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-mono-label font-bold tracking-widest text-signal uppercase">
-                  {service.index} · LOCATION HUB
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="font-mono text-mono-label font-bold text-signal">
+                  {service.index || "01"}
                 </span>
+                <span className="text-muted">•</span>
                 <span className="rounded-full bg-flow/10 border border-flow/30 px-3 py-1 font-mono text-xs font-semibold text-flow">
                   📍 {loc.name}
                 </span>
@@ -194,7 +195,7 @@ export default async function ServiceLocationDetailPage({
 
               {/* Main Location Title */}
               <h1 className="mt-4 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-chalk">
-                {service.title} in {loc.name}
+                {cleanTitle} in {loc.name}
               </h1>
 
               {/* Main Custom Intro or Promise */}
@@ -257,7 +258,7 @@ export default async function ServiceLocationDetailPage({
               {/* Compact 15-Minute Quote Lead Card */}
               <QuickQuoteCard
                 serviceSlug={service.slug}
-                serviceTitle={`${service.title} (${loc.name})`}
+                serviceTitle={`${cleanTitle} (${loc.name})`}
               />
             </div>
           </div>

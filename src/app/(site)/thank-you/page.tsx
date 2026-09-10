@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Script from "next/script";
 import { CheckCircle2, Phone, MessageSquare, ArrowRight, ShieldCheck, Clock, Zap, Home } from "lucide-react";
 import { getSettings } from "@/lib/queries";
 
@@ -22,7 +23,8 @@ export default async function ThankYouPage() {
       <div className="pointer-events-none absolute -bottom-24 right-10 h-96 w-96 rounded-full bg-signal/15 blur-3xl" />
 
       {/* Script Hook for Google Ads Conversion & GTM DataLayer */}
-      <script
+      <Script
+        id="gtm-datalayer-conversion"
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
