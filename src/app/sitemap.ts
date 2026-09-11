@@ -7,8 +7,8 @@ import {
 } from "@/lib/queries";
 import { SITE_URL } from "@/lib/site";
 
-// Reads live from Postgres — keep it fresh rather than baked in at build time.
-export const dynamic = "force-dynamic";
+// Revalidate every hour so it stays fresh while serving instantly from the edge
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [services, posts, products, serviceLocations] = await Promise.all([

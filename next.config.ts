@@ -17,7 +17,13 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
-    return [];
+    return [
+      {
+        source: "/sitemap_index.xml",
+        destination: "/sitemap.xml",
+        permanent: true,
+      },
+    ];
   },
 };
 
