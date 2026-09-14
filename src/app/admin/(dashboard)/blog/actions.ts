@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { query, queryOne } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
@@ -94,6 +94,7 @@ export async function createBlogPost(formData: FormData) {
     );
   }
 
+  updateTag("posts");
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
   redirect("/admin/blog");
@@ -170,6 +171,7 @@ export async function updateBlogPost(id: string, formData: FormData) {
     );
   }
 
+  updateTag("posts");
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
   revalidatePath(`/blog/${data.slug}`);
@@ -180,6 +182,7 @@ export async function deleteBlogPost(id: string) {
   await requireAdmin();
   const post = await queryOne<any>("SELECT `slug` FROM `BlogPost` WHERE `id` = ?", [id]);
   await query("DELETE FROM `BlogPost` WHERE `id` = ?", [id]);
+  updateTag("posts");
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
   if (post) {
