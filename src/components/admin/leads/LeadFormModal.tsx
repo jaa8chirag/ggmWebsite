@@ -107,7 +107,6 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
                 <CountryCodeSelect
                   selectedCode={countryCode}
                   onChange={setCountryCode}
-                  className="border-0 px-3 py-2.5 font-mono text-xs font-bold text-chalk border-r border-chalk/15"
                 />
                 <input
                   type="text"

@@ -210,7 +210,6 @@ export default function ContactForm({
             selectedCode={countryCode}
             onChange={setCountryCode}
             disabled={isSubmitting}
-            className="border-0 px-3 py-3 font-mono text-xs font-bold text-chalk border-r border-chalk/15"
           />
           <input
             id="phone"

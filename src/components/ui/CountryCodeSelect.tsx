@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { ChevronDown } from "lucide-react";
 
 export interface CountryCodeItem {
   code: string; // e.g. "+91"
@@ -58,18 +59,25 @@ export default function CountryCodeSelect({
   disabled = false,
 }: CountryCodeSelectProps) {
   return (
-    <select
-      value={selectedCode}
-      onChange={(e) => onChange(e.target.value)}
-      disabled={disabled}
-      aria-label="Select Country Dial Code"
-      className={`shrink-0 w-[56px] max-w-[62px] border-0 bg-transparent font-mono text-[11px] font-bold text-chalk focus:outline-none cursor-pointer ${className}`}
-    >
-      {COUNTRY_CODES.map((c) => (
-        <option key={c.code} value={c.code} className="bg-ink text-chalk">
-          {c.code}
-        </option>
-      ))}
-    </select>
+    <div className={`relative inline-flex items-center shrink-0 border-r border-chalk/15 ${className}`}>
+      <select
+        value={selectedCode}
+        onChange={(e) => onChange(e.target.value)}
+        disabled={disabled}
+        aria-label="Select Country Dial Code"
+        className="appearance-none bg-transparent pl-3 pr-6 py-2.5 font-mono text-xs sm:text-sm font-bold text-chalk focus:outline-none cursor-pointer w-[68px] sm:w-[72px]"
+      >
+        {COUNTRY_CODES.map((c) => (
+          <option key={c.code} value={c.code} className="bg-ink text-chalk">
+            {c.code}
+          </option>
+        ))}
+      </select>
+      <ChevronDown
+        size={12}
+        className="pointer-events-none absolute right-2 text-muted"
+        aria-hidden="true"
+      />
+    </div>
   );
 }

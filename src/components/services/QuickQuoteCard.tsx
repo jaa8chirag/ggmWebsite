@@ -154,7 +154,6 @@ export default function QuickQuoteCard({
                   selectedCode={countryCode}
                   onChange={setCountryCode}
                   disabled={isSubmitting}
-                  className="border-0 px-2 py-2 font-mono text-[11px] font-bold text-chalk border-r border-chalk/15"
                 />
                 <input
                   type="tel"
