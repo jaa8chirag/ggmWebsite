@@ -11,10 +11,9 @@ export interface CountryCodeItem {
 
 export const COUNTRY_CODES: CountryCodeItem[] = [
   { code: "+91", iso: "IN", name: "India", flag: "🇮🇳" },
-  { code: "+1", iso: "US", name: "United States", flag: "🇺🇸" },
+  { code: "+1", iso: "US", name: "United States / Canada", flag: "🇺🇸" },
   { code: "+44", iso: "GB", name: "United Kingdom", flag: "🇬🇧" },
   { code: "+971", iso: "AE", name: "United Arab Emirates", flag: "🇦🇪" },
-  { code: "+1", iso: "CA", name: "Canada", flag: "🇨🇦" },
   { code: "+61", iso: "AU", name: "Australia", flag: "🇦🇺" },
   { code: "+65", iso: "SG", name: "Singapore", flag: "🇸🇬" },
   { code: "+966", iso: "SA", name: "Saudi Arabia", flag: "🇸🇦" },
@@ -64,11 +63,11 @@ export default function CountryCodeSelect({
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
       aria-label="Select Country Dial Code"
-      className={`shrink-0 w-[78px] max-w-[85px] border-0 bg-transparent font-mono text-[11px] font-bold text-chalk focus:outline-none cursor-pointer ${className}`}
+      className={`shrink-0 w-[56px] max-w-[62px] border-0 bg-transparent font-mono text-[11px] font-bold text-chalk focus:outline-none cursor-pointer ${className}`}
     >
       {COUNTRY_CODES.map((c) => (
-        <option key={`${c.iso}-${c.code}`} value={c.code} className="bg-ink text-chalk">
-          {c.code} ({c.iso})
+        <option key={c.code} value={c.code} className="bg-ink text-chalk">
+          {c.code}
         </option>
       ))}
     </select>
