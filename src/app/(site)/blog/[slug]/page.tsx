@@ -75,19 +75,26 @@ export default async function BlogPostPage({
 
   const tocHeadings: { id: string; text: string; level: "h2" | "h3" }[] = [];
   for (const block of post.blocks) {
-    if (block.type === "h2" && block.text) {
-      tocHeadings.push({ id: slugify(block.text), text: block.text, level: "h2" });
-    } else if (block.type === "h3" && block.text) {
-      tocHeadings.push({ id: slugify(block.text), text: block.text, level: "h3" });
-    } else if (block.text) {
-      const lines = block.text.split("\n");
+    const raw = block.text?.trim() ?? "";
+    if (block.type === "h2" && raw) {
+      tocHeadings.push({ id: slugify(raw), text: raw, level: "h2" });
+    } else if (block.type === "h3" && raw) {
+      tocHeadings.push({ id: slugify(raw), text: raw, level: "h3" });
+    } else if (raw) {
+      const lines = raw.split("\n");
       for (const line of lines) {
         const trimmed = line.trim();
         if (trimmed.startsWith("## ")) {
-          const text = trimmed.replace(/^##\s+/, "");
+          const text = trimmed.replace(/^##\s+/, "").trim();
           tocHeadings.push({ id: slugify(text), text, level: "h2" });
-        } else if (trimmed.startsWith("### ")) {
-          const text = trimmed.replace(/^###\s+/, "");
+        } else if (trimmed.startsWith("### ") || trimmed.startsWith("# ")) {
+          const text = trimmed.replace(/^#+\s+/, "").trim();
+          tocHeadings.push({ id: slugify(text), text, level: "h3" });
+        } else if (/^(h2\s*[:\-–—]|\[h2\])\s*/i.test(trimmed)) {
+          const text = trimmed.replace(/^(h2\s*[:\-–—]|\[h2\])\s*/i, "").trim();
+          tocHeadings.push({ id: slugify(text), text, level: "h2" });
+        } else if (/^(h3\s*[:\-–—]|\[h3\])\s*/i.test(trimmed)) {
+          const text = trimmed.replace(/^(h3\s*[:\-–—]|\[h3\])\s*/i, "").trim();
           tocHeadings.push({ id: slugify(text), text, level: "h3" });
         }
       }
@@ -158,25 +165,35 @@ export default async function BlogPostPage({
 
             <div className="mt-16 space-y-6">
               {post.blocks.map((block) => {
-                if (block.type === "h2") {
+                const raw = block.text?.trim() ?? "";
+                const isExplicitH2 = block.type === "h2" || /^##\s+/.test(raw) || /^(h2\s*[:\-–—]|\[h2\])\s*/i.test(raw);
+                const isExplicitH3 = block.type === "h3" || /^###\s+/.test(raw) || /^#\s+/.test(raw) || /^(h3\s*[:\-–—]|\[h3\])\s*/i.test(raw);
+
+                if (isExplicitH2) {
+                  const headingText = block.type === "h2"
+                    ? raw
+                    : raw.replace(/^##\s+/, "").replace(/^(h2\s*[:\-–—]|\[h2\])\s*/i, "").trim();
                   return (
                     <h2
                       key={block.id}
-                      id={slugify(block.text ?? "")}
-                      className="scroll-mt-32 pt-6 font-display text-2xl text-chalk"
+                      id={slugify(headingText)}
+                      className="scroll-mt-32 pt-6 font-display text-2xl font-bold text-chalk"
                     >
-                      <FormattedText text={block.text} as="span" />
+                      <FormattedText text={headingText} as="span" />
                     </h2>
                   );
                 }
-                if (block.type === "h3") {
+                if (isExplicitH3) {
+                  const headingText = block.type === "h3"
+                    ? raw
+                    : raw.replace(/^#+\s+/, "").replace(/^(h3\s*[:\-–—]|\[h3\])\s*/i, "").trim();
                   return (
                     <h3
                       key={block.id}
-                      id={slugify(block.text ?? "")}
-                      className="scroll-mt-32 pt-4 font-display text-xl text-chalk"
+                      id={slugify(headingText)}
+                      className="scroll-mt-32 pt-4 font-display text-xl font-bold text-chalk"
                     >
-                      <FormattedText text={block.text} as="span" />
+                      <FormattedText text={headingText} as="span" />
                     </h3>
                   );
                 }

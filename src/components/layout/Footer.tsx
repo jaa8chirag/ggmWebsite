@@ -118,9 +118,19 @@ export default async function Footer() {
           {/* Governance & Policies Column */}
           <div>
             <p className="font-mono text-mono-label uppercase tracking-widest text-flow">
-              Governance
+              Company &amp; Governance
             </p>
             <ul className="mt-4 space-y-2.5">
+              <li>
+                <Link
+                  href="/careers"
+                  prefetch={false}
+                  className="font-body text-sm font-semibold text-chalk transition-colors hover:text-flow flex items-center gap-1.5"
+                >
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-signal animate-pulse" />
+                  Careers (We&apos;re Hiring)
+                </Link>
+              </li>
               <li>
                 <Link
                   href="/certifications"
@@ -219,6 +229,9 @@ export default async function Footer() {
             © {new Date().getFullYear()} {settings.name}. All rights reserved.
           </p>
           <div className="flex flex-wrap items-center gap-3 text-[11px]">
+            <Link href="/careers" prefetch={false} className="hover:text-chalk transition-colors text-flow font-medium">
+              Careers
+            </Link>
             <Link href="/privacy-policy" prefetch={false} className="hover:text-chalk transition-colors">
               Privacy Policy
             </Link>

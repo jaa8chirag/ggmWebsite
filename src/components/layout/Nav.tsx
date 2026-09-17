@@ -14,6 +14,7 @@ import {
   TrendingUp,
   Award,
   ArrowRight,
+  Briefcase,
 } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
@@ -27,6 +28,12 @@ const aboutDropdownItems = [
     href: "/about",
     description: "Agency overview, mission & vision",
     icon: Users,
+  },
+  {
+    label: "Careers",
+    href: "/careers",
+    description: "Join our team & open positions",
+    icon: Briefcase,
   },
   {
     label: "Quality & Compliance",
@@ -132,7 +139,8 @@ export default function Nav() {
     pathname === "/quality-compliance" ||
     pathname === "/about-ceo" ||
     pathname === "/about-the-company" ||
-    pathname === "/why-us";
+    pathname === "/why-us" ||
+    pathname === "/careers";
 
   return (
     <>

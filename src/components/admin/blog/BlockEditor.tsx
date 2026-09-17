@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import {
   Plus,
   X,
@@ -12,9 +12,16 @@ import {
   Code,
   Eye,
   Edit3,
+  Sparkles,
+  List,
+  Heading2,
+  Heading3,
+  AlignLeft,
+  CheckCircle2,
 } from "lucide-react";
 import { labelClass, inputClass } from "@/components/admin/styles";
 import { formatInlineText } from "@/components/ui/FormattedText";
+import { parseArticleContent, ParsedBlock } from "@/lib/blogParser";
 
 type BlockType = "h2" | "h3" | "paragraph" | "list";
 
@@ -55,6 +62,7 @@ export default function BlockEditor({ initial = [] }: { initial?: InitialBlock[]
   );
   const [showQuickPaste, setShowQuickPaste] = useState(false);
   const [pastedText, setPastedText] = useState("");
+  const pastedHtmlRef = useRef<string>("");
   const nextId = useRef(rows.length);
 
   const update = (id: number, patch: Partial<Row>) =>
@@ -70,90 +78,48 @@ export default function BlockEditor({ initial = [] }: { initial?: InitialBlock[]
     });
   };
 
-  const parseQuickPaste = () => {
-    if (!pastedText.trim()) return;
+  // Real-time detection of blocks from pasted text and rich HTML
+  const detectedBlocks: ParsedBlock[] = useMemo(() => {
+    if (!pastedText.trim() && !pastedHtmlRef.current.trim()) return [];
+    return parseArticleContent(pastedText, pastedHtmlRef.current);
+  }, [pastedText]);
 
-    const lines = pastedText.split("\n");
-    const newRows: Row[] = [];
-    let currentListItems: string[] = [];
+  const h2Count = detectedBlocks.filter((b) => b.type === "h2").length;
+  const h3Count = detectedBlocks.filter((b) => b.type === "h3").length;
+  const pCount = detectedBlocks.filter((b) => b.type === "paragraph").length;
+  const listCount = detectedBlocks.filter((b) => b.type === "list").length;
 
-    const flushList = () => {
-      if (currentListItems.length > 0) {
-        newRows.push({
-          id: nextId.current++,
-          type: "list",
-          text: "",
-          items: currentListItems.join("\n"),
-        });
-        currentListItems = [];
+  const parseQuickPaste = (mode: "replace" | "append" = "replace") => {
+    const blocks = detectedBlocks.length > 0
+      ? detectedBlocks
+      : parseArticleContent(pastedText, pastedHtmlRef.current);
+
+    if (blocks.length === 0) return;
+
+    const newRows: Row[] = blocks.map((b) => ({
+      id: nextId.current++,
+      type: b.type,
+      text: b.text,
+      items: b.items.join("\n"),
+      showPreview: false,
+    }));
+
+    if (mode === "append") {
+      // If current rows only have 1 initial blank paragraph, replace it
+      const isInitialBlank =
+        rows.length === 1 && rows[0].type === "paragraph" && !rows[0].text && !rows[0].items;
+      if (isInitialBlank) {
+        setRows(newRows);
+      } else {
+        setRows((r) => [...r, ...newRows]);
       }
-    };
-
-    let currentParagraph: string[] = [];
-    const flushParagraph = () => {
-      if (currentParagraph.length > 0) {
-        newRows.push({
-          id: nextId.current++,
-          type: "paragraph",
-          text: currentParagraph.join(" "),
-          items: "",
-        });
-        currentParagraph = [];
-      }
-    };
-
-    for (let i = 0; i < lines.length; i++) {
-      const raw = lines[i];
-      const trimmed = raw.trim();
-
-      if (!trimmed) {
-        flushParagraph();
-        flushList();
-        continue;
-      }
-
-      if (trimmed.startsWith("## ")) {
-        flushParagraph();
-        flushList();
-        newRows.push({
-          id: nextId.current++,
-          type: "h2",
-          text: trimmed.replace(/^##\s+/, ""),
-          items: "",
-        });
-        continue;
-      }
-
-      if (trimmed.startsWith("### ") || trimmed.startsWith("# ")) {
-        flushParagraph();
-        flushList();
-        newRows.push({
-          id: nextId.current++,
-          type: "h3",
-          text: trimmed.replace(/^#+\s+/, ""),
-          items: "",
-        });
-        continue;
-      }
-
-      if (/^[-*]\s+/.test(trimmed) || /^\d+\.\s+/.test(trimmed)) {
-        flushParagraph();
-        currentListItems.push(trimmed.replace(/^([-*]|\d+\.)\s+/, ""));
-        continue;
-      }
-
-      flushList();
-      currentParagraph.push(trimmed);
-    }
-
-    flushParagraph();
-    flushList();
-
-    if (newRows.length > 0) {
+    } else {
       setRows(newRows);
-      setPastedText("");
-      setShowQuickPaste(false);
     }
+
+    setPastedText("");
+    pastedHtmlRef.current = "";
+    setShowQuickPaste(false);
   };
 
   const insertHelper = (rowId: number, prefix: string, suffix: string = prefix) => {
@@ -202,46 +168,152 @@ export default function BlockEditor({ initial = [] }: { initial?: InitialBlock[]
       </div>
 
       {showQuickPaste && (
-        <div className="mt-4 rounded-xl border border-flow/40 bg-surface p-4 shadow-xl space-y-3">
-          <div className="flex items-center justify-between">
-            <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-chalk">
-              Paste Entire Article (Auto-Parses Headings &amp; Lists)
-            </h4>
+        <div className="mt-4 rounded-2xl border border-flow/40 bg-surface p-5 shadow-2xl space-y-4">
+          <div className="flex items-center justify-between border-b border-chalk/10 pb-3">
+            <div>
+              <h4 className="font-mono text-sm font-bold uppercase tracking-wider text-chalk flex items-center gap-2">
+                <Sparkles size={16} className="text-signal" />
+                Quick Paste Full Article
+              </h4>
+              <p className="font-body text-xs text-muted mt-0.5">
+                Copy from <strong>Scalenut</strong>, Google Docs, Word, or HTML. Headings (H2/H3), bullet lists, and paragraphs are automatically parsed.
+              </p>
+            </div>
             <button
               type="button"
-              onClick={() => setShowQuickPaste(false)}
-              className="text-muted hover:text-signal"
+              onClick={() => {
+                setShowQuickPaste(false);
+                pastedHtmlRef.current = "";
+              }}
+              className="text-muted hover:text-signal p-1 rounded-lg cursor-pointer"
             >
-              <X size={14} />
+              <X size={16} />
             </button>
           </div>
+
           <textarea
             value={pastedText}
             onChange={(e) => setPastedText(e.target.value)}
-            rows={8}
-            placeholder="Paste raw article text or markdown here...
-## Heading 2
-Paragraph text here...
-### Heading 3
-- Bullet item 1
-- Bullet item 2"
-            className={inputClass}
+            onPaste={(e) => {
+              const html = e.clipboardData.getData("text/html");
+              if (html && html.trim()) {
+                pastedHtmlRef.current = html;
+              }
+            }}
+            rows={10}
+            placeholder="Click here and press Ctrl+V to paste your article from Scalenut, Google Docs, or HTML...
+
+Example:
+## What is Generative Engine Optimization?
+In 2026, AI search engines change how users find info.
+
+### Key Ranking Factors:
+• Topical authority
+• Entity optimization"
+            className={`${inputClass} font-mono text-xs`}
           />
-          <div className="flex justify-end gap-2">
+
+          {/* Live Detection Summary Bar */}
+          {detectedBlocks.length > 0 && (
+            <div className="rounded-xl border border-flow/20 bg-flow/5 p-3.5 space-y-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="font-mono text-xs font-bold uppercase tracking-wider text-flow flex items-center gap-1.5">
+                  <CheckCircle2 size={13} />
+                  Detected {detectedBlocks.length} Blocks
+                </p>
+                <div className="flex flex-wrap items-center gap-2 font-mono text-[11px]">
+                  <span className="rounded-md bg-flow/15 px-2 py-0.5 text-flow font-bold flex items-center gap-1">
+                    <Heading2 size={12} /> {h2Count} H2 Headings
+                  </span>
+                  <span className="rounded-md bg-flow/15 px-2 py-0.5 text-flow font-bold flex items-center gap-1">
+                    <Heading3 size={12} /> {h3Count} H3 Sub-headings
+                  </span>
+                  <span className="rounded-md bg-chalk/10 px-2 py-0.5 text-chalk font-semibold flex items-center gap-1">
+                    <AlignLeft size={12} /> {pCount} Paragraphs
+                  </span>
+                  {listCount > 0 && (
+                    <span className="rounded-md bg-signal/15 px-2 py-0.5 text-signal font-semibold flex items-center gap-1">
+                      <List size={12} /> {listCount} Lists
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Preview of Headings that will populate Table of Contents */}
+              {(h2Count > 0 || h3Count > 0) && (
+                <div className="border-t border-flow/15 pt-2">
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-muted font-semibold">
+                    Table of Contents Preview ({h2Count + h3Count} Headings):
+                  </p>
+                  <div className="mt-1.5 max-h-28 overflow-y-auto space-y-1 pr-1 font-body text-xs">
+                    {detectedBlocks
+                      .filter((b) => b.type === "h2" || b.type === "h3")
+                      .slice(0, 8)
+                      .map((h, idx) => (
+                        <div key={idx} className="flex items-center gap-2 text-chalk truncate">
+                          <span
+                            className={`rounded px-1 py-0.5 font-mono text-[9px] font-bold uppercase ${
+                              h.type === "h2" ? "bg-flow/20 text-flow" : "bg-signal/20 text-signal"
+                            }`}
+                          >
+                            {h.type}
+                          </span>
+                          <span className="truncate">{h.text}</span>
+                        </div>
+                      ))}
+                    {h2Count + h3Count > 8 && (
+                      <p className="font-mono text-[10px] text-muted italic">
+                        + {h2Count + h3Count - 8} more headings...
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
             <button
               type="button"
-              onClick={() => setShowQuickPaste(false)}
-              className="rounded-lg border border-chalk/20 px-3 py-1.5 font-mono text-xs text-muted hover:text-chalk"
+              onClick={() => {
+                setPastedText("");
+                pastedHtmlRef.current = "";
+              }}
+              className="font-mono text-xs text-muted hover:text-signal transition-colors cursor-pointer"
             >
-              Cancel
+              Clear Text
             </button>
-            <button
-              type="button"
-              onClick={parseQuickPaste}
-              className="rounded-lg bg-flow px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-ink hover:bg-flow/90 cursor-pointer"
-            >
-              Convert to Blocks
-            </button>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowQuickPaste(false);
+                  pastedHtmlRef.current = "";
+                }}
+                className="rounded-lg border border-chalk/20 px-3.5 py-1.5 font-mono text-xs text-muted hover:text-chalk cursor-pointer"
+              >
+                Cancel
+              </button>
+              {rows.length > 1 && (
+                <button
+                  type="button"
+                  disabled={detectedBlocks.length === 0}
+                  onClick={() => parseQuickPaste("append")}
+                  className="rounded-lg border border-flow/40 bg-flow/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-flow hover:bg-flow hover:text-ink transition-all disabled:opacity-40 cursor-pointer"
+                >
+                  Append ({detectedBlocks.length})
+                </button>
+              )}
+              <button
+                type="button"
+                disabled={detectedBlocks.length === 0}
+                onClick={() => parseQuickPaste("replace")}
+                className="rounded-lg bg-flow px-5 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-ink hover:bg-flow/90 transition-all shadow-sm disabled:opacity-40 cursor-pointer"
+              >
+                Convert to Blocks ({detectedBlocks.length})
+              </button>
+            </div>
           </div>
         </div>
       )}

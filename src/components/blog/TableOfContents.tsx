@@ -51,7 +51,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
     return () => observer.disconnect();
   }, [items]);
 
-  if (items.length < 2) return null;
+  if (items.length < 1) return null;
 
   return (
     <nav

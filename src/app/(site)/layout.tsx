@@ -111,6 +111,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             `,
           }}
         />
+        {/* Localo Local Business Structured Data */}
+        <Script
+          id="localo-structured-data"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              fetch("https://api.localo.com/api/structured_data/3qqUFhJ6QHCF_p9Ml9VGmicS8stdvM8rVwX7H-P1jqw/local_business")
+                .then(function(response){ return response.json(); })
+                .then(function(data){
+                  var script = document.createElement("script");
+                  script.type = "application/ld+json";
+                  script.textContent = JSON.stringify(data);
+                  document.head.appendChild(script);
+                })
+                .catch(function(err){ console.error("Localo schema load error:", err); });
+            `,
+          }}
+        />
       </head>
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-ink text-chalk font-body">
         {/* Google Tag Manager (noscript) */}

@@ -25,9 +25,28 @@ function parseBlocks(formData: FormData) {
       if (items.length === 0) continue;
       blocks.push({ type, text: null, items, order: blocks.length });
     } else {
-      const text = (texts[i] ?? "").trim();
+      let text = (texts[i] ?? "").trim();
       if (!text) continue;
-      blocks.push({ type, text, items: [], order: blocks.length });
+      let effectiveType = type;
+
+      // Smart fallback: if type is paragraph but content clearly indicates a heading
+      if (effectiveType === "paragraph") {
+        if (/^##\s+/.test(text)) {
+          effectiveType = "h2";
+          text = text.replace(/^##\s+/, "").trim();
+        } else if (/^###\s+/.test(text) || /^#\s+/.test(text)) {
+          effectiveType = "h3";
+          text = text.replace(/^#+\s+/, "").trim();
+        } else if (/^(h2\s*[:\-–—]|\[h2\])\s*/i.test(text)) {
+          effectiveType = "h2";
+          text = text.replace(/^(h2\s*[:\-–—]|\[h2\])\s*/i, "").trim();
+        } else if (/^(h3\s*[:\-–—]|\[h3\])\s*/i.test(text)) {
+          effectiveType = "h3";
+          text = text.replace(/^(h3\s*[:\-–—]|\[h3\])\s*/i, "").trim();
+        }
+      }
+
+      blocks.push({ type: effectiveType, text, items: [], order: blocks.length });
     }
   }
   return blocks;
