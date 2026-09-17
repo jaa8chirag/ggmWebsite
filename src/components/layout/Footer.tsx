@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Phone, Mail, MapPin, ShieldCheck } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import {
   WhatsAppIcon,
   LinkedInIcon,
@@ -77,16 +77,7 @@ export default async function Footer() {
               </div>
             </div>
 
-            {/* Trust Seals Badges */}
-            <div className="mt-6 flex flex-wrap gap-2">
-              <Link
-                href="/certifications"
-                prefetch={false}
-                className="inline-flex items-center gap-1.5 rounded-full border border-flow/30 bg-flow/10 px-3 py-1 font-mono text-[11px] font-semibold text-flow transition-colors hover:bg-flow hover:text-white"
-              >
-                <ShieldCheck size={12} /> MSME &amp; Partner Certifications
-              </Link>
-            </div>
+
           </div>
 
           {/* Services Column (Curated 5 Flagships Per User Specification) */}
@@ -131,15 +122,7 @@ export default async function Footer() {
                   Careers (We&apos;re Hiring)
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/certifications"
-                  prefetch={false}
-                  className="font-body text-sm text-muted transition-colors hover:text-chalk"
-                >
-                  Certifications &amp; Accreditations
-                </Link>
-              </li>
+
               <li>
                 <Link
                   href="/privacy-policy"
