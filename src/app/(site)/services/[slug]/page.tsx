@@ -29,6 +29,7 @@ import FormattedText from "@/components/ui/FormattedText";
 import TechStack from "@/components/common/TechStack";
 import QuickQuoteCard from "@/components/services/QuickQuoteCard";
 import SeoScopeOfWorkSection from "@/components/services/SeoScopeOfWorkSection";
+import ServiceLocationsList from "@/components/services/ServiceLocationsList";
 import { SERVICE_DETAILS } from "@/data/serviceDetails";
 
 const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
@@ -673,24 +674,12 @@ export default async function ServiceDetailPage({
         {/* 10. WHERE WE WORK (SERVICE LOCATIONS)                               */}
         {/* =================================================================== */}
         {serviceLocations.length > 0 && (
-          <section className="mx-auto max-w-[1440px] px-6 py-12 md:px-10">
-            <h2 className="font-mono text-mono-label uppercase tracking-widest text-muted">
-              Where we work
-            </h2>
-            <div className="mt-6 flex flex-wrap gap-3">
-              {serviceLocations.map((sl) => (
-                <Link
-                  key={sl.id}
-                  href={`/services/${service.slug}/${sl.location.slug}`}
-                  prefetch={false}
-                  className="flex items-center gap-1.5 rounded-full border border-chalk/20 px-4 py-2 font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:border-flow hover:text-flow"
-                >
-                  <MapPin size={12} />
-                  {sl.location.name}
-                </Link>
-              ))}
-            </div>
-          </section>
+          <ServiceLocationsList
+            locations={serviceLocations}
+            serviceSlug={service.slug}
+            title="Where we work"
+            initialLimit={24}
+          />
         )}
 
         {/* =================================================================== */}
