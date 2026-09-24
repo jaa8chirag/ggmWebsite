@@ -327,7 +327,7 @@ export const DB_SETTINGS: SiteSettingsModel = {
   "msme": "UDYAM-DL-08-0098741",
   "indiamartSeal": "Verified Trust Seal Member",
   "justdialSeal": "Justdial Verified Enterprise",
-  "googleBusinessUrl": "https://maps.google.com/?cid=ggmtechnologies",
+  "googleBusinessUrl": "https://www.google.com/maps/place/GGM+TECHNOLOGIES/@28.5586016,77.1970418,16z/data=!4m10!1m2!2m1!1s4th+Floor,+400-A,+12+Ajit+Singh+House,+Yusuf+Sarai+Commercial+Complex,+Green+Park+,+New+Delhi+110016!3m6!1s0xacd4b1dfe9650407:0x198cc7ca266d7621!8m2!3d28.5586016!4d77.206569!15sCmQ0dGggRmxvb3IsIDQwMC1BLCAxMiBBaml0IFNpbmdoIEhvdXNlLCBZdXN1ZiBTYXJhaSBDb21tZXJjaWFsIENvbXBsZXgsIEdyZWVuIFBhcmsgLCBOZXcgRGVsaGkgMTEwMDE2WmAiXjR0aCBmbG9vciA0MDAgYSAxMiBhaml0IHNpbmdoIGhvdXNlIHl1c3VmIHNhcmFpIGNvbW1lcmNpYWwgY29tcGxleCBncmVlbiBwYXJrIG5ldyBkZWxoaSAxMTAwMTaSARB3ZWJzaXRlX2Rlc2lnbmVy4AEA!16s%2Fg%2F11z30lcyz1",
   "ceoName": "Guru Govind Mahesh",
   "ceoTitle": "Founder & Chief Executive Officer",
   "ceoBio": "Driven by an uncompromising commitment to transparent, numbers backed digital growth, Guru Govind Mahesh founded GGM Technologies to bridge the gap between creative marketing strategy and hardcore engineering precision. With over a decade of hands-on experience scaling D2C brands, B2B enterprises, and multinational eCommerce storefronts, he leads the agency with an algorithmic, ROI-first mindset.",
