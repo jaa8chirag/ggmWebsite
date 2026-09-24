@@ -21,6 +21,23 @@ export default async function ContactPage() {
     getServices(),
   ]);
 
+  const fullAddress = [
+    settings.addressLine1,
+    settings.addressLine2,
+    settings.addressLine3,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  const mapQuery = encodeURIComponent(
+    fullAddress ||
+      "4th Floor, 400-A, 12 Ajit Singh House, Yusuf Sarai Commercial Complex, Green Park, New Delhi 110016"
+  );
+  const mapEmbedUrl = `https://maps.google.com/maps?q=${mapQuery}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
+  const mapDirectUrl =
+    settings.googleBusinessUrl ||
+    `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+
   return (
     <div className="bg-ink py-32 md:py-40">
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-16 px-6 md:grid-cols-2 md:px-10">
@@ -42,7 +59,10 @@ export default async function ContactPage() {
               <p className="text-mono-label uppercase tracking-widest text-flow">
                 Phone
               </p>
-              <a href={settings.phoneHref} className="mt-1 block text-chalk">
+              <a
+                href={settings.phoneHref}
+                className="mt-1 block text-chalk transition-colors hover:text-flow"
+              >
                 {settings.phone}
               </a>
             </div>
@@ -52,15 +72,25 @@ export default async function ContactPage() {
               </p>
               <a
                 href={`mailto:${settings.email}`}
-                className="mt-1 block text-chalk"
+                className="mt-1 block text-chalk transition-colors hover:text-flow"
               >
                 {settings.email}
               </a>
             </div>
             <div>
-              <p className="text-mono-label uppercase tracking-widest text-flow">
-                Address
-              </p>
+              <div className="flex items-center justify-between">
+                <p className="text-mono-label uppercase tracking-widest text-flow">
+                  Address &amp; Location
+                </p>
+                <a
+                  href={mapDirectUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs text-flow hover:underline"
+                >
+                  Open in Google Maps ↗
+                </a>
+              </div>
               <p className="mt-1 text-chalk">
                 {settings.addressLine1}
                 <br />
@@ -68,6 +98,18 @@ export default async function ContactPage() {
                 <br />
                 {settings.addressLine3}
               </p>
+              <div className="mt-3 overflow-hidden rounded-xl border border-chalk/15 shadow-md">
+                <iframe
+                  title="GGM Technologies Office Location"
+                  width="100%"
+                  height="220"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                  src={mapEmbedUrl}
+                />
+              </div>
             </div>
             <div>
               <p className="text-mono-label uppercase tracking-widest text-flow">

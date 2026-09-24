@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone } from "lucide-react";
 import {
   WhatsAppIcon,
   LinkedInIcon,
@@ -35,7 +35,7 @@ export default async function Footer() {
   return (
     <footer className="border-t border-chalk/20 bg-ink">
       <div className="mx-auto max-w-[1440px] px-6 py-12 md:px-10 md:py-14">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-5 md:gap-8">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-8">
           {/* Brand & Bio */}
           <div className="col-span-2 md:col-span-2">
             <div className="flex items-center gap-2.5">
@@ -158,49 +158,6 @@ export default async function Footer() {
                 >
                   Disclaimer &amp; Terms
                 </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact Details */}
-          <div>
-            <p className="font-mono text-mono-label uppercase tracking-widest text-flow">
-              Contact
-            </p>
-            <ul className="mt-4 space-y-2.5 font-body text-sm text-muted">
-              <li>
-                <a
-                  href={settings.phoneHref}
-                  className="inline-flex items-center gap-1.5 transition-colors hover:text-chalk"
-                >
-                  <Phone size={13} className="text-flow" />
-                  {settings.phone}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`mailto:${settings.email}`}
-                  className="inline-flex items-center gap-1.5 transition-colors hover:text-chalk"
-                >
-                  <Mail size={13} className="text-flow" />
-                  {settings.email}
-                </a>
-              </li>
-              <li className="leading-snug">
-                <span className="inline-flex items-start gap-1.5">
-                  <MapPin size={13} className="text-flow shrink-0 mt-1" />
-                  <span>
-                    {settings.addressLine1}
-                    <br />
-                    {settings.addressLine2}
-                    <br />
-                    {settings.addressLine3}
-                  </span>
-                </span>
-              </li>
-              <li>{settings.businessHours}</li>
-              <li className="font-mono text-xs text-muted/70">
-                GSTIN: {settings.gst}
               </li>
             </ul>
           </div>
