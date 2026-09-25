@@ -32,6 +32,7 @@ interface LeadDetailDrawerProps {
 
 const STATUS_LABELS: Record<CrmLeadStatus, { label: string; color: string; border: string }> = {
   NEW: { label: "New Lead", color: "bg-blue-500/20 text-blue-400", border: "border-blue-500/30" },
+  HOT_DEAL: { label: "Hot Deal 🔥", color: "bg-orange-500/20 text-orange-400", border: "border-orange-500/30" },
   IN_DISCUSSION: { label: "In Discussion", color: "bg-yellow-500/20 text-yellow-400", border: "border-yellow-500/30" },
   QUOTATION_SENT: { label: "Quotation Sent", color: "bg-purple-500/20 text-purple-400", border: "border-purple-500/30" },
   FOLLOWUP_SCHEDULED: { label: "Follow-up Set", color: "bg-cyan-500/20 text-cyan-400", border: "border-cyan-500/30" },
@@ -180,58 +181,58 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-black/70 backdrop-blur-md animate-fadeIn">
-      <div className="absolute inset-y-0 right-0 max-w-full flex pl-0 sm:pl-6">
+      <div className="absolute inset-y-0 right-0 max-w-full flex pl-0 sm:pl-6 md:pl-10">
         {/* Expanded Drawer Width to max-w-4xl */}
-        <div className="w-screen max-w-full lg:max-w-4xl bg-surface border-l border-chalk/20 shadow-2xl flex flex-col justify-between">
+        <div className="w-screen max-w-full md:max-w-2xl lg:max-w-4xl bg-surface border-l border-chalk/20 shadow-2xl flex flex-col justify-between">
           
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-chalk/15 px-4 py-4 sm:px-8 sm:py-5 bg-ink/80">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-flow/20 text-flow border border-flow/30 font-bold font-mono">
-                <User size={24} />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-chalk/15 px-4 py-3.5 sm:px-6 md:px-8 sm:py-5 bg-ink/80">
+            <div className="flex items-start sm:items-center gap-3.5 min-w-0">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-2xl bg-flow/20 text-flow border border-flow/30 font-bold font-mono">
+                <User size={22} className="sm:w-6 sm:h-6" />
               </div>
-              <div>
-                <div className="flex items-center gap-3">
-                  <h2 className="font-heading text-xl font-bold text-chalk truncate max-w-xs">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="font-heading text-lg sm:text-xl font-bold text-chalk truncate max-w-[180px] sm:max-w-xs">
                     {lead.name}
                   </h2>
-                  <span className={`rounded-full px-3 py-1 font-mono text-xs uppercase tracking-wider font-semibold border ${STATUS_LABELS[status].color} ${STATUS_LABELS[status].border}`}>
+                  <span className={`rounded-full px-2.5 py-0.5 font-mono text-[0.7rem] uppercase tracking-wider font-semibold border ${STATUS_LABELS[status].color} ${STATUS_LABELS[status].border}`}>
                     {STATUS_LABELS[status].label}
                   </span>
-                  <span className={`rounded-full px-2.5 py-0.5 font-mono text-[0.65rem] uppercase font-bold ${PAYMENT_LABELS[paymentStatus].bg} ${PAYMENT_LABELS[paymentStatus].text}`}>
+                  <span className={`rounded-full px-2 py-0.5 font-mono text-[0.65rem] uppercase font-bold ${PAYMENT_LABELS[paymentStatus].bg} ${PAYMENT_LABELS[paymentStatus].text}`}>
                     {PAYMENT_LABELS[paymentStatus].label}
                   </span>
                 </div>
-                <p className="font-mono text-xs text-muted flex items-center gap-2 mt-1">
-                  <Briefcase size={13} className="text-flow" /> {lead.serviceTitle}
-                  <span className="text-chalk/30">•</span>
-                  <Tag size={13} className="text-muted" /> Source: <strong className="text-chalk">{lead.source}</strong>
+                <p className="font-mono text-[0.7rem] sm:text-xs text-muted flex flex-wrap items-center gap-2 mt-1">
+                  <span className="flex items-center gap-1"><Briefcase size={12} className="text-flow shrink-0" /> {lead.serviceTitle}</span>
+                  <span className="text-chalk/30 hidden sm:inline">•</span>
+                  <span className="flex items-center gap-1"><Tag size={12} className="text-muted shrink-0" /> Source: <strong className="text-chalk">{lead.source}</strong></span>
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5 self-end sm:self-center shrink-0">
               <button
                 onClick={handleSaveLead}
                 disabled={isUpdating}
-                className="rounded-xl bg-flow px-5 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-ink transition-all hover:bg-flow/90 disabled:opacity-50 shadow-md shadow-flow/20"
+                className="rounded-xl bg-flow px-4 py-2 sm:px-5 sm:py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-ink transition-all hover:bg-flow/90 disabled:opacity-50 shadow-md shadow-flow/20 cursor-pointer"
               >
                 {isUpdating ? "Saving..." : "Save All Changes"}
               </button>
               <button
                 onClick={onClose}
-                className="rounded-xl p-2 text-muted transition-colors hover:bg-ink hover:text-chalk"
+                className="rounded-xl p-2 text-muted transition-colors hover:bg-ink hover:text-chalk cursor-pointer"
               >
-                <X size={22} />
+                <X size={20} />
               </button>
             </div>
           </div>
 
-          {/* Body Content - 2 Column Layout */}
+          {/* Body Content - 2 Column Layout on large, clean stacked on tablet */}
           <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
             
             {/* LEFT COLUMN: Controls, Pricing & Payments (7 Cols) */}
-            <div className="lg:col-span-7 space-y-6 border-r border-chalk/10 pr-0 lg:pr-6">
+            <div className="lg:col-span-7 space-y-6 lg:border-r lg:border-chalk/10 lg:pr-6">
 
               {/* Client Contact & Company Details */}
               <div className="rounded-2xl border border-chalk/15 bg-ink/40 p-4 space-y-3">
@@ -295,6 +296,7 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                   className="w-full rounded-xl border border-chalk/20 bg-surface px-4 py-2.5 font-body text-sm font-semibold text-chalk focus:border-flow focus:outline-none"
                 >
                   <option value="NEW">New Lead (Fresh Inquiry)</option>
+                  <option value="HOT_DEAL">Hot Deal 🔥 (High Priority)</option>
                   <option value="IN_DISCUSSION">In Discussion (Talks Ongoing)</option>
                   <option value="QUOTATION_SENT">Quotation Sent</option>
                   <option value="FOLLOWUP_SCHEDULED">Follow-up Scheduled</option>
@@ -422,26 +424,26 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                     onChange={(e) => setNextPaymentDate(e.target.value)}
                     className="w-full rounded-xl border border-amber-500/30 bg-surface px-3 py-2 font-body text-xs text-chalk focus:border-amber-400 focus:outline-none"
                   />
-                  <div className="flex items-center gap-2 mt-2 font-mono text-[0.65rem]">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-2 font-mono text-[0.65rem]">
                     <span className="text-muted">Quick Set:</span>
                     <button
                       type="button"
                       onClick={() => setPresetPaymentDate(3)}
-                      className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-amber-400 border border-chalk/20"
+                      className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-amber-400 border border-chalk/20 cursor-pointer"
                     >
                       In 3 Days
                     </button>
                     <button
                       type="button"
                       onClick={() => setPresetPaymentDate(7)}
-                      className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-amber-400 border border-chalk/20"
+                      className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-amber-400 border border-chalk/20 cursor-pointer"
                     >
                       In 7 Days
                     </button>
                     <button
                       type="button"
                       onClick={() => setPresetPaymentDate(15)}
-                      className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-amber-400 border border-chalk/20"
+                      className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-amber-400 border border-chalk/20 cursor-pointer"
                     >
                       In 15 Days
                     </button>
@@ -471,26 +473,26 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                   onChange={(e) => setNextFollowUp(e.target.value)}
                   className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs text-chalk focus:border-flow focus:outline-none"
                 />
-                <div className="flex items-center gap-2 font-mono text-[0.65rem]">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 font-mono text-[0.65rem]">
                   <span className="text-muted">Quick Set:</span>
                   <button
                     type="button"
                     onClick={() => setPresetFollowUp(1)}
-                    className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20"
+                    className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20 cursor-pointer"
                   >
                     Tomorrow 11 AM
                   </button>
                   <button
                     type="button"
                     onClick={() => setPresetFollowUp(3)}
-                    className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20"
+                    className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20 cursor-pointer"
                   >
                     In 3 Days
                   </button>
                   <button
                     type="button"
                     onClick={() => setPresetFollowUp(7)}
-                    className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20"
+                    className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20 cursor-pointer"
                   >
                     Next Week
                   </button>
@@ -564,26 +566,26 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
           </div>
 
           {/* Drawer Footer */}
-          <div className="border-t border-chalk/15 px-8 py-4 bg-ink/90 flex items-center justify-between">
+          <div className="border-t border-chalk/15 px-4 sm:px-6 md:px-8 py-3.5 sm:py-4 bg-ink/90 flex flex-wrap items-center justify-between gap-3">
             <button
               onClick={handleDelete}
               disabled={isDeleting}
-              className="flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-2 font-mono text-xs text-rose-400 transition-colors hover:bg-rose-500/20 disabled:opacity-50"
+              className="flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3.5 py-2 font-mono text-xs text-rose-400 transition-colors hover:bg-rose-500/20 disabled:opacity-50 cursor-pointer"
             >
-              <Trash2 size={15} /> Delete Lead
+              <Trash2 size={14} /> Delete Lead
             </button>
             
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5 sm:gap-3">
               <button
                 onClick={onClose}
-                className="rounded-xl border border-chalk/20 px-5 py-2 font-mono text-xs uppercase tracking-wider text-muted hover:text-chalk"
+                className="rounded-xl border border-chalk/20 px-4 sm:px-5 py-2 font-mono text-xs uppercase tracking-wider text-muted hover:text-chalk cursor-pointer"
               >
                 Close
               </button>
               <button
                 onClick={handleSaveLead}
                 disabled={isUpdating}
-                className="rounded-xl bg-flow px-6 py-2 font-mono text-xs font-bold uppercase tracking-wider text-ink transition-all hover:bg-flow/90 disabled:opacity-50"
+                className="rounded-xl bg-flow px-5 sm:px-6 py-2 font-mono text-xs font-bold uppercase tracking-wider text-ink transition-all hover:bg-flow/90 disabled:opacity-50 cursor-pointer"
               >
                 {isUpdating ? "Saving..." : "Save Changes"}
               </button>

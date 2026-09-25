@@ -50,37 +50,37 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm animate-fadeIn">
-      <div className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-chalk/20 bg-surface shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3 sm:p-4 backdrop-blur-sm animate-fadeIn">
+      <div className="relative w-full max-w-full sm:max-w-2xl lg:max-w-3xl overflow-hidden rounded-2xl border border-chalk/20 bg-surface shadow-2xl flex flex-col max-h-[92vh]">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-chalk/15 px-6 py-4 bg-ink/60">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-flow/20 text-flow border border-flow/30">
-              <User size={20} />
+        <div className="flex items-center justify-between border-b border-chalk/15 px-4 sm:px-6 py-3.5 sm:py-4 bg-ink/60 shrink-0">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl bg-flow/20 text-flow border border-flow/30">
+              <User size={18} className="sm:w-5 sm:h-5" />
             </div>
-            <div>
-              <h3 className="font-heading text-lg font-bold text-chalk">Add Manual Lead</h3>
-              <p className="font-mono text-xs text-muted">Create offline call, WhatsApp, or referral lead with full payment tracking</p>
+            <div className="min-w-0">
+              <h3 className="font-heading text-base sm:text-lg font-bold text-chalk truncate">Add Manual Lead</h3>
+              <p className="font-mono text-[0.65rem] sm:text-xs text-muted truncate">Create offline call, WhatsApp, or referral lead with full payment tracking</p>
             </div>
           </div>
           <button
             onClick={onClose}
             type="button"
-            className="rounded-lg p-2 text-muted transition-colors hover:bg-ink hover:text-chalk"
+            className="rounded-lg p-2 text-muted transition-colors hover:bg-ink hover:text-chalk cursor-pointer shrink-0"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Form body */}
-        <form onSubmit={handleSubmit} className="max-h-[82vh] overflow-y-auto p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-5">
           {error && (
             <div className="rounded-xl border border-signal/40 bg-signal/10 p-3 text-xs font-mono text-signal">
               {error}
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
             {/* Lead Name */}
             <div>
               <label className="block font-mono text-xs text-muted mb-1 font-semibold uppercase tracking-wider">
@@ -222,6 +222,7 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
                 className="w-full rounded-xl border border-chalk/20 bg-ink px-3.5 py-2.5 font-body text-sm text-chalk focus:border-flow focus:outline-none"
               >
                 <option value="NEW">New Lead (Fresh Inquiry)</option>
+                <option value="HOT_DEAL">Hot Deal 🔥 (High Priority)</option>
                 <option value="IN_DISCUSSION">In Discussion (Talks Ongoing)</option>
                 <option value="QUOTATION_SENT">Quotation Sent</option>
                 <option value="FOLLOWUP_SCHEDULED">Follow-up Scheduled</option>
@@ -237,7 +238,7 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
               <CreditCard size={14} /> Pricing & Advance Payment Controls
             </h4>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
               {/* Approx Amount */}
               <div>
                 <label className="block font-mono text-xs text-muted mb-1 font-medium">
@@ -265,7 +266,7 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-chalk/10 pt-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 border-t border-chalk/10 pt-3">
               {/* Advance Paid */}
               <div>
                 <label className="block font-mono text-xs text-emerald-400 mb-1 font-semibold">
@@ -310,7 +311,7 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
             </div>
 
             {/* Follow-ups & Payment Collection Date */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-chalk/10 pt-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 border-t border-chalk/10 pt-3">
               {/* Quotation Sent Toggle */}
               <div className="flex items-center gap-2 mt-6">
                 <input
@@ -365,18 +366,18 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-chalk/15">
+          <div className="flex items-center justify-end gap-2.5 sm:gap-3 pt-3 border-t border-chalk/15">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-chalk/25 px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-muted transition-colors hover:bg-ink hover:text-chalk"
+              className="rounded-xl border border-chalk/25 px-4 sm:px-5 py-2 sm:py-2.5 font-mono text-xs uppercase tracking-wider text-muted transition-colors hover:bg-ink hover:text-chalk cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="rounded-xl bg-flow px-6 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-ink transition-all hover:bg-flow/90 disabled:opacity-50"
+              className="rounded-xl bg-flow px-5 sm:px-6 py-2 sm:py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-ink transition-all hover:bg-flow/90 disabled:opacity-50 cursor-pointer"
             >
               {loading ? "Saving Lead..." : "Save Lead to CRM"}
             </button>

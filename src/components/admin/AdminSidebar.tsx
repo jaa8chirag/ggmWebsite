@@ -150,8 +150,8 @@ export default function AdminSidebar({ adminEmail }: AdminSidebarProps) {
 
   return (
     <>
-      {/* MOBILE TOP HEADER BAR (Only visible on screens < lg) */}
-      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-chalk/20 bg-surface/95 px-4 py-3 backdrop-blur lg:hidden">
+      {/* MOBILE & TABLET TOP HEADER BAR (Only visible on screens < lg) */}
+      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-chalk/20 bg-surface/95 px-4 sm:px-6 py-3 backdrop-blur lg:hidden">
         <Link href="/admin" className="flex items-center gap-2">
           <Image
             src="/logo/ggm-logo.png"
@@ -167,7 +167,7 @@ export default function AdminSidebar({ adminEmail }: AdminSidebarProps) {
 
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex items-center gap-2 rounded-xl border border-chalk/20 bg-ink px-3 py-2 font-mono text-xs font-semibold text-chalk hover:text-flow"
+          className="flex items-center gap-2 rounded-xl border border-chalk/20 bg-ink px-3 py-2 font-mono text-xs font-semibold text-chalk hover:text-flow cursor-pointer"
         >
           {mobileOpen ? <X size={18} /> : <Menu size={18} />}
           <span>Menu</span>
@@ -179,7 +179,7 @@ export default function AdminSidebar({ adminEmail }: AdminSidebarProps) {
         {renderNavContent()}
       </aside>
 
-      {/* MOBILE SLIDE-OVER DRAWER (Only when mobileOpen is true) */}
+      {/* MOBILE & TABLET SLIDE-OVER DRAWER (Only when mobileOpen is true) */}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
           {/* Backdrop Blur */}
@@ -189,11 +189,11 @@ export default function AdminSidebar({ adminEmail }: AdminSidebarProps) {
           />
 
           {/* Drawer Sidebar */}
-          <div className="relative flex w-4/5 max-w-xs flex-1 flex-col bg-surface shadow-2xl z-10 border-r border-chalk/20">
+          <div className="relative flex w-4/5 max-w-xs sm:max-w-sm flex-1 flex-col bg-surface shadow-2xl z-10 border-r border-chalk/20">
             <div className="absolute right-3 top-3">
               <button
                 onClick={() => setMobileOpen(false)}
-                className="rounded-lg p-2 text-muted hover:bg-ink hover:text-chalk"
+                className="rounded-lg p-2 text-muted hover:bg-ink hover:text-chalk cursor-pointer"
               >
                 <X size={20} />
               </button>

@@ -60,8 +60,8 @@ export default async function AdminDashboardLayout({
       <AdminSidebar adminEmail={admin.email} />
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
-        <div className="mx-auto max-w-[1280px]">{children}</div>
+      <main className="flex-1 overflow-y-auto px-3.5 py-4 sm:px-6 sm:py-6 md:px-8 md:py-8 lg:px-10 lg:py-10 min-w-0">
+        <div className="mx-auto max-w-[1280px] w-full min-w-0">{children}</div>
       </main>
     </div>
   );

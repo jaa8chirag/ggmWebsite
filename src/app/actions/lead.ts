@@ -208,7 +208,7 @@ export async function updateLeadAction(
     // Also sync back to QuoteRequest if connected
     if (existing.quoteRequestId) {
       let quoteStatus = "PENDING";
-      if (status === "IN_DISCUSSION" || status === "QUOTATION_SENT" || status === "FOLLOWUP_SCHEDULED") {
+      if (status === "IN_DISCUSSION" || status === "QUOTATION_SENT" || status === "FOLLOWUP_SCHEDULED" || status === "HOT_DEAL") {
         quoteStatus = "CONTACTED";
       } else if (status === "WON") {
         quoteStatus = "CONVERTED";

@@ -221,6 +221,7 @@ export interface QuoteRequest {
 export type CrmLeadStatus =
   | "NEW"
   | "IN_DISCUSSION"
+  | "HOT_DEAL"
   | "QUOTATION_SENT"
   | "FOLLOWUP_SCHEDULED"
   | "WON"
