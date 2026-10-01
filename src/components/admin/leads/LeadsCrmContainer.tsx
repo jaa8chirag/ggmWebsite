@@ -138,10 +138,10 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
         </div>
       </div>
 
-      {/* Filter Tabs, Sort & View Controls */}
-      <div className="flex flex-col gap-3.5 lg:flex-row lg:items-center lg:justify-between border-b border-chalk/15 pb-4 min-w-0">
-        {/* Status Tabs - Smooth horizontal touch-scroll on tablet & mobile */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full [scrollbar-width:none] [-ms-overflow-style:none]">
+      {/* Filter Tabs & Search Controls */}
+      <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3.5 border-b border-chalk/15 pb-4 min-w-0">
+        {/* Status Tabs - Wrap cleanly so every tab is 100% visible and never hidden */}
+        <div className="flex flex-wrap items-center gap-2 min-w-0">
           {STATUS_FILTERS.map((tab) => {
             const isActive = selectedFilter === tab.id;
             return (
@@ -151,7 +151,7 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                   setSelectedFilter(tab.id);
                   setCurrentPage(1);
                 }}
-                className={`shrink-0 whitespace-nowrap rounded-xl px-3 py-2 font-mono text-xs font-semibold transition-all cursor-pointer ${
+                className={`shrink-0 whitespace-nowrap rounded-xl px-3.5 py-2 font-mono text-xs font-semibold transition-all cursor-pointer ${
                   isActive
                     ? "bg-flow text-ink shadow-md font-bold"
                     : "bg-surface text-muted border border-chalk/15 hover:border-chalk/30 hover:text-chalk"
@@ -164,7 +164,7 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
         </div>
 
         {/* Search Box */}
-        <div className="relative w-full sm:w-72 lg:w-80 min-w-[200px]">
+        <div className="relative w-full xl:w-80 min-w-[240px] shrink-0">
           <Search size={15} className="absolute left-3.5 top-2.5 text-muted" />
           <input
             type="text"
