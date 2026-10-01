@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -21,6 +21,8 @@ import {
   Users,
   Menu,
   X,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { logoutAction } from "@/app/admin/actions";
 
@@ -55,51 +57,132 @@ const NAV_GROUPS = [
 
 export default function AdminSidebar({ adminEmail }: AdminSidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
 
-  const renderNavContent = () => (
-    <div className="flex h-full flex-col justify-between overflow-y-auto px-6 py-6">
-      <div>
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("ggm_admin_sidebar_collapsed");
+      if (saved === "true") {
+        setIsCollapsed(true);
+      }
+    } catch (e) {}
+  }, []);
+
+  const toggleCollapsed = () => {
+    setIsCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem("ggm_admin_sidebar_collapsed", String(next));
+      } catch (e) {}
+      return next;
+    });
+  };
+
+  const renderNavContent = (collapsed: boolean = false) => (
+    <div className={`flex h-full flex-col justify-between overflow-y-auto ${collapsed ? "px-3 py-5 items-center" : "px-6 py-6"}`}>
+      <div className="w-full">
         {/* Brand Header */}
-        <div className="flex items-center justify-between">
-          <Link href="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-3">
-            <Image
-              src="/logo/ggm-logo.png"
-              alt="GGM Technologies"
-              width={140}
-              height={50}
-              className="h-8 w-auto object-contain"
-            />
-          </Link>
-          <span className="rounded-full bg-signal/15 px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-widest text-signal font-semibold border border-signal/30">
-            CMS Admin
-          </span>
+        <div className={`flex items-center ${collapsed ? "flex-col gap-3 justify-center" : "justify-between"}`}>
+          {!collapsed ? (
+            <>
+              <Link href="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 min-w-0">
+                <Image
+                  src="/logo/ggm-logo.png"
+                  alt="GGM Technologies"
+                  width={130}
+                  height={45}
+                  className="h-8 w-auto object-contain"
+                />
+              </Link>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className="hidden sm:inline-block rounded-full bg-signal/15 px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-widest text-signal font-semibold border border-signal/30">
+                  Admin
+                </span>
+                <button
+                  type="button"
+                  onClick={toggleCollapsed}
+                  title="Collapse left slider"
+                  className="hidden lg:flex h-8 w-8 items-center justify-center rounded-xl border border-chalk/20 bg-ink/60 text-muted hover:text-flow hover:border-flow transition-colors cursor-pointer"
+                >
+                  <PanelLeftClose size={16} />
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col items-center gap-3">
+              <Link href="/admin" title="GGM Admin" className="flex h-10 w-10 items-center justify-center rounded-2xl bg-flow/15 text-flow font-heading font-black text-lg border border-flow/30">
+                G
+              </Link>
+              <button
+                type="button"
+                onClick={toggleCollapsed}
+                title="Expand left slider"
+                className="flex h-8 w-8 items-center justify-center rounded-xl border border-chalk/20 bg-ink/80 text-muted hover:text-flow hover:border-flow transition-colors cursor-pointer"
+              >
+                <PanelLeftOpen size={16} />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Live Site Link */}
-        <a
-          href="/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 flex items-center justify-between rounded-xl border border-chalk/25 bg-ink/60 px-4 py-2.5 font-mono text-xs text-muted transition-colors hover:border-flow hover:text-flow"
-        >
-          <span className="flex items-center gap-2">
-            <GlobeIcon className="h-3.5 w-3.5 text-flow" /> View Public Site
-          </span>
-          <ExternalLink size={12} />
-        </a>
+        {!collapsed ? (
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 flex items-center justify-between rounded-xl border border-chalk/25 bg-ink/60 px-4 py-2.5 font-mono text-xs text-muted transition-colors hover:border-flow hover:text-flow"
+          >
+            <span className="flex items-center gap-2">
+              <GlobeIcon className="h-3.5 w-3.5 text-flow" /> View Public Site
+            </span>
+            <ExternalLink size={12} />
+          </a>
+        ) : (
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="View Public Site"
+            className="mt-4 flex h-10 w-10 items-center justify-center rounded-xl border border-chalk/25 bg-ink/60 text-muted hover:border-flow hover:text-flow mx-auto transition-colors"
+          >
+            <GlobeIcon className="h-4 w-4 text-flow" />
+          </a>
+        )}
 
         {/* Navigation Groups */}
-        <nav className="mt-8 space-y-7">
+        <nav className={`space-y-6 ${collapsed ? "mt-5" : "mt-8"}`}>
           {NAV_GROUPS.map((group) => (
             <div key={group.label}>
-              <p className="px-3 font-mono text-[0.65rem] uppercase tracking-widest text-muted/70 font-semibold">
-                {group.label}
-              </p>
-              <ul className="mt-2.5 space-y-1">
+              {!collapsed && (
+                <p className="px-3 font-mono text-[0.65rem] uppercase tracking-widest text-muted/70 font-semibold mb-2">
+                  {group.label}
+                </p>
+              )}
+              <ul className="space-y-1.5">
                 {group.links.map((link) => {
                   const Icon = link.icon;
                   const isActive = pathname === link.href;
+
+                  if (collapsed) {
+                    return (
+                      <li key={link.href}>
+                        <Link
+                          href={link.href}
+                          title={link.label}
+                          className={`flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-200 mx-auto ${
+                            isActive
+                              ? "bg-flow text-ink font-bold shadow-md shadow-flow/20"
+                              : "text-chalk hover:bg-ink hover:text-flow border border-transparent hover:border-chalk/20"
+                          }`}
+                        >
+                          <Icon size={18} className={isActive ? "text-ink" : "text-muted/80"} />
+                        </Link>
+                      </li>
+                    );
+                  }
+
                   return (
                     <li key={link.href}>
                       <Link
@@ -112,7 +195,7 @@ export default function AdminSidebar({ adminEmail }: AdminSidebarProps) {
                         }`}
                       >
                         <Icon size={18} className={isActive ? "text-ink" : "text-muted/80"} />
-                        <span>{link.label}</span>
+                        <span className="truncate">{link.label}</span>
                       </Link>
                     </li>
                   );
@@ -124,26 +207,40 @@ export default function AdminSidebar({ adminEmail }: AdminSidebarProps) {
       </div>
 
       {/* Admin Footer & Logout */}
-      <div className="border-t border-chalk/25 pt-5 mt-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-flow/15 text-flow font-mono font-bold text-xs border border-flow/30">
-            <ShieldCheck size={18} />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate font-mono text-xs font-semibold text-chalk">{adminEmail}</p>
-            <p className="font-mono text-[0.65rem] text-muted">Super Admin</p>
-          </div>
-        </div>
+      <div className={`border-t border-chalk/25 pt-4 mt-6 w-full ${collapsed ? "flex flex-col items-center" : ""}`}>
+        {!collapsed ? (
+          <>
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-flow/15 text-flow font-mono font-bold text-xs border border-flow/30">
+                <ShieldCheck size={18} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-mono text-xs font-semibold text-chalk">{adminEmail}</p>
+                <p className="font-mono text-[0.65rem] text-muted">Super Admin</p>
+              </div>
+            </div>
 
-        <form action={logoutAction} className="mt-4">
-          <button
-            type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-chalk/25 bg-ink/40 py-2 font-mono text-xs uppercase tracking-widest text-muted transition-all duration-200 hover:border-signal/50 hover:bg-signal/10 hover:text-signal"
-          >
-            <LogOut size={14} />
-            Sign out
-          </button>
-        </form>
+            <form action={logoutAction} className="mt-4">
+              <button
+                type="submit"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-chalk/25 bg-ink/40 py-2 font-mono text-xs uppercase tracking-widest text-muted transition-all duration-200 hover:border-signal/50 hover:bg-signal/10 hover:text-signal cursor-pointer"
+              >
+                <LogOut size={14} />
+                Sign out
+              </button>
+            </form>
+          </>
+        ) : (
+          <form action={logoutAction} className="flex justify-center">
+            <button
+              type="submit"
+              title="Sign out"
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-chalk/25 bg-ink/40 text-muted hover:border-signal/50 hover:bg-signal/10 hover:text-signal cursor-pointer transition-colors"
+            >
+              <LogOut size={16} />
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
@@ -174,9 +271,13 @@ export default function AdminSidebar({ adminEmail }: AdminSidebarProps) {
         </button>
       </header>
 
-      {/* DESKTOP SIDEBAR (Visible on screens >= lg) */}
-      <aside className="hidden lg:flex lg:sticky lg:top-0 lg:h-screen lg:w-72 lg:shrink-0 lg:flex-col lg:border-r-2 lg:border-chalk/30 lg:bg-surface lg:shadow-xl">
-        {renderNavContent()}
+      {/* DESKTOP SIDEBAR (Visible on screens >= lg) - Smooth toggle between w-72 and w-20 */}
+      <aside
+        className={`hidden lg:flex lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:flex-col lg:border-r-2 lg:border-chalk/30 lg:bg-surface lg:shadow-xl transition-all duration-300 ${
+          isCollapsed ? "lg:w-20" : "lg:w-72"
+        }`}
+      >
+        {renderNavContent(isCollapsed)}
       </aside>
 
       {/* MOBILE & TABLET SLIDE-OVER DRAWER (Only when mobileOpen is true) */}
@@ -198,7 +299,7 @@ export default function AdminSidebar({ adminEmail }: AdminSidebarProps) {
                 <X size={20} />
               </button>
             </div>
-            {renderNavContent()}
+            {renderNavContent(false)}
           </div>
         </div>
       )}

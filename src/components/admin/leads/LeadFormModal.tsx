@@ -224,8 +224,6 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
                 <option value="NEW">New Lead (Fresh Inquiry)</option>
                 <option value="HOT_DEAL">Hot Deal 🔥 (High Priority)</option>
                 <option value="IN_DISCUSSION">In Discussion (Talks Ongoing)</option>
-                <option value="QUOTATION_SENT">Quotation Sent</option>
-                <option value="FOLLOWUP_SCHEDULED">Follow-up Scheduled</option>
                 <option value="WON">Deal Won (Client Onboarded)</option>
                 <option value="LOST">Deal Lost</option>
               </select>
@@ -310,36 +308,9 @@ export default function LeadFormModal({ isOpen, onClose }: LeadFormModalProps) {
               </div>
             </div>
 
-            {/* Follow-ups & Payment Collection Date */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 border-t border-chalk/10 pt-3">
-              {/* Quotation Sent Toggle */}
-              <div className="flex items-center gap-2 mt-6">
-                <input
-                  type="checkbox"
-                  id="quotationSentModal"
-                  name="quotationSent"
-                  value="true"
-                  className="h-4 w-4 rounded border-chalk/30 bg-ink text-flow focus:ring-flow"
-                />
-                <label htmlFor="quotationSentModal" className="font-body text-xs text-chalk cursor-pointer select-none">
-                  Quotation Sent to Client?
-                </label>
-              </div>
-
-              {/* Next Call Follow Up */}
-              <div>
-                <label className="block font-mono text-xs text-muted mb-1 font-medium flex items-center gap-1.5">
-                  <Calendar size={12} className="text-flow" /> Next Call Follow-up
-                </label>
-                <input
-                  type="datetime-local"
-                  name="nextFollowUp"
-                  className="w-full rounded-xl border border-chalk/20 bg-ink px-3 py-2 font-body text-xs text-chalk focus:border-flow focus:outline-none"
-                />
-              </div>
-
-              {/* Next Payment Follow Up */}
-              <div>
+            {/* Next Payment Collection Date */}
+            <div className="border-t border-chalk/10 pt-3">
+              <div className="max-w-xs">
                 <label className="block font-mono text-xs text-muted mb-1 font-medium flex items-center gap-1.5">
                   <Calendar size={12} className="text-amber-400" /> Next Payment Due Date
                 </label>

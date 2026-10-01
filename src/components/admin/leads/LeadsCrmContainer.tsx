@@ -41,8 +41,6 @@ const STATUS_FILTERS: { id: CrmLeadStatus | "ALL"; label: string }[] = [
   { id: "NEW", label: "New Leads" },
   { id: "HOT_DEAL", label: "Hot Deals 🔥" },
   { id: "IN_DISCUSSION", label: "In Discussion" },
-  { id: "QUOTATION_SENT", label: "Quotation Sent" },
-  { id: "FOLLOWUP_SCHEDULED", label: "Follow-up Set" },
   { id: "WON", label: "Deals Won 🎉" },
   { id: "LOST", label: "Lost" },
 ];
@@ -63,25 +61,21 @@ const PAYMENT_BADGES: Record<PaymentStatus, { label: string; bg: string; text: s
   FULLY_PAID: { label: "Paid", bg: "bg-emerald-500/15", text: "text-emerald-400" },
 };
 
-type SortMode = "FOLLOWUP_PRIORITY" | "NEWEST" | "PAYMENT_DUE" | "HIGHEST_PRICE";
+type SortMode = "NEWEST" | "PAYMENT_DUE" | "HIGHEST_PRICE";
 
 const ITEMS_PER_PAGE = 10;
 
 export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmContainerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState<CrmLeadStatus | "ALL">("ALL");
-  const [sortMode, setSortMode] = useState<SortMode>("FOLLOWUP_PRIORITY");
+  const [sortMode, setSortMode] = useState<SortMode>("NEWEST");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list"); // Default to list view
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState<CrmLeadModel | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Filter & Priority Sort logic
+  // Filter & Sort logic
   const processedLeads = useMemo(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayStr = today.toISOString().slice(0, 10);
-
     const filtered = initialLeads.filter((lead) => {
       const matchesFilter = selectedFilter === "ALL" || lead.status === selectedFilter;
       const queryLower = searchQuery.toLowerCase().trim();
@@ -98,16 +92,6 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
     });
 
     return filtered.sort((a, b) => {
-      if (sortMode === "FOLLOWUP_PRIORITY") {
-        // Priority ranking: Overdue & Due Today first, then upcoming, then unscheduled
-        const getPriorityScore = (l: CrmLeadModel) => {
-          if (!l.nextFollowUp || l.status === "WON" || l.status === "LOST") return 9999999999999;
-          const dt = new Date(l.nextFollowUp).getTime();
-          return dt; // Earliest timestamp first
-        };
-        return getPriorityScore(a) - getPriorityScore(b);
-      }
-
       if (sortMode === "PAYMENT_DUE") {
         const getPayScore = (l: CrmLeadModel) => {
           if (!l.nextPaymentDate) return 9999999999999;
@@ -142,36 +126,6 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
     await updateLeadAction(leadId, { status: newStatus });
   }
 
-  // Get Follow Up urgency badge for a lead
-  function getFollowUpBadge(nextFollowUp?: string | null, status?: CrmLeadStatus) {
-    if (!nextFollowUp || status === "WON" || status === "LOST") return null;
-
-    const followUpDate = new Date(nextFollowUp);
-    const now = new Date();
-    const isToday = followUpDate.toDateString() === now.toDateString();
-    const isOverdue = followUpDate < now && !isToday;
-
-    if (isOverdue) {
-      return (
-        <span className="flex items-center gap-1 rounded-md bg-rose-500/20 px-2 py-0.5 font-mono text-[0.65rem] font-bold text-rose-400 border border-rose-500/40 animate-pulse">
-          <AlertTriangle size={11} /> OVERDUE
-        </span>
-      );
-    }
-    if (isToday) {
-      return (
-        <span className="flex items-center gap-1 rounded-md bg-amber-500/20 px-2 py-0.5 font-mono text-[0.65rem] font-bold text-amber-400 border border-amber-500/40">
-          <Clock size={11} /> DUE TODAY
-        </span>
-      );
-    }
-    return (
-      <span className="flex items-center gap-1 rounded-md bg-cyan-500/15 px-2 py-0.5 font-mono text-[0.65rem] font-semibold text-cyan-400 border border-cyan-500/30">
-        <Calendar size={11} /> UPCOMING
-      </span>
-    );
-  }
-
   return (
     <div className="space-y-6 sm:space-y-8 animate-fadeIn min-w-0">
       {/* Header & Main Actions */}
@@ -196,24 +150,12 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
         </button>
       </div>
 
-      {/* KPI Stats Bar - 2 cols on mobile, 3 cols on tablet, 6 cols on desktop */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5 lg:gap-4">
+      {/* KPI Stats Bar - 4 clean columns */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-2.5 sm:gap-3.5 lg:gap-4">
         <div className="rounded-2xl border border-chalk/15 bg-surface p-3 sm:p-4 space-y-1">
           <p className="font-mono text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider text-muted font-semibold">Total Leads</p>
           <p className="font-heading text-xl sm:text-2xl font-bold text-chalk">{stats.totalLeads}</p>
           <span className="font-mono text-[0.65rem] text-flow block truncate">Website + Manual</span>
-        </div>
-
-        <div className="rounded-2xl border border-chalk/15 bg-surface p-3 sm:p-4 space-y-1">
-          <p className="font-mono text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider text-muted font-semibold">Due Today</p>
-          <p className="font-heading text-xl sm:text-2xl font-bold text-amber-400">{stats.dueTodayCount}</p>
-          <span className="font-mono text-[0.65rem] text-amber-400/80 block truncate">Follow-up call</span>
-        </div>
-
-        <div className="rounded-2xl border border-chalk/15 bg-surface p-3 sm:p-4 space-y-1">
-          <p className="font-mono text-[0.65rem] sm:text-[0.7rem] uppercase tracking-wider text-muted font-semibold">Quotations</p>
-          <p className="font-heading text-xl sm:text-2xl font-bold text-purple-400">{stats.quotationsSentCount}</p>
-          <span className="font-mono text-[0.65rem] text-purple-400/80 block truncate">Sent active</span>
         </div>
 
         <div className="rounded-2xl border border-chalk/15 bg-surface p-3 sm:p-4 space-y-1">
@@ -277,7 +219,7 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
             />
           </div>
 
-          {/* Priority Sort Dropdown */}
+          {/* Sort Dropdown */}
           <div className="flex items-center gap-1.5 rounded-xl border border-chalk/20 bg-surface px-2.5 py-1.5 font-mono text-xs text-chalk shrink-0">
             <ArrowUpDown size={14} className="text-flow shrink-0" />
             <select
@@ -288,7 +230,6 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
               }}
               className="bg-transparent font-semibold focus:outline-none cursor-pointer max-w-[145px] sm:max-w-none truncate"
             >
-              <option value="FOLLOWUP_PRIORITY">Follow-up Priority</option>
               <option value="NEWEST">Newest First</option>
               <option value="PAYMENT_DUE">Payment Due Date</option>
               <option value="HIGHEST_PRICE">Highest Deal Value</option>
@@ -338,15 +279,13 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
             </div>
 
             <div className="overflow-x-auto w-full [-webkit-overflow-scrolling:touch]">
-              <table className="w-full min-w-[960px] text-left font-body text-xs border-collapse">
+              <table className="w-full min-w-[840px] text-left font-body text-xs border-collapse">
                 <thead>
                   <tr className="border-b border-chalk/15 bg-ink/70 font-mono text-[0.7rem] uppercase tracking-wider text-muted">
-                    <th className="py-3.5 px-4 font-semibold min-w-[220px]">Priority & Client</th>
+                    <th className="py-3.5 px-4 font-semibold min-w-[220px]">Client Details</th>
                     <th className="py-3.5 px-4 font-semibold min-w-[140px]">Service</th>
                     <th className="py-3.5 px-4 font-semibold min-w-[155px]">Pipeline Status</th>
                     <th className="py-3.5 px-4 font-semibold min-w-[140px]">Pricing & Advance</th>
-                    <th className="py-3.5 px-4 font-semibold min-w-[100px]">Quotation</th>
-                    <th className="py-3.5 px-4 font-semibold min-w-[125px]">Next Follow-up</th>
                     <th className="py-3.5 px-4 font-semibold min-w-[125px]">Next Payment</th>
                     <th className="py-3.5 px-4 font-semibold text-right min-w-[90px]">Actions</th>
                   </tr>
@@ -355,7 +294,6 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                   {paginatedLeads.map((lead) => {
                     const badge = STATUS_BADGES[lead.status] || STATUS_BADGES.NEW;
                     const payBadge = PAYMENT_BADGES[lead.paymentStatus] || PAYMENT_BADGES.PENDING;
-                    const urgencyBadge = getFollowUpBadge(lead.nextFollowUp, lead.status);
 
                     const cleanPhone = lead.phone.replace(/[^0-9]/g, "");
                     const waPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
@@ -367,15 +305,12 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                         className="hover:bg-ink/50 transition-colors group cursor-pointer"
                         onClick={() => setSelectedLead(lead)}
                       >
-                        {/* Client Info & Priority Badge */}
+                        {/* Client Info */}
                         <td className="py-3.5 px-4">
                           <div className="space-y-1">
-                            <div className="flex items-center gap-2">
-                              {urgencyBadge}
-                              <span className="font-heading font-bold text-chalk text-sm group-hover:text-flow transition-colors">
-                                {lead.name}
-                              </span>
-                            </div>
+                            <span className="font-heading font-bold text-chalk text-sm group-hover:text-flow transition-colors">
+                              {lead.name}
+                            </span>
                             <div className="flex flex-wrap items-center gap-2 font-mono text-[0.7rem] text-muted">
                               <a
                                 href={waUrl}
@@ -409,8 +344,6 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                             <option value="NEW">New Lead</option>
                             <option value="HOT_DEAL">Hot Deal 🔥</option>
                             <option value="IN_DISCUSSION">In Discussion</option>
-                            <option value="QUOTATION_SENT">Quotation Sent</option>
-                            <option value="FOLLOWUP_SCHEDULED">Follow-up Set</option>
                             <option value="WON">Deal Won 🎉</option>
                             <option value="LOST">Deal Lost</option>
                           </select>
@@ -427,35 +360,6 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                               <span className="text-amber-400">Bal: {lead.balanceDue || "₹0"}</span>
                             </div>
                           </div>
-                        </td>
-
-                        {/* Quotation Sent Badge */}
-                        <td className="py-3.5 px-4 font-mono text-xs">
-                          <span
-                            className={`px-2 py-0.5 rounded text-[0.65rem] uppercase font-bold ${
-                              lead.quotationSent
-                                ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                                : "bg-chalk/10 text-muted"
-                            }`}
-                          >
-                            {lead.quotationSent ? "YES SENT" : "PENDING"}
-                          </span>
-                        </td>
-
-                        {/* Next Follow Up Date */}
-                        <td className="py-3.5 px-4 font-mono text-xs">
-                          {lead.nextFollowUp ? (
-                            <div className="text-chalk">
-                              {new Date(lead.nextFollowUp).toLocaleDateString("en-IN", {
-                                month: "short",
-                                day: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
-                            </div>
-                          ) : (
-                            <span className="text-muted/50">—</span>
-                          )}
                         </td>
 
                         {/* Next Payment Date */}
@@ -495,7 +399,6 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {paginatedLeads.map((lead) => {
               const badge = STATUS_BADGES[lead.status] || STATUS_BADGES.NEW;
-              const urgencyBadge = getFollowUpBadge(lead.nextFollowUp, lead.status);
 
               return (
                 <div
@@ -506,7 +409,6 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 mb-1">{urgencyBadge}</div>
                         <h3 className="font-heading text-base font-bold text-chalk group-hover:text-flow transition-colors truncate">
                           {lead.name}
                         </h3>
@@ -546,23 +448,7 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                   </div>
 
                   <div className="space-y-2.5 pt-2 border-t border-chalk/10">
-                    <div className="flex items-center justify-between font-mono text-[0.7rem]">
-                      <span className="text-muted">
-                        Quotation:{" "}
-                        <strong className={lead.quotationSent ? "text-emerald-400" : "text-amber-400/80"}>
-                          {lead.quotationSent ? "SENT" : "PENDING"}
-                        </strong>
-                      </span>
-
-                      {lead.nextFollowUp && (
-                        <span className="flex items-center gap-1 text-cyan-400 font-semibold">
-                          <Calendar size={11} />
-                          {new Date(lead.nextFollowUp).toLocaleDateString("en-IN", { month: "short", day: "numeric" })}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between font-mono text-xs pt-1">
+                    <div className="flex items-center justify-between font-mono text-xs">
                       <span className="text-muted text-[0.65rem] flex items-center gap-1">
                         <FileText size={11} /> {lead.timelineNotes?.length || 0} discussion notes
                       </span>

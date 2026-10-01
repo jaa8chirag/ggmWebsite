@@ -124,8 +124,6 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
       advancePaid: advancePaid || null,
       balanceDue: balanceDue || null,
       paymentStatus,
-      quotationSent,
-      nextFollowUp: nextFollowUp || null,
       nextPaymentDate: nextPaymentDate || null,
     });
     setIsUpdating(false);
@@ -298,17 +296,15 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                   <option value="NEW">New Lead (Fresh Inquiry)</option>
                   <option value="HOT_DEAL">Hot Deal 🔥 (High Priority)</option>
                   <option value="IN_DISCUSSION">In Discussion (Talks Ongoing)</option>
-                  <option value="QUOTATION_SENT">Quotation Sent</option>
-                  <option value="FOLLOWUP_SCHEDULED">Follow-up Scheduled</option>
                   <option value="WON">Deal Won 🎉 (Client Onboarded)</option>
                   <option value="LOST">Deal Lost</option>
                 </select>
               </div>
 
-              {/* Pricing & Quotation Details */}
+              {/* Pricing Details */}
               <div className="rounded-2xl border border-chalk/15 bg-ink/40 p-4 space-y-4">
                 <h3 className="font-mono text-xs uppercase tracking-wider font-semibold text-flow flex items-center gap-2">
-                  <DollarSign size={14} /> Pricing & Quotation Controls
+                  <DollarSign size={14} /> Pricing & Budget Controls
                 </h3>
 
                 <div className="grid grid-cols-2 gap-3">
@@ -339,21 +335,6 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                     />
                     <span className="font-mono text-[0.65rem] text-muted/70 mt-0.5 block">Fix price final</span>
                   </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-2 border-t border-chalk/10">
-                  <label className="font-body text-xs text-chalk flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={quotationSent}
-                      onChange={(e) => setQuotationSent(e.target.checked)}
-                      className="h-4 w-4 rounded border-chalk/30 bg-surface text-flow focus:ring-flow"
-                    />
-                    Quotation Sent to Client?
-                  </label>
-                  <span className={`px-2.5 py-1 rounded font-mono text-[0.65rem] uppercase font-bold ${quotationSent ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-chalk/10 text-muted'}`}>
-                    {quotationSent ? "YES - SENT" : "NO - PENDING"}
-                  </span>
                 </div>
               </div>
 
@@ -448,54 +429,6 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                       In 15 Days
                     </button>
                   </div>
-                </div>
-              </div>
-
-              {/* Call Follow-up Scheduler */}
-              <div className="rounded-2xl border border-chalk/15 bg-ink/40 p-4 space-y-3">
-                <label className="block font-mono text-[0.7rem] text-muted uppercase tracking-wider flex items-center justify-between">
-                  <span className="flex items-center gap-1.5 text-flow font-semibold">
-                    <Calendar size={13} /> Next Call / Discussion Follow-up Date
-                  </span>
-                  {nextFollowUp && (
-                    <button
-                      type="button"
-                      onClick={() => setNextFollowUp("")}
-                      className="text-rose-400 hover:underline text-[0.65rem]"
-                    >
-                      Clear Date
-                    </button>
-                  )}
-                </label>
-                <input
-                  type="datetime-local"
-                  value={nextFollowUp}
-                  onChange={(e) => setNextFollowUp(e.target.value)}
-                  className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs text-chalk focus:border-flow focus:outline-none"
-                />
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 font-mono text-[0.65rem]">
-                  <span className="text-muted">Quick Set:</span>
-                  <button
-                    type="button"
-                    onClick={() => setPresetFollowUp(1)}
-                    className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20 cursor-pointer"
-                  >
-                    Tomorrow 11 AM
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPresetFollowUp(3)}
-                    className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20 cursor-pointer"
-                  >
-                    In 3 Days
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPresetFollowUp(7)}
-                    className="rounded bg-ink px-2 py-0.5 text-chalk hover:text-flow border border-chalk/20 cursor-pointer"
-                  >
-                    Next Week
-                  </button>
                 </div>
               </div>
 
