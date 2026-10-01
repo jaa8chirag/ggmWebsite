@@ -7,9 +7,12 @@ import {
   Search,
   Calendar,
   Phone,
+  Copy,
+  Check,
   FileText,
   ChevronRight,
   ChevronLeft,
+  MessageSquare,
 } from "lucide-react";
 import { CrmLeadModel, CrmLeadStatus, CrmStats, PaymentStatus } from "@/types";
 import { updateLeadAction, addLeadNoteAction } from "@/app/actions/lead";
@@ -62,6 +65,16 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState<CrmLeadModel | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [copiedPhoneId, setCopiedPhoneId] = useState<string | null>(null);
+
+  const handleCopyPhone = (leadId: string, phone: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      navigator.clipboard.writeText(phone);
+      setCopiedPhoneId(leadId);
+      setTimeout(() => setCopiedPhoneId(null), 2000);
+    } catch (err) {}
+  };
 
   // Filter & Sort logic (Status priority: NEW -> HOT_DEAL -> IN_DISCUSSION -> WON -> LOST, then newest first)
   const processedLeads = useMemo(() => {
@@ -231,27 +244,65 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                       <tr
                         key={lead.id}
                         className="hover:bg-ink/50 transition-colors group cursor-pointer"
-                        onClick={() => setSelectedLead(lead)}
+                        onClick={() => {
+                          const sel = typeof window !== "undefined" ? window.getSelection()?.toString() : "";
+                          if (sel && sel.trim().length > 0) return;
+                          setSelectedLead(lead);
+                        }}
                       >
                         {/* Client Info */}
-                        <td className="py-3.5 px-4">
-                          <div className="space-y-1">
-                            <span className="font-heading font-bold text-chalk text-sm group-hover:text-flow transition-colors">
+                        <td 
+                          className="py-3.5 px-4"
+                          onClick={(e) => {
+                            const target = e.target as HTMLElement;
+                            if (target.closest("button") || target.closest("a") || target.closest(".contact-details-box")) {
+                              e.stopPropagation();
+                            }
+                          }}
+                        >
+                          <div className="space-y-1.5">
+                            <span className="font-heading font-bold text-chalk text-sm group-hover:text-flow transition-colors select-text">
                               {lead.name}
                             </span>
-                            <div className="flex flex-wrap items-center gap-2 font-mono text-[0.7rem] text-muted">
-                              <a
-                                href={waUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={(e) => e.stopPropagation()}
-                                className="flex items-center gap-1 text-emerald-400 hover:underline font-semibold"
-                              >
-                                <Phone size={11} /> {lead.phone}
-                              </a>
-                              {lead.email && <span className="truncate max-w-[130px] text-chalk/90">{lead.email}</span>}
-                              {lead.companyName && <span className="text-amber-400 font-semibold">{lead.companyName}</span>}
-                              {lead.location && <span className="text-cyan-400">📍 {lead.location}</span>}
+                            <div 
+                              className="contact-details-box flex flex-wrap items-center gap-2 font-mono text-[0.7rem] text-muted select-text"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {/* 1-Click Copy Phone Badge */}
+                              <div className="flex items-center gap-1.5">
+                                <button
+                                  type="button"
+                                  onClick={(e) => handleCopyPhone(lead.id, lead.phone, e)}
+                                  title="Click to copy phone number"
+                                  className="inline-flex items-center gap-1.5 rounded-lg bg-surface/90 border border-chalk/15 px-2 py-0.5 text-chalk font-mono font-semibold text-xs hover:border-flow hover:text-flow transition-all cursor-pointer group/copy select-all"
+                                >
+                                  <Phone size={11} className="text-flow" />
+                                  <span className="select-all">{lead.phone}</span>
+                                  {copiedPhoneId === lead.id ? (
+                                    <span className="text-[0.65rem] text-emerald-400 font-bold flex items-center gap-0.5 bg-emerald-500/10 px-1 py-0.2 rounded">
+                                      <Check size={10} /> Copied!
+                                    </span>
+                                  ) : (
+                                    <Copy size={11} className="text-muted group-hover/copy:text-flow transition-colors" />
+                                  )}
+                                </button>
+
+                                {/* Direct WhatsApp Chat */}
+                                <a
+                                  href={waUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  title="Chat on WhatsApp"
+                                  className="rounded-lg p-1 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 transition-colors"
+                                >
+                                  <MessageSquare size={12} />
+                                </a>
+                              </div>
+
+                              {lead.email && <span className="truncate max-w-[130px] text-chalk/90 select-all">{lead.email}</span>}
+                              {lead.companyName && <span className="text-amber-400 font-semibold select-all">{lead.companyName}</span>}
+                              {lead.location && <span className="text-cyan-400 select-all">📍 {lead.location}</span>}
                               <span className="rounded bg-chalk/10 px-1.5 py-0.2 text-flow">{lead.source}</span>
                             </div>
                           </div>

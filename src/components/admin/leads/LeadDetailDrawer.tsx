@@ -21,6 +21,8 @@ import {
   HelpCircle,
   Building2,
   MapPin,
+  Copy,
+  Check,
 } from "lucide-react";
 import { CrmLeadModel, CrmLeadStatus, PaymentStatus, LeadNote } from "@/types";
 import { updateLeadAction, addLeadNoteAction, deleteLeadAction } from "@/app/actions/lead";
@@ -66,9 +68,13 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
   const [isSubmittingNote, setIsSubmittingNote] = useState(false);
 
   // Form states initialized on lead change
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [location, setLocation] = useState("");
+  const [serviceTitle, setServiceTitle] = useState("");
+  const [source, setSource] = useState("");
   const [status, setStatus] = useState<CrmLeadStatus>("NEW");
   const [approxAmount, setApproxAmount] = useState("");
   const [fixAmount, setFixAmount] = useState("");
@@ -79,15 +85,20 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
   const [nextFollowUp, setNextFollowUp] = useState("");
   const [nextPaymentDate, setNextPaymentDate] = useState("");
   const [timelineNotes, setTimelineNotes] = useState<LeadNote[]>([]);
+  const [copiedDrawerPhone, setCopiedDrawerPhone] = useState(false);
 
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (lead) {
+      setName(lead.name || "");
+      setPhone(lead.phone || "");
       setEmail(lead.email || "");
       setCompanyName(lead.companyName || "");
       setLocation(lead.location || "");
+      setServiceTitle(lead.serviceTitle || "");
+      setSource(lead.source || "Manual Lead");
       setStatus(lead.status || "NEW");
       setApproxAmount(lead.approxAmount || "");
       setFixAmount(lead.fixAmount || "");
@@ -104,20 +115,23 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
   if (!lead) return null;
 
   // Format WhatsApp Link
-  const cleanPhone = lead.phone.replace(/[^0-9]/g, "");
+  const currentPhone = phone || lead.phone;
+  const cleanPhone = currentPhone.replace(/[^0-9]/g, "");
   const waPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
   const whatsappUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(
-    `Hello ${lead.name}, thank you for contacting GGM Technologies regarding ${lead.serviceTitle}.`
+    `Hello ${name || lead.name}, thank you for contacting GGM Technologies regarding ${serviceTitle || lead.serviceTitle}.`
   )}`;
 
   async function handleSaveLead() {
     setIsUpdating(true);
     await updateLeadAction(lead!.id, {
-      name: lead!.name,
-      phone: lead!.phone,
-      email: email || null,
-      companyName: companyName || null,
-      location: location || null,
+      name: name.trim() || lead!.name,
+      phone: phone.trim() || lead!.phone,
+      email: email.trim() || null,
+      companyName: companyName.trim() || null,
+      location: location.trim() || null,
+      serviceTitle: serviceTitle.trim() || lead!.serviceTitle,
+      source: source.trim() || lead!.source,
       status,
       approxAmount: approxAmount || null,
       fixAmount: fixAmount || null,
@@ -192,7 +206,7 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="font-heading text-lg sm:text-xl font-bold text-chalk truncate max-w-[180px] sm:max-w-xs">
-                    {lead.name}
+                    {name || lead.name}
                   </h2>
                   <span className={`rounded-full px-2.5 py-0.5 font-mono text-[0.7rem] uppercase tracking-wider font-semibold border ${STATUS_LABELS[status].color} ${STATUS_LABELS[status].border}`}>
                     {STATUS_LABELS[status].label}
@@ -202,9 +216,9 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                   </span>
                 </div>
                 <p className="font-mono text-[0.7rem] sm:text-xs text-muted flex flex-wrap items-center gap-2 mt-1">
-                  <span className="flex items-center gap-1"><Briefcase size={12} className="text-flow shrink-0" /> {lead.serviceTitle}</span>
+                  <span className="flex items-center gap-1"><Briefcase size={12} className="text-flow shrink-0" /> {serviceTitle || lead.serviceTitle}</span>
                   <span className="text-chalk/30 hidden sm:inline">•</span>
-                  <span className="flex items-center gap-1"><Tag size={12} className="text-muted shrink-0" /> Source: <strong className="text-chalk">{lead.source}</strong></span>
+                  <span className="flex items-center gap-1"><Tag size={12} className="text-muted shrink-0" /> Source: <strong className="text-chalk">{source || lead.source}</strong></span>
                 </p>
               </div>
             </div>
@@ -232,24 +246,93 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
             {/* LEFT COLUMN: Controls, Pricing & Payments (7 Cols) */}
             <div className="lg:col-span-7 space-y-6 lg:border-r lg:border-chalk/10 lg:pr-6">
 
-              {/* Client Contact & Company Details */}
-              <div className="rounded-2xl border border-chalk/15 bg-ink/40 p-4 space-y-3">
-                <h3 className="font-mono text-xs uppercase tracking-wider font-semibold text-chalk flex items-center gap-2">
-                  <User size={14} className="text-flow" /> Client Details & Profile
-                </h3>
+              {/* Client Contact & Profile Details */}
+              <div className="rounded-2xl border border-chalk/15 bg-ink/40 p-4 sm:p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-mono text-xs uppercase tracking-wider font-semibold text-chalk flex items-center gap-2">
+                    <User size={14} className="text-flow" /> Client Details & Profile
+                  </h3>
+                  <span className="font-mono text-[0.65rem] text-muted">All Fields Editable</span>
+                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
-                  {/* Mail ID */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 font-mono text-xs">
+                  {/* Client Name */}
+                  <div>
+                    <label className="block text-[0.65rem] text-muted uppercase tracking-wider mb-1 flex items-center gap-1 font-semibold">
+                      <User size={11} className="text-flow" /> Client Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Client Name"
+                      className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs font-semibold text-chalk focus:border-flow focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Phone Number with quick Copy button */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="text-[0.65rem] text-muted uppercase tracking-wider flex items-center gap-1 font-semibold">
+                        <Phone size={11} className="text-emerald-400" /> Phone / WhatsApp *
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const numToCopy = phone || lead.phone;
+                          if (typeof navigator !== "undefined" && navigator.clipboard && numToCopy) {
+                            navigator.clipboard.writeText(numToCopy);
+                            setCopiedDrawerPhone(true);
+                            setTimeout(() => setCopiedDrawerPhone(false), 2000);
+                          }
+                        }}
+                        className="text-[0.65rem] text-flow hover:underline flex items-center gap-1 cursor-pointer"
+                      >
+                        {copiedDrawerPhone ? (
+                          <span className="text-emerald-400 font-bold flex items-center gap-0.5">
+                            <Check size={10} /> Copied!
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-0.5">
+                            <Copy size={10} /> Copy
+                          </span>
+                        )}
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+91 98765 43210"
+                      className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs font-semibold text-chalk focus:border-flow focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Email ID */}
                   <div>
                     <label className="block text-[0.65rem] text-muted uppercase tracking-wider mb-1 flex items-center gap-1">
-                      <Mail size={11} /> Mail ID
+                      <Mail size={11} /> Email Address
                     </label>
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="e.g. client@company.com"
-                      className="w-full rounded-xl border border-chalk/20 bg-surface px-2.5 py-1.5 font-body text-xs text-chalk focus:border-flow focus:outline-none"
+                      placeholder="client@company.com"
+                      className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs text-chalk focus:border-flow focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Service Title / Inquiry */}
+                  <div>
+                    <label className="block text-[0.65rem] text-muted uppercase tracking-wider mb-1 flex items-center gap-1 font-semibold">
+                      <Briefcase size={11} className="text-flow" /> Service / Inquiry
+                    </label>
+                    <input
+                      type="text"
+                      value={serviceTitle}
+                      onChange={(e) => setServiceTitle(e.target.value)}
+                      placeholder="e.g. SEO & Digital Marketing"
+                      className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs font-semibold text-chalk focus:border-flow focus:outline-none"
                     />
                   </div>
 
@@ -262,8 +345,8 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                       type="text"
                       value={companyName}
                       onChange={(e) => setCompanyName(e.target.value)}
-                      placeholder="e.g. Apex Ltd."
-                      className="w-full rounded-xl border border-chalk/20 bg-surface px-2.5 py-1.5 font-body text-xs text-chalk focus:border-flow focus:outline-none"
+                      placeholder="Company / Business Name"
+                      className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs text-chalk focus:border-flow focus:outline-none"
                     />
                   </div>
 
@@ -276,8 +359,23 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                       type="text"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      placeholder="e.g. Delhi NCR"
-                      className="w-full rounded-xl border border-chalk/20 bg-surface px-2.5 py-1.5 font-body text-xs text-chalk focus:border-flow focus:outline-none"
+                      placeholder="Delhi NCR / Mumbai"
+                      className="w-full rounded-xl border border-chalk/20 bg-surface px-3 py-2 font-body text-xs text-chalk focus:border-flow focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Lead Source */}
+                <div className="pt-2 border-t border-chalk/10 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2">
+                    <Tag size={12} className="text-muted" />
+                    <span className="text-[0.7rem] text-muted">Source:</span>
+                    <input
+                      type="text"
+                      value={source}
+                      onChange={(e) => setSource(e.target.value)}
+                      placeholder="Website Contact Form"
+                      className="rounded-lg border border-chalk/20 bg-surface px-2.5 py-1 text-xs text-chalk font-mono focus:border-flow focus:outline-none"
                     />
                   </div>
                 </div>

@@ -47,7 +47,7 @@ export const getServices = unstable_cache(
       });
     }
 
-    return services.map((s) => {
+    const mapped: Service[] = services.map((s) => {
       let canonicalSlug = s.slug;
       const lower = (s.slug || "").toLowerCase();
       if (lower === "website-development" || lower === "web-development" || lower === "website-development-services") {
@@ -74,6 +74,16 @@ export const getServices = unstable_cache(
         noIndex: Boolean(s.noIndex),
       };
     });
+
+    // Ensure services defined in DB_SERVICES (like digital-marketing-services) are always present even if not in DB yet
+    const existingSlugs = new Set(mapped.map((s) => s.slug.toLowerCase()));
+    for (const seed of DB_SERVICES) {
+      if (!existingSlugs.has(seed.slug.toLowerCase())) {
+        mapped.push(seed);
+      }
+    }
+
+    return mapped;
   },
   ["getServices"],
   { tags: ["services"], revalidate: 3600 }

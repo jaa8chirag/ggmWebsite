@@ -289,6 +289,50 @@ export const DB_SERVICES: Service[] = [
     "ogImage": "/images/uploads/services/wordpress-development_1789056701326.jpg",
     "canonicalOverride": null,
     "noIndex": false
+  },
+  {
+    "id": "srv_digital_marketing_services",
+    "slug": "digital-marketing-services",
+    "index": "10",
+    "title": "Digital Marketing Services",
+    "promise": "Data-driven multi-channel campaigns that drive real traffic, qualified leads, and predictable revenue.",
+    "description": "GGM Technologies delivers full-suite 360° Digital Marketing Services engineered to scale modern businesses. We combine technical SEO, high-ROAS Google Ads, performance Meta campaigns, social media management, content marketing, and conversion rate optimization (CRO) into a cohesive growth engine that consistently lowers customer acquisition costs and out-converts your competition.",
+    "bullets": [
+      "Full-funnel SEO, Google Ads & Meta Performance Marketing",
+      "Conversion-focused landing pages & automated CRM lead funnels",
+      "Transparent 24/7 Looker Studio ROI & revenue attribution reporting"
+    ],
+    "faqs": [
+      {
+        "question": "What channels are included in your Digital Marketing Services?",
+        "answer": "Our digital marketing services cover the entire buyer journey: Search Engine Optimization (Technical, On-Page, Off-Page, and Generative Engine Optimization), Paid Search (Google Ads, Bing Ads), Paid Social (Meta Ads on Instagram & Facebook, LinkedIn Ads), Content & Copywriting, Social Media Marketing, Conversion Rate Optimization (CRO), and Marketing Automation."
+      },
+      {
+        "question": "How do you ensure marketing spend generates actual revenue rather than vanity metrics?",
+        "answer": "We tie every campaign directly to bottom-line business metrics: Cost Per Acquisition (CPA), Return On Ad Spend (ROAS), Customer Lifetime Value (LTV), and pipeline velocity. Rather than reporting impressions and clicks, our 24/7 custom Looker Studio dashboards show verified leads, closed deals, and revenue attribution across all touchpoints."
+      },
+      {
+        "question": "How soon can we expect to see results from digital marketing campaigns?",
+        "answer": "Paid advertising channels (Google Search, Shopping, and Meta Ads) begin capturing high-intent leads and generating sales within the first 7 to 14 days of launch. Search engine optimization (SEO) and organic content marketing compound over 3 to 6 months, creating a permanent, zero-marginal-cost customer acquisition engine."
+      },
+      {
+        "question": "Do you design dedicated landing pages for ad campaigns?",
+        "answer": "Yes, absolutely. Sending paid ad traffic to generic homepages wastes up to 60% of media budget. We design, code, and deploy custom, sub-second conversion-rate-optimized landing pages with tailored value propositions, social proof, and multi-step forms that maximize conversion rates."
+      },
+      {
+        "question": "What is your pricing and retainer structure for digital marketing?",
+        "answer": "We offer flexible, performance-aligned monthly retainer models tailored to your business stage and growth targets. Retainers include a dedicated growth squad (Digital Marketing Strategist, Media Buyer, Copywriter, and Data Analyst) with zero long-term lock-in contracts."
+      },
+      {
+        "question": "Who retains ownership of ad accounts, creative assets, and marketing data?",
+        "answer": "You retain 100% full ownership of all Google Ads accounts, Meta Business Managers, pixel data, creative designs, and tracking configurations. Everything is built directly inside your company assets with complete transparency."
+      }
+    ],
+    "metaTitle": "Digital Marketing Services in Delhi & Globally | 360° ROI Growth — GGM Technologies",
+    "metaDescription": "Accelerate commercial growth with premier Digital Marketing Services by GGM Technologies. Expert SEO, Google Ads, Meta PPC, social media, and conversion funnels.",
+    "ogImage": "/images/services/digital-marketing-services.jpg",
+    "canonicalOverride": null,
+    "noIndex": false
   }
 ];
 
