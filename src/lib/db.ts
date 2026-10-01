@@ -33,6 +33,46 @@ async function ensureSchema() {
   if (schemaMigrated) return;
   schemaMigrated = true;
   try {
+    const tableCaseFixes: [string, string][] = [
+      ["sitesettings", "SiteSettings"],
+      ["blogpost", "BlogPost"],
+      ["blogblock", "BlogBlock"],
+      ["blogfaq", "BlogFaq"],
+      ["casestudy", "CaseStudy"],
+      ["product", "Product"],
+      ["productspec", "ProductSpec"],
+      ["testimonial", "Testimonial"],
+      ["legalpage", "LegalPage"],
+      ["certificatedocument", "CertificateDocument"],
+      ["quoterequest", "QuoteRequest"],
+      ["whychooseus", "WhyChooseUs"],
+      ["metricitem", "MetricItem"],
+      ["adminuser", "AdminUser"],
+      ["adminsession", "AdminSession"],
+      ["service", "Service"],
+      ["servicefaq", "ServiceFaq"],
+      ["servicelocation", "ServiceLocation"],
+      ["location", "Location"],
+      ["crmlead", "CrmLead"],
+      ["seosettings", "SeoSettings"],
+    ];
+
+    try {
+      const [tableRows] = (await pool.query("SHOW TABLES")) as any;
+      if (Array.isArray(tableRows)) {
+        const existingTables = tableRows.map((r: any) => Object.values(r)[0] as string);
+        for (const [lower, pascal] of tableCaseFixes) {
+          if (existingTables.includes(lower) && !existingTables.includes(pascal)) {
+            await pool.query(`RENAME TABLE \`${lower}\` TO \`${pascal}\``).catch(async () => {
+              await pool.query(`CREATE OR REPLACE VIEW \`${pascal}\` AS SELECT * FROM \`${lower}\``).catch(() => {});
+            });
+          }
+        }
+      }
+    } catch {
+      // Ignore
+    }
+
     const alterStatements = [
       "ALTER TABLE `CaseStudy` MODIFY `ogImage` LONGTEXT",
       "ALTER TABLE `Service` MODIFY `ogImage` LONGTEXT",

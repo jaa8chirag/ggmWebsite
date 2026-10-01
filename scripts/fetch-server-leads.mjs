@@ -1,9 +1,17 @@
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 
-dotenv.config({ path: ".env.local" });
+import fs from "fs";
+
+if (fs.existsSync(".env.local")) {
+  dotenv.config({ path: ".env.local" });
+}
+if (fs.existsSync(".env")) {
+  dotenv.config({ path: ".env" });
+}
 
 const SERVER_URL = "https://ggmtechnologies.com/api/admin/crm/sync-leads?secret=ggm_leads_sync_2026";
+const DB_URL = process.env.DATABASE_URL || "mysql://root:Chirag30kum%40r@127.0.0.1:3306/ggmwebsite";
 
 async function main() {
   console.log(`🌐 Fetching leads from production server (${SERVER_URL})...`);
@@ -20,7 +28,7 @@ async function main() {
     }
 
     console.log(`✅ Successfully fetched ${data.leads.length} leads from production server!`);
-    const conn = await mysql.createConnection(process.env.DATABASE_URL);
+    const conn = await mysql.createConnection(DB_URL);
 
     for (const r of data.leads) {
       await conn.query(
