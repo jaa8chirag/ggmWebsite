@@ -89,10 +89,19 @@ export default async function Footer() {
                 <span>{settings.email || "info@ggmtechnologies.com"}</span>
               </a>
 
-              <div className="inline-flex items-center gap-1.5 rounded-xl border border-chalk/10 bg-surface/40 px-3 py-2 font-mono text-xs text-muted">
-                <MapPin size={13} className="text-muted/80 shrink-0" />
+              <a
+                href={
+                  settings.googleBusinessUrl ||
+                  "https://www.google.com/maps/search/?api=1&query=GGM+Technologies+4th+Floor+Suite+C+400-A+12+Ajit+Singh+House+Yusuf+Sarai+Commercial+Complex+Near+Green+Park+Metro+Station+Exit+Gate+Number+-+02+New+Delhi+-+110016"
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                title="GGM Technologies - Yusuf Sarai, Green Park, New Delhi"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-chalk/10 bg-surface/40 px-3 py-2 font-mono text-xs text-muted hover:border-flow hover:text-flow transition-colors shadow-sm"
+              >
+                <MapPin size={13} className="text-flow shrink-0" />
                 <span>New Delhi, India</span>
-              </div>
+              </a>
             </div>
 
             {/* Social Media Link Bar */}

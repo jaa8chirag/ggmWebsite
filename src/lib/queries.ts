@@ -471,7 +471,7 @@ export const getSettings = unstable_cache(
       googleBusinessUrl:
         settings.googleBusinessUrl && settings.googleBusinessUrl !== "https://maps.google.com/?cid=ggmtechnologies"
           ? settings.googleBusinessUrl
-          : "https://www.google.com/maps/place/GGM+TECHNOLOGIES/@28.5586016,77.1970418,16z/data=!4m10!1m2!2m1!1s4th+Floor,+400-A,+12+Ajit+Singh+House,+Yusuf+Sarai+Commercial+Complex,+Green+Park+,+New+Delhi+110016!3m6!1s0xacd4b1dfe9650407:0x198cc7ca266d7621!8m2!3d28.5586016!4d77.206569!15sCmQ0dGggRmxvb3IsIDQwMC1BLCAxMiBBaml0IFNpbmdoIEhvdXNlLCBZdXN1ZiBTYXJhaSBDb21tZXJjaWFsIENvbXBsZXgsIEdyZWVuIFBhcmsgLCBOZXcgRGVsaGkgMTEwMDE2WmAiXjR0aCBmbG9vciA0MDAgYSAxMiBhaml0IHNpbmdoIGhvdXNlIHl1c3VmIHNhcmFpIGNvbW1lcmNpYWwgY29tcGxleCBncmVlbiBwYXJrIG5ldyBkZWxoaSAxMTAwMTaSARB3ZWJzaXRlX2Rlc2lnbmVy4AEA!16s%2Fg%2F11z30lcyz1",
+          : "https://www.google.com/maps/search/?api=1&query=GGM+Technologies+4th+Floor+Suite+C+400-A+12+Ajit+Singh+House+Yusuf+Sarai+Commercial+Complex+Near+Green+Park+Metro+Station+Exit+Gate+Number+-+02+New+Delhi+-+110016",
       logoUrl: settings.logoUrl ?? null,
       ceoImage: settings.ceoImage ?? null,
       aboutImage: settings.aboutImage ?? null,
