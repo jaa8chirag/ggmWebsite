@@ -2,48 +2,9 @@
 
 import React from "react";
 import { ChevronDown } from "lucide-react";
+import { COUNTRY_CODES, type CountryCodeItem } from "@/data/countryCodes";
 
-export interface CountryCodeItem {
-  code: string; // e.g. "+91"
-  iso: string;  // e.g. "IN"
-  name: string; // e.g. "India"
-  flag: string; // e.g. "🇮🇳"
-}
-
-export const COUNTRY_CODES: CountryCodeItem[] = [
-  { code: "+91", iso: "IN", name: "India", flag: "🇮🇳" },
-  { code: "+1", iso: "US", name: "United States / Canada", flag: "🇺🇸" },
-  { code: "+44", iso: "GB", name: "United Kingdom", flag: "🇬🇧" },
-  { code: "+971", iso: "AE", name: "United Arab Emirates", flag: "🇦🇪" },
-  { code: "+61", iso: "AU", name: "Australia", flag: "🇦🇺" },
-  { code: "+65", iso: "SG", name: "Singapore", flag: "🇸🇬" },
-  { code: "+966", iso: "SA", name: "Saudi Arabia", flag: "🇸🇦" },
-  { code: "+974", iso: "QA", name: "Qatar", flag: "🇶🇦" },
-  { code: "+968", iso: "OM", name: "Oman", flag: "🇴🇲" },
-  { code: "+965", iso: "KW", name: "Kuwait", flag: "🇰🇼" },
-  { code: "+973", iso: "BH", name: "Bahrain", flag: "🇧🇭" },
-  { code: "+49", iso: "DE", name: "Germany", flag: "🇩🇪" },
-  { code: "+33", iso: "FR", name: "France", flag: "🇫🇷" },
-  { code: "+31", iso: "NL", name: "Netherlands", flag: "🇳🇱" },
-  { code: "+39", iso: "IT", name: "Italy", flag: "🇮🇹" },
-  { code: "+34", iso: "ES", name: "Spain", flag: "🇪🇸" },
-  { code: "+60", iso: "MY", name: "Malaysia", flag: "🇲🇾" },
-  { code: "+66", iso: "TH", name: "Thailand", flag: "🇹🇭" },
-  { code: "+62", iso: "ID", name: "Indonesia", flag: "🇮🇩" },
-  { code: "+92", iso: "PK", name: "Pakistan", flag: "🇵🇰" },
-  { code: "+880", iso: "BD", name: "Bangladesh", flag: "🇧🇩" },
-  { code: "+94", iso: "LK", name: "Sri Lanka", flag: "🇱🇰" },
-  { code: "+977", iso: "NP", name: "Nepal", flag: "🇳🇵" },
-  { code: "+27", iso: "ZA", name: "South Africa", flag: "🇿🇦" },
-  { code: "+234", iso: "NG", name: "Nigeria", flag: "🇳🇬" },
-  { code: "+254", iso: "KE", name: "Kenya", flag: "🇰🇪" },
-  { code: "+55", iso: "BR", name: "Brazil", flag: "🇧🇷" },
-  { code: "+52", iso: "MX", name: "Mexico", flag: "🇲🇽" },
-  { code: "+64", iso: "NZ", name: "New Zealand", flag: "🇳🇿" },
-  { code: "+81", iso: "JP", name: "Japan", flag: "🇯🇵" },
-  { code: "+82", iso: "KR", name: "South Korea", flag: "🇰🇷" },
-  { code: "+86", iso: "CN", name: "China", flag: "🇨🇳" },
-];
+export { COUNTRY_CODES, type CountryCodeItem };
 
 interface CountryCodeSelectProps {
   selectedCode: string;
@@ -58,21 +19,40 @@ export default function CountryCodeSelect({
   className = "",
   disabled = false,
 }: CountryCodeSelectProps) {
+  const currentItem =
+    COUNTRY_CODES.find((c) => c.code === selectedCode) || COUNTRY_CODES[0];
+
   return (
-    <div className={`relative inline-flex items-center shrink-0 border-r border-chalk/15 ${className}`}>
+    <div
+      className={`relative inline-flex items-center shrink-0 border-r border-chalk/15 transition-colors hover:border-chalk/30 ${className}`}
+    >
+      {/* Visual pill: Flag + Code + Dropdown Arrow */}
+      <div className="flex items-center gap-1.5 pl-3 pr-6 py-2.5 font-mono text-xs sm:text-sm font-bold text-chalk pointer-events-none select-none">
+        <span className="text-sm leading-none" role="img" aria-label={currentItem?.name}>
+          {currentItem?.flag || "🌐"}
+        </span>
+        <span>{selectedCode}</span>
+      </div>
+
+      {/* Full native select overlaying the pill with all 241 world country codes */}
       <select
         value={selectedCode}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
         aria-label="Select Country Dial Code"
-        className="appearance-none bg-transparent pl-3 pr-6 py-2.5 font-mono text-xs sm:text-sm font-bold text-chalk focus:outline-none cursor-pointer w-[68px] sm:w-[72px]"
+        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer text-base bg-ink"
       >
         {COUNTRY_CODES.map((c) => (
-          <option key={c.code} value={c.code} className="bg-ink text-chalk">
-            {c.code}
+          <option
+            key={`${c.iso}-${c.code}`}
+            value={c.code}
+            className="bg-ink text-chalk py-1"
+          >
+            {c.flag} {c.name} ({c.code})
           </option>
         ))}
       </select>
+
       <ChevronDown
         size={12}
         className="pointer-events-none absolute right-2 text-muted"
