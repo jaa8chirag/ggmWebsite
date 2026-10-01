@@ -46,6 +46,14 @@ const PAYMENT_BADGES: Record<PaymentStatus, { label: string; bg: string; text: s
   FULLY_PAID: { label: "Paid", bg: "bg-emerald-500/15", text: "text-emerald-400" },
 };
 
+const STATUS_PRIORITY: Record<string, number> = {
+  NEW: 1,
+  HOT_DEAL: 2,
+  IN_DISCUSSION: 3,
+  WON: 4,
+  LOST: 5,
+};
+
 const ITEMS_PER_PAGE = 10;
 
 export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmContainerProps) {
@@ -55,7 +63,7 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
   const [selectedLead, setSelectedLead] = useState<CrmLeadModel | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Filter & Sort logic (default newest first)
+  // Filter & Sort logic (Status priority: NEW -> HOT_DEAL -> IN_DISCUSSION -> WON -> LOST, then newest first)
   const processedLeads = useMemo(() => {
     const filtered = initialLeads.filter((lead) => {
       const matchesFilter = selectedFilter === "ALL" || lead.status === selectedFilter;
@@ -72,7 +80,16 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
       return matchesFilter && matchesSearch;
     });
 
-    return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return filtered.sort((a, b) => {
+      const priorityA = STATUS_PRIORITY[a.status] ?? 99;
+      const priorityB = STATUS_PRIORITY[b.status] ?? 99;
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB;
+      }
+
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
   }, [initialLeads, selectedFilter, searchQuery]);
 
   const totalPages = Math.max(1, Math.ceil(processedLeads.length / ITEMS_PER_PAGE));
