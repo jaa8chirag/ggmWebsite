@@ -30,11 +30,11 @@ export default async function Footer() {
 
   const flagshipServices = [
     { title: "Website Development", href: "/services/website-development-services" },
-    { title: "Digital Marketing Services", href: "/services/digital-marketing-services" },
-    { title: "Search Engine Optimization (SEO)", href: "/services/seo" },
+    { title: "Digital Marketing", href: "/services/digital-marketing-services" },
+    { title: "SEO & Growth", href: "/services/seo" },
     { title: "E-Commerce & Shopify", href: "/services/shopify-website-development" },
-    { title: "Google Ads & PPC Management", href: "/services/google-adsense" },
-    { title: "Mobile App Development", href: "/services/mobile-app-development" },
+    { title: "Google Ads & PPC", href: "/services/google-adsense" },
+    { title: "Mobile App Dev", href: "/services/mobile-app-development" },
   ];
 
   const companyLinks = [
@@ -43,18 +43,18 @@ export default async function Footer() {
     { title: "Careers", href: "/careers" },
     { title: "Quality & Compliance", href: "/quality-compliance" },
     { title: "Privacy Policy", href: "/privacy-policy" },
-    { title: "Refund & Returns Policy", href: "/refund-policy" },
+    { title: "Refund Policy", href: "/refund-policy" },
     { title: "Cookie Policy", href: "/cookie-policy" },
-    { title: "Disclaimer & Terms", href: "/disclaimer" },
+    { title: "Terms & Disclaimer", href: "/disclaimer" },
   ];
 
   return (
     <footer className="border-t border-chalk/15 bg-ink text-chalk">
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 md:px-10 py-12 md:py-16">
-        {/* Main Grid: Mobile 1-col, Tablet 2-col, Desktop 12-col */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
+        {/* Main Grid: Brand on top (or left on desktop), Services and Company side-by-side */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
           {/* Brand & Contact Info Column */}
-          <div className="sm:col-span-2 lg:col-span-5 space-y-6">
+          <div className="lg:col-span-5 space-y-6">
             <Link href="/" className="inline-block">
               <Image
                 src="/logo/ggm-logo.png"
@@ -96,11 +96,11 @@ export default async function Footer() {
             </div>
 
             {/* Social Media Link Bar */}
-            <div className="pt-2">
-              <p className="font-mono text-[11px] uppercase tracking-widest text-muted/70 mb-3">
+            <div className="pt-1">
+              <p className="font-mono text-[11px] uppercase tracking-widest text-muted/70 mb-2.5">
                 Connect With Us
               </p>
-              <div className="flex flex-wrap items-center gap-2.5">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
                 {socialLinks.map((s) => {
                   const Icon = s.icon;
                   return (
@@ -111,9 +111,9 @@ export default async function Footer() {
                       rel="noopener noreferrer"
                       title={s.label}
                       aria-label={s.label}
-                      className={`flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-chalk/15 bg-surface/80 text-muted transition-all duration-200 hover:scale-105 ${s.color}`}
+                      className={`flex h-9 w-9 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-chalk/15 bg-surface/80 text-muted transition-all duration-200 hover:scale-105 ${s.color}`}
                     >
-                      <Icon size={16} />
+                      <Icon size={15} />
                     </a>
                   );
                 })}
@@ -121,47 +121,50 @@ export default async function Footer() {
             </div>
           </div>
 
-          {/* Services Column */}
-          <div className="lg:col-span-4 sm:col-span-1">
-            <p className="font-mono text-xs uppercase tracking-widest text-flow font-bold flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-flow" />
-              Core Services
-            </p>
-            <ul className="mt-4 space-y-3">
-              {flagshipServices.map((s) => (
-                <li key={s.href}>
-                  <Link
-                    href={s.href}
-                    prefetch={false}
-                    className="group inline-flex items-center gap-1.5 font-body text-sm text-muted hover:text-chalk transition-colors py-0.5"
-                  >
-                    <span>{s.title}</span>
-                    <ArrowUpRight size={11} className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-flow" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Side-by-Side Columns for Core Services & Company Legal */}
+          <div className="lg:col-span-7 grid grid-cols-2 gap-6 sm:gap-10 pt-6 lg:pt-0 border-t border-chalk/10 lg:border-t-0">
+            {/* Core Services Column */}
+            <div>
+              <p className="font-mono text-xs uppercase tracking-widest text-flow font-bold flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-flow" />
+                Core Services
+              </p>
+              <ul className="mt-4 space-y-2.5 sm:space-y-3">
+                {flagshipServices.map((s) => (
+                  <li key={s.href}>
+                    <Link
+                      href={s.href}
+                      prefetch={false}
+                      className="group inline-flex items-center gap-1 font-body text-xs sm:text-sm text-muted hover:text-chalk transition-colors py-0.5"
+                    >
+                      <span>{s.title}</span>
+                      <ArrowUpRight size={10} className="hidden sm:inline-block opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-flow" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Company & Legal Column */}
-          <div className="lg:col-span-3 sm:col-span-1">
-            <p className="font-mono text-xs uppercase tracking-widest text-flow font-bold flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-flow" />
-              Company &amp; Legal
-            </p>
-            <ul className="mt-4 space-y-3">
-              {companyLinks.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    prefetch={false}
-                    className="group inline-flex items-center gap-1.5 font-body text-sm text-muted hover:text-chalk transition-colors py-0.5"
-                  >
-                    <span>{item.title}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {/* Company & Legal Column */}
+            <div>
+              <p className="font-mono text-xs uppercase tracking-widest text-flow font-bold flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-flow" />
+                Company &amp; Legal
+              </p>
+              <ul className="mt-4 space-y-2.5 sm:space-y-3">
+                {companyLinks.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      prefetch={false}
+                      className="group inline-flex items-center gap-1 font-body text-xs sm:text-sm text-muted hover:text-chalk transition-colors py-0.5"
+                    >
+                      <span>{item.title}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
 
