@@ -101,6 +101,8 @@ export async function getServiceBySlug(slug: string): Promise<Service | null> {
         candidateSlugs.push("google-adsense", "google-ads", "adsense");
       } else if (normalized === "ppc" || normalized === "pay-per-click" || normalized === "pay-per-click-advertising") {
         candidateSlugs.push("ppc", "pay-per-click", "pay-per-click-advertising");
+      } else if (normalized === "digital-marketing-services" || normalized === "digital-marketing" || normalized === "digital-agency" || normalized === "digital-marketing-agency" || normalized === "digital") {
+        candidateSlugs.push("digital-marketing-services", "digital-marketing", "digital-agency", "digital-marketing-agency");
       }
 
       let s = await queryOne<any>(

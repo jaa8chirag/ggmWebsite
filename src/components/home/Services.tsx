@@ -37,8 +37,10 @@ const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
   "shopify-development": "/images/services/shopify-development.jpg",
   "wordpress-development": "/images/services/wordpress-development.jpg",
   "shopify-wordpress": "/images/services/shopify-development.jpg",
-  "digital-agency": "/images/services/digital-agency.jpg",
-  "digital-marketing-agency": "/images/services/digital-agency.jpg",
+  "digital-marketing-services": "/images/services/digital-marketing-services.jpg",
+  "digital-marketing": "/images/services/digital-marketing-services.jpg",
+  "digital-agency": "/images/services/digital-marketing-services.jpg",
+  "digital-marketing-agency": "/images/services/digital-marketing-services.jpg",
 };
 
 export function ServiceCard({

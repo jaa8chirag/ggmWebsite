@@ -33,6 +33,7 @@ const SERVICE_PRESET_IMAGES = [
   { label: "PPC & Google Ads", url: "/images/services/ppc.jpg" },
   { label: "Lead Generation", url: "/images/services/lead-generation.jpg" },
   { label: "Social Media Marketing", url: "/images/services/social-media-marketing.jpg" },
+  { label: "Digital Marketing Services", url: "/images/services/digital-marketing-services.jpg" },
   { label: "Shopify Development", url: "/images/services/shopify-wordpress.jpg" },
   { label: "WordPress Development", url: "/images/services/shopify-wordpress.jpg" },
 ];
