@@ -5,6 +5,26 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+CREATE TABLE IF NOT EXISTS `casestudy` (
+  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `client` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `summary` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `resultLabel` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `variant` enum('interiors','fitness','ecommerce') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'interiors',
+  `order` int NOT NULL DEFAULT '0',
+  `createdAt` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updatedAt` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  `metaTitle` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `metaDescription` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ogImage` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `canonicalOverride` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `noIndex` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `CaseStudy_slug_key` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 DELETE FROM `casestudy` WHERE 1=1;
 
 INSERT INTO `casestudy` (`id`, `slug`, `client`, `category`, `summary`, `resultLabel`, `variant`, `order`, `createdAt`, `updatedAt`, `ogImage`, `canonicalOverride`, `noIndex`)
@@ -149,4 +169,14 @@ ON DUPLICATE KEY UPDATE
   `ogImage` = VALUES(`ogImage`),
   `canonicalOverride` = VALUES(`canonicalOverride`),
   `updatedAt` = NOW(3);
+
+-- Linux Compatibility View
+DROP VIEW IF EXISTS `CaseStudy`;
+CREATE OR REPLACE VIEW `CaseStudy` AS SELECT * FROM `casestudy`;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- Verification
+SELECT COUNT(*) AS total_case_studies FROM `casestudy`;
+
 
