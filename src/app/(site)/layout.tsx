@@ -37,7 +37,7 @@ const geistMono = Geist_Mono({
 
 const title = "Digital Marketing Agency in Delhi | GGM Technologies";
 const description =
-  "GGM Technologies is a New Delhi digital growth partner running SEO, PPC, website development, lead generation, social media marketing, and Shopify & WordPress builds — measured in rankings and revenue.";
+  "GGM Technologies is a New Delhi digital growth partner running SEO, PPC advertising, website development, lead generation, social media marketing, and Shopify & WordPress builds built for measurable business revenue.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

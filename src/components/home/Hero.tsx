@@ -145,9 +145,8 @@ export default function Hero({ eyebrow }: { eyebrow: string }) {
           delay={0.15}
         />
 
-        <p className="mx-auto mt-8 max-w-lg font-body text-body-l text-muted">
-          We build SEO, PPC, and web systems that turn search traffic into
-          pipeline — measured in rankings and revenue, not vanity metrics.
+        <p className="mx-auto mt-8 max-w-xl font-body text-body-l text-muted leading-relaxed">
+          We engineer high-converting web systems, data-driven SEO, and scalable ad campaigns that transform search traffic into qualified leads and predictable revenue growth.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
