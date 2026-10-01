@@ -6,25 +6,10 @@ import {
   Plus,
   Search,
   Calendar,
-  MessageSquare,
-  DollarSign,
-  Clock,
   Phone,
-  Tag,
-  AlertCircle,
   FileText,
-  Briefcase,
   ChevronRight,
   ChevronLeft,
-  LayoutList,
-  LayoutGrid,
-  ArrowUpDown,
-  CreditCard,
-  CheckCircle2,
-  AlertTriangle,
-  ExternalLink,
-  ShieldCheck,
-  Send,
 } from "lucide-react";
 import { CrmLeadModel, CrmLeadStatus, CrmStats, PaymentStatus } from "@/types";
 import { updateLeadAction, addLeadNoteAction } from "@/app/actions/lead";
@@ -61,20 +46,16 @@ const PAYMENT_BADGES: Record<PaymentStatus, { label: string; bg: string; text: s
   FULLY_PAID: { label: "Paid", bg: "bg-emerald-500/15", text: "text-emerald-400" },
 };
 
-type SortMode = "NEWEST" | "PAYMENT_DUE" | "HIGHEST_PRICE";
-
 const ITEMS_PER_PAGE = 10;
 
 export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmContainerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState<CrmLeadStatus | "ALL">("ALL");
-  const [sortMode, setSortMode] = useState<SortMode>("NEWEST");
-  const [viewMode, setViewMode] = useState<"list" | "grid">("list"); // Default to list view
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState<CrmLeadModel | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Filter & Sort logic
+  // Filter & Sort logic (default newest first)
   const processedLeads = useMemo(() => {
     const filtered = initialLeads.filter((lead) => {
       const matchesFilter = selectedFilter === "ALL" || lead.status === selectedFilter;
@@ -91,28 +72,8 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
       return matchesFilter && matchesSearch;
     });
 
-    return filtered.sort((a, b) => {
-      if (sortMode === "PAYMENT_DUE") {
-        const getPayScore = (l: CrmLeadModel) => {
-          if (!l.nextPaymentDate) return 9999999999999;
-          return new Date(l.nextPaymentDate).getTime();
-        };
-        return getPayScore(a) - getPayScore(b);
-      }
-
-      if (sortMode === "HIGHEST_PRICE") {
-        const getPrice = (l: CrmLeadModel) => {
-          const num = l.fixAmount || l.approxAmount || "0";
-          const match = num.match(/\d[\d,]*/);
-          return match ? parseInt(match[0].replace(/,/g, ""), 10) || 0 : 0;
-        };
-        return getPrice(b) - getPrice(a);
-      }
-
-      // Default NEWEST
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    });
-  }, [initialLeads, selectedFilter, searchQuery, sortMode]);
+    return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }, [initialLeads, selectedFilter, searchQuery]);
 
   const totalPages = Math.max(1, Math.ceil(processedLeads.length / ITEMS_PER_PAGE));
   const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
@@ -202,81 +163,31 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
           })}
         </div>
 
-        {/* Search, Sort & View Toggle */}
-        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3 w-full lg:w-auto">
-          {/* Search Box */}
-          <div className="relative flex-1 sm:w-60 lg:w-64 min-w-[160px]">
-            <Search size={15} className="absolute left-3.5 top-2.5 text-muted" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setCurrentPage(1);
-              }}
-              placeholder="Search leads..."
-              className="w-full rounded-xl border border-chalk/20 bg-surface px-3.5 py-2 pl-9 font-body text-xs text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
-            />
-          </div>
-
-          {/* Sort Dropdown */}
-          <div className="flex items-center gap-1.5 rounded-xl border border-chalk/20 bg-surface px-2.5 py-1.5 font-mono text-xs text-chalk shrink-0">
-            <ArrowUpDown size={14} className="text-flow shrink-0" />
-            <select
-              value={sortMode}
-              onChange={(e) => {
-                setSortMode(e.target.value as SortMode);
-                setCurrentPage(1);
-              }}
-              className="bg-transparent font-semibold focus:outline-none cursor-pointer max-w-[145px] sm:max-w-none truncate"
-            >
-              <option value="NEWEST">Newest First</option>
-              <option value="PAYMENT_DUE">Payment Due Date</option>
-              <option value="HIGHEST_PRICE">Highest Deal Value</option>
-            </select>
-          </div>
-
-          {/* List / Grid View Switcher */}
-          <div className="flex items-center rounded-xl border border-chalk/20 bg-surface p-1 shrink-0">
-            <button
-              onClick={() => setViewMode("list")}
-              title="List View"
-              className={`rounded-lg p-1.5 transition-colors cursor-pointer ${
-                viewMode === "list" ? "bg-flow text-ink" : "text-muted hover:text-chalk"
-              }`}
-            >
-              <LayoutList size={16} />
-            </button>
-            <button
-              onClick={() => setViewMode("grid")}
-              title="Grid Card View"
-              className={`rounded-lg p-1.5 transition-colors cursor-pointer ${
-                viewMode === "grid" ? "bg-flow text-ink" : "text-muted hover:text-chalk"
-              }`}
-            >
-              <LayoutGrid size={16} />
-            </button>
-          </div>
+        {/* Search Box */}
+        <div className="relative w-full sm:w-72 lg:w-80 min-w-[200px]">
+          <Search size={15} className="absolute left-3.5 top-2.5 text-muted" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
+            placeholder="Search leads by name, phone, email, service..."
+            className="w-full rounded-xl border border-chalk/20 bg-surface px-3.5 py-2 pl-9 font-body text-xs text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
+          />
         </div>
       </div>
 
-      {/* Main Content Area */}
+      {/* Main Content Area - Clean Tabular View */}
       {processedLeads.length > 0 ? (
-        viewMode === "list" ? (
-          /* TABULAR LIST VIEW */
-          <div className="rounded-2xl border border-chalk/15 bg-surface shadow-xl overflow-hidden min-w-0">
-            {/* Tablet / Mobile Horizontal Scroll Hint */}
-            <div className="flex xl:hidden items-center justify-between px-4 py-2 bg-ink/70 border-b border-chalk/10 font-mono text-[0.65rem] text-muted">
-              <span className="flex items-center gap-1.5 text-flow/90 font-medium">
-                <span>⇄</span> Swipe horizontally to view all table columns
-              </span>
-              <button
-                onClick={() => setViewMode("grid")}
-                className="text-chalk hover:text-flow underline transition-colors cursor-pointer"
-              >
-                Switch to Cards
-              </button>
-            </div>
+        <div className="rounded-2xl border border-chalk/15 bg-surface shadow-xl overflow-hidden min-w-0">
+          {/* Tablet / Mobile Horizontal Scroll Hint */}
+          <div className="flex xl:hidden items-center justify-between px-4 py-2 bg-ink/70 border-b border-chalk/10 font-mono text-[0.65rem] text-muted">
+            <span className="flex items-center gap-1.5 text-flow/90 font-medium">
+              <span>⇄</span> Swipe horizontally to view all columns
+            </span>
+          </div>
 
             <div className="overflow-x-auto w-full [-webkit-overflow-scrolling:touch]">
               <table className="w-full min-w-[840px] text-left font-body text-xs border-collapse">
@@ -394,78 +305,6 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
               </table>
             </div>
           </div>
-        ) : (
-          /* GRID CARD VIEW - 1 col on mobile, 2 cols on tablet, 3 cols on desktop */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {paginatedLeads.map((lead) => {
-              const badge = STATUS_BADGES[lead.status] || STATUS_BADGES.NEW;
-
-              return (
-                <div
-                  key={lead.id}
-                  onClick={() => setSelectedLead(lead)}
-                  className="group relative rounded-2xl border border-chalk/15 bg-surface p-4 sm:p-5 space-y-4 transition-all duration-200 hover:border-flow/40 hover:shadow-xl hover:shadow-flow/5 cursor-pointer flex flex-col justify-between"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0 flex-1">
-                        <h3 className="font-heading text-base font-bold text-chalk group-hover:text-flow transition-colors truncate">
-                          {lead.name}
-                        </h3>
-                        <p className="font-mono text-xs text-muted flex items-center gap-1 mt-0.5 truncate">
-                          <Briefcase size={12} className="text-flow shrink-0" /> {lead.serviceTitle}
-                        </p>
-                      </div>
-
-                      <span
-                        className={`shrink-0 rounded-full px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-wider font-semibold border ${badge.bg} ${badge.text} ${badge.border}`}
-                      >
-                        {badge.label}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between font-mono text-xs text-muted border-t border-chalk/10 pt-2.5">
-                      <span className="flex items-center gap-1.5 text-chalk font-semibold truncate">
-                        <Phone size={13} className="text-muted shrink-0" /> {lead.phone}
-                      </span>
-                      <span className="rounded bg-chalk/10 px-2 py-0.5 text-[0.65rem] uppercase font-bold text-flow shrink-0">
-                        {lead.source}
-                      </span>
-                    </div>
-
-                    {/* Financial Amounts Breakdown */}
-                    <div className="grid grid-cols-2 gap-2 rounded-xl border border-chalk/10 bg-ink/40 p-2.5 font-mono text-xs">
-                      <div>
-                        <span className="text-[0.65rem] text-muted block">Fixed Price:</span>
-                        <span className="font-bold text-flow truncate block">{lead.fixAmount || lead.approxAmount || "Not set"}</span>
-                      </div>
-                      <div>
-                        <span className="text-[0.65rem] text-muted block">Advance / Bal:</span>
-                        <span className="font-bold text-emerald-400">{lead.advancePaid || "₹0"}</span>
-                        <span className="text-amber-400 font-bold ml-1">({lead.balanceDue || "₹0"})</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2.5 pt-2 border-t border-chalk/10">
-                    <div className="flex items-center justify-between font-mono text-xs">
-                      <span className="text-muted text-[0.65rem] flex items-center gap-1">
-                        <FileText size={11} /> {lead.timelineNotes?.length || 0} discussion notes
-                      </span>
-
-                      <button
-                        type="button"
-                        className="flex items-center gap-1 text-xs font-bold text-flow group-hover:translate-x-1 transition-transform"
-                      >
-                        Manage Lead <ChevronRight size={14} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )
       ) : (
         <div className="rounded-2xl border border-dashed border-chalk/20 p-8 sm:p-12 text-center space-y-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface mx-auto text-muted">
