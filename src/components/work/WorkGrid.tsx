@@ -3,7 +3,21 @@
 import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, ExternalLink, ArrowRight, Sparkles, X, Check, TrendingUp, Layers, Award } from "lucide-react";
+import {
+  Search,
+  ExternalLink,
+  ArrowRight,
+  Sparkles,
+  X,
+  Check,
+  TrendingUp,
+  Layers,
+  Award,
+  ArrowUpRight,
+  Globe,
+  Zap,
+  ShieldCheck,
+} from "lucide-react";
 import FormattedText from "@/components/ui/FormattedText";
 import WorkIllustration from "@/components/decor/WorkIllustration";
 import type { CaseStudy } from "@/types";
@@ -14,10 +28,10 @@ interface WorkGridProps {
 
 const CATEGORY_TABS = [
   { id: "ALL", label: "All Projects" },
-  { id: "SEO", label: "SEO & Growth" },
-  { id: "WEB", label: "Web Development" },
-  { id: "PPC", label: "PPC & Lead Gen" },
-  { id: "ECOMMERCE", label: "Shopify & E-Commerce" },
+  { id: "NEXTJS", label: "Next.js & Custom" },
+  { id: "WORDPRESS", label: "WordPress Portals" },
+  { id: "ECOMMERCE", label: "Shopify & E-Com" },
+  { id: "GROWTH", label: "SEO & PPC Growth" },
 ];
 
 export default function WorkGrid({ initialWork }: WorkGridProps) {
@@ -30,19 +44,18 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
     return initialWork.filter((item) => {
       // Category filter match
       if (selectedCategory !== "ALL") {
-        const catUpper = item.category.toUpperCase();
-        if (selectedCategory === "SEO" && !catUpper.includes("SEO")) return false;
+        const catUpper = (item.category || "").toUpperCase();
         if (
-          selectedCategory === "WEB" &&
-          !catUpper.includes("WEB") &&
-          !catUpper.includes("DEVELOPMENT")
+          selectedCategory === "NEXTJS" &&
+          !catUpper.includes("NEXT") &&
+          !catUpper.includes("PMIAPP") &&
+          !catUpper.includes("CUSTOM")
         )
           return false;
         if (
-          selectedCategory === "PPC" &&
-          !catUpper.includes("PPC") &&
-          !catUpper.includes("LEAD") &&
-          !catUpper.includes("ADS")
+          selectedCategory === "WORDPRESS" &&
+          !catUpper.includes("WORDPRESS") &&
+          !catUpper.includes("WP")
         )
           return false;
         if (
@@ -51,15 +64,23 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
           !catUpper.includes("SHOPIFY")
         )
           return false;
+        if (
+          selectedCategory === "GROWTH" &&
+          !catUpper.includes("SEO") &&
+          !catUpper.includes("PPC") &&
+          !catUpper.includes("LEAD") &&
+          !catUpper.includes("ADS")
+        )
+          return false;
       }
 
       // Search match
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
-        const matchesClient = item.client.toLowerCase().includes(q);
-        const matchesCat = item.category.toLowerCase().includes(q);
-        const matchesSummary = item.summary.toLowerCase().includes(q);
-        const matchesResult = item.resultLabel.toLowerCase().includes(q);
+        const matchesClient = (item.client || "").toLowerCase().includes(q);
+        const matchesCat = (item.category || "").toLowerCase().includes(q);
+        const matchesSummary = (item.summary || "").toLowerCase().includes(q);
+        const matchesResult = (item.resultLabel || "").toLowerCase().includes(q);
         if (!matchesClient && !matchesCat && !matchesSummary && !matchesResult) return false;
       }
 
@@ -127,26 +148,55 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
           {filteredWork.map((item) => {
             const hasCoverImage = Boolean(item.ogImage);
             const liveUrl = item.canonicalOverride;
+            const categoryLabel = item.category.split("·")[0]?.trim() || item.category;
 
             return (
               <div
                 key={item.slug || item.id}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-chalk/15 bg-surface/70 transition-all duration-300 hover:-translate-y-1.5 hover:border-flow/40 hover:shadow-2xl hover:shadow-flow/10"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-chalk/15 bg-surface/80 transition-all duration-500 hover:-translate-y-2 hover:border-flow/50 hover:shadow-2xl hover:shadow-flow/15"
               >
-                {/* Top Media Showcase */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink/90 border-b border-chalk/10">
+                {/* Top Media Showcase - Edge-to-Edge Full Bleed */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink border-b border-chalk/10">
                   {hasCoverImage ? (
-                    <Image
-                      src={item.ogImage!}
-                      alt={item.client}
-                      fill
-                      unoptimized
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-contain p-2 transition-transform duration-500 group-hover:scale-105"
-                    />
+                    <>
+                      <Image
+                        src={item.ogImage!}
+                        alt={item.client}
+                        fill
+                        unoptimized
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                      />
+                      {/* Gradient overlay so image flows cleanly into card */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-70 pointer-events-none group-hover:opacity-40 transition-opacity" />
+                    </>
                   ) : (
                     <div className="h-full w-full p-4 flex items-center justify-center bg-gradient-to-br from-ink via-surface to-ink">
                       <WorkIllustration variant={item.variant} />
+                    </div>
+                  )}
+
+                  {/* Floating Category Pill */}
+                  <div className="absolute top-3.5 left-3.5 z-10">
+                    <span className="inline-flex items-center rounded-full bg-ink/85 px-3 py-1 font-mono text-[0.65rem] font-bold uppercase tracking-wider text-flow border border-chalk/20 backdrop-blur-md shadow-lg">
+                      {categoryLabel}
+                    </span>
+                  </div>
+
+                  {/* Live Website Badge on Image if available */}
+                  {liveUrl && (
+                    <div className="absolute top-3.5 right-3.5 z-10">
+                      <a
+                        href={liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-emerald-950/85 px-2.5 py-1 font-mono text-[0.65rem] font-semibold text-emerald-400 border border-emerald-500/30 backdrop-blur-md hover:bg-emerald-900/90 transition-colors shadow-lg"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>Live Site</span>
+                        <ArrowUpRight size={11} />
+                      </a>
                     </div>
                   )}
                 </div>
@@ -154,19 +204,20 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                 {/* Content Body */}
                 <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                   <div className="space-y-3">
-                    {/* Category & Result Badges */}
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="rounded-full bg-chalk/10 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-wider font-semibold text-flow border border-chalk/15">
-                        {item.category}
-                      </span>
-                      <span className="flex items-center gap-1 rounded-full bg-emerald-500/15 px-3 py-1 font-mono text-[0.7rem] font-bold text-emerald-400 border border-emerald-500/30">
-                        <TrendingUp size={12} /> {item.resultLabel}
-                      </span>
-                    </div>
+                    {/* Result / Impact Badge */}
+                    {item.resultLabel && (
+                      <div className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500/10 px-3 py-1 font-mono text-[0.72rem] font-semibold text-emerald-400 border border-emerald-500/25">
+                        <TrendingUp size={12} className="text-emerald-400 shrink-0" />
+                        <span>{item.resultLabel}</span>
+                      </div>
+                    )}
 
-                    <h3 className="font-heading text-xl font-bold text-chalk group-hover:text-flow transition-colors">
+                    {/* Client Title */}
+                    <h3 className="font-heading text-xl font-bold text-chalk group-hover:text-flow transition-colors line-clamp-1">
                       {item.client}
                     </h3>
+
+                    {/* Summary */}
                     <FormattedText
                       text={item.summary}
                       as="p"
@@ -175,12 +226,12 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="pt-4 border-t border-chalk/10 flex items-center justify-between gap-2">
+                  <div className="pt-4 border-t border-chalk/10 flex items-center justify-between gap-3">
                     <button
                       onClick={() => setActiveModalItem(item)}
-                      className="flex items-center gap-1.5 font-mono text-xs font-bold text-flow hover:underline cursor-pointer"
+                      className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-flow hover:text-flow/80 cursor-pointer transition-colors"
                     >
-                      <span>View Breakdown</span>
+                      <span>Case Study</span>
                       <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
                     </button>
 
@@ -189,10 +240,10 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                         href={liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 rounded-lg border border-chalk/20 px-2.5 py-1 font-mono text-[0.65rem] text-muted uppercase tracking-wider hover:border-flow hover:text-flow transition-colors"
+                        className="inline-flex items-center gap-1 rounded-lg border border-chalk/20 bg-ink/40 px-3 py-1.5 font-mono text-[0.68rem] font-semibold text-chalk hover:border-flow hover:text-flow hover:bg-surface transition-all"
                       >
-                        <span>Live Site</span>
-                        <ExternalLink size={10} />
+                        <span>Visit Site</span>
+                        <ExternalLink size={11} />
                       </a>
                     )}
                   </div>
@@ -205,15 +256,15 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
 
       {/* Detail Modal Drawer */}
       {activeModalItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 sm:p-6 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl border border-chalk/20 bg-surface shadow-2xl p-6 sm:p-8 space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 sm:p-6 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl border border-chalk/20 bg-surface shadow-2xl p-6 sm:p-8 space-y-6">
             {/* Modal Header */}
             <div className="flex items-start justify-between gap-4 border-b border-chalk/15 pb-4">
               <div>
                 <span className="font-mono text-xs font-semibold uppercase tracking-widest text-signal">
                   {activeModalItem.category}
                 </span>
-                <h2 className="mt-1 font-heading text-2xl font-bold text-chalk">
+                <h2 className="mt-1 font-heading text-2xl sm:text-3xl font-bold text-chalk">
                   {activeModalItem.client}
                 </h2>
               </div>
@@ -226,57 +277,77 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
             </div>
 
             {/* Modal Highlight Banner */}
-            <div className="flex items-center justify-between rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 font-mono text-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 font-mono text-xs">
               <span className="text-emerald-300 font-semibold flex items-center gap-2">
                 <Award size={18} className="text-emerald-400" /> Key Impact Delivered:
               </span>
-              <span className="font-bold text-sm text-emerald-400 bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-500/40">
-                {activeModalItem.resultLabel}
+              <span className="font-bold text-sm text-emerald-400 bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-500/40 w-fit">
+                {activeModalItem.resultLabel || "Verified Production Build"}
               </span>
             </div>
 
-            {/* Cover Image if available */}
+            {/* Edge-to-Edge Hero Image in Modal */}
             {activeModalItem.ogImage && (
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-chalk/15 bg-ink">
+              <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden rounded-2xl border border-chalk/20 bg-ink shadow-2xl">
                 <Image
                   src={activeModalItem.ogImage}
                   alt={activeModalItem.client}
                   fill
                   unoptimized
-                  className="object-contain p-2"
+                  className="object-cover object-top"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-transparent pointer-events-none" />
+
+                {/* Floating Live Link in Modal Image */}
+                {activeModalItem.canonicalOverride && (
+                  <div className="absolute bottom-4 right-4 z-10">
+                    <a
+                      href={activeModalItem.canonicalOverride}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-xl bg-ink/90 px-4 py-2 font-mono text-xs font-bold text-flow border border-chalk/20 backdrop-blur-md shadow-2xl hover:bg-flow hover:text-ink transition-all"
+                    >
+                      <span>Open Live Website</span>
+                      <ExternalLink size={13} />
+                    </a>
+                  </div>
+                )}
               </div>
             )}
 
             {/* Project Summary / Details */}
             <div className="space-y-3 font-body text-sm text-muted leading-relaxed">
               <h4 className="font-mono text-xs uppercase tracking-wider font-bold text-chalk flex items-center gap-2">
-                <Sparkles size={14} className="text-flow" /> Case Study Overview & Strategy
+                <Sparkles size={14} className="text-flow" /> Case Study Overview & Scope
               </h4>
-              <FormattedText text={activeModalItem.summary} as="div" className="bg-ink/50 p-4 rounded-2xl border border-chalk/10" />
+              <FormattedText
+                text={activeModalItem.summary}
+                as="div"
+                className="bg-ink/50 p-5 rounded-2xl border border-chalk/10 text-muted leading-relaxed"
+              />
             </div>
 
             {/* Strategic Deliverables List */}
             <div className="space-y-3">
               <h4 className="font-mono text-xs uppercase tracking-wider font-bold text-chalk">
-                Key Strategic Highlights
+                Verified Deliverables & Engineering
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 font-mono text-xs">
-                <div className="flex items-center gap-2 rounded-xl border border-chalk/15 bg-ink p-3 text-chalk">
+                <div className="flex items-center gap-2.5 rounded-xl border border-chalk/15 bg-ink p-3 text-chalk">
                   <Check size={14} className="text-emerald-400 shrink-0" />
-                  <span>Custom Performance Funnel</span>
+                  <span>Custom Performance Architecture</span>
                 </div>
-                <div className="flex items-center gap-2 rounded-xl border border-chalk/15 bg-ink p-3 text-chalk">
+                <div className="flex items-center gap-2.5 rounded-xl border border-chalk/15 bg-ink p-3 text-chalk">
                   <Check size={14} className="text-emerald-400 shrink-0" />
-                  <span>Conversion Rate Optimization</span>
+                  <span>Conversion & Lead Optimization</span>
                 </div>
-                <div className="flex items-center gap-2 rounded-xl border border-chalk/15 bg-ink p-3 text-chalk">
+                <div className="flex items-center gap-2.5 rounded-xl border border-chalk/15 bg-ink p-3 text-chalk">
                   <Check size={14} className="text-emerald-400 shrink-0" />
-                  <span>High-Intent Audience Targeting</span>
+                  <span>Mobile-First Responsive UX</span>
                 </div>
-                <div className="flex items-center gap-2 rounded-xl border border-chalk/15 bg-ink p-3 text-chalk">
+                <div className="flex items-center gap-2.5 rounded-xl border border-chalk/15 bg-ink p-3 text-chalk">
                   <Check size={14} className="text-emerald-400 shrink-0" />
-                  <span>Transparent KPI Tracking</span>
+                  <span>Enterprise Security & SEO Baseline</span>
                 </div>
               </div>
             </div>
@@ -290,10 +361,12 @@ export default function WorkGrid({ initialWork }: WorkGridProps) {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 font-mono text-xs font-semibold text-flow hover:underline"
                 >
-                  <ExternalLink size={14} /> Visit Client Website ({activeModalItem.client})
+                  <Globe size={14} /> Visit Client Website ({activeModalItem.client})
                 </a>
               ) : (
-                <span className="font-mono text-xs text-muted">GGM Verified Client Case Study</span>
+                <span className="font-mono text-xs text-muted flex items-center gap-1.5">
+                  <ShieldCheck size={14} className="text-flow" /> GGM Technologies Verified Client Build
+                </span>
               )}
 
               <Link
