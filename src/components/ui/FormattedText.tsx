@@ -240,6 +240,54 @@ export function renderFormattedContent(text: string): React.ReactNode[] {
       continue;
     }
 
+    // Markdown Table
+    if (trimmed.startsWith("|") && trimmed.endsWith("|")) {
+      flushList();
+      const tableLines = [trimmed];
+      while (i + 1 < lines.length && lines[i + 1].trim().startsWith("|") && lines[i + 1].trim().endsWith("|")) {
+        i++;
+        tableLines.push(lines[i].trim());
+      }
+
+      const rows = tableLines
+        .filter((l) => !/^[\|\s\-:]+$/.test(l))
+        .map((l) => l.split("|").slice(1, -1).map((c) => c.trim()));
+
+      if (rows.length > 0) {
+        const header = rows[0];
+        const bodyRows = rows.slice(1);
+        blocks.push(
+          <div key={`table-${i}`} className="my-6 overflow-x-auto rounded-2xl border border-chalk/20 bg-surface/40 p-1 shadow-lg">
+            <table className="w-full border-collapse text-left font-body text-sm text-chalk">
+              {header.length > 0 && (
+                <thead>
+                  <tr className="border-b border-chalk/20 bg-chalk/10">
+                    {header.map((col, idx) => (
+                      <th key={idx} className="py-3 px-4 font-mono text-xs uppercase tracking-wider text-flow font-bold">
+                        {formatInlineText(col)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+              )}
+              <tbody className="divide-y divide-chalk/10">
+                {bodyRows.map((r, rIdx) => (
+                  <tr key={rIdx} className="hover:bg-chalk/5 transition-colors">
+                    {r.map((cell, cIdx) => (
+                      <td key={cIdx} className="py-3 px-4 leading-relaxed text-muted">
+                        {formatInlineText(cell)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      }
+      continue;
+    }
+
     // Regular paragraph
     flushList();
     blocks.push(
@@ -260,8 +308,8 @@ export default function FormattedText({
 }: FormattedTextProps) {
   if (!text) return null;
 
-  // If text contains block elements (headings, quotes, lists) or multi-lines, render as block list
-  const hasBlockMarkdown = /^(#+\s|>|\s*[-*]\s|\s*\d+\.\s)/m.test(text);
+  // If text contains block elements (headings, quotes, lists, tables) or multi-lines, render as block list
+  const hasBlockMarkdown = /^(#+\s|>|\s*[-*]\s|\s*\d+\.\s|\|.*\|)/m.test(text);
 
   if (hasBlockMarkdown) {
     return <div className={className}>{renderFormattedContent(text)}</div>;

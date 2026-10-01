@@ -2518,6 +2518,260 @@ export const SERVICE_DETAILS: Record<string, ServiceDetailContent> = {
       "Expert Google AdSense approval and yield monetization services in Delhi. Maximize RPM, implement header bidding, and eliminate invalid click risks with GGM Technologies.",
     focusKeywords: ["Google AdSense approval service Delhi", "AdSense monetization agency India", "increase AdSense RPM", "Google Ad Manager setup Delhi", "AdSense policy fix"],
   },
+  "digital-agency": {
+    slug: "digital-agency",
+    badge: "FULL-SERVICE 360° DIGITAL AGENCY",
+    heroH1: "Digital Agency & Growth Acceleration",
+    heroSubtitle:
+      "Unified Brand Design, Cutting-Edge Engineering, and High-ROAS Performance Marketing Under One Roof",
+    overviewParagraphs: [
+      "In an increasingly fragmented digital economy, disjointed efforts between freelance designers, outsourced dev shops, and separate ad media buyers bleed marketing budget. GGM Technologies operates as a unified, full-service digital agency engineered to bridge this gap. We combine bespoke digital brand identity, sub-second web and mobile engineering, AI-driven search dominance (SEO & GEO), and multi-channel performance marketing into a synchronized growth engine.",
+      "From high-growth startups seeking to disrupt incumbent markets to established mid-market enterprises modernizing legacy digital footprints, our multidisciplinary teams of designers, full-stack engineers, SEO strategists, and performance media buyers work in lockstep. We don't just deliver vanity assets — we architect high-converting commercial pipelines that consistently outrank and out-convert your competitors.",
+      "With complete transparency, data-backed attribution models, and dedicated account leadership, GGM Technologies transforms digital ambition into quantifiable market leadership.",
+    ],
+    metrics: [
+      { value: "380%+", label: "Average Revenue Growth", subtext: "Scaled across retained client engagements over 12 months" },
+      { value: "< 0.8s", label: "Next.js Benchmark Speed", subtext: "Sub-second page loads engineered for peak conversion" },
+      { value: "99.2%", label: "Client Retention Rate", subtext: "Built on transparent ROI reporting and zero lock-in contracts" },
+      { value: "500+", label: "Digital Projects Shipped", subtext: "Enterprise web platforms, mobile apps, and growth funnels" },
+    ],
+    pillarsTitle: "Comprehensive 360° Digital Agency Capabilities",
+    pillarsSubtitle:
+      "End-to-end execution across every customer touchpoint — from brand discovery to commercial revenue scaling.",
+    pillars: [
+      {
+        title: "Brand Identity & Bespoke UI/UX Design",
+        tagline: "Visual authority that commands premium pricing.",
+        description:
+          "We craft cohesive digital design systems, user personas, wireframes, interactive prototypes, and luxury UI/UX that transform casual visitors into passionate brand advocates.",
+        deliverables: [
+          "Design Systems & Component Libraries in Figma",
+          "Bespoke UI/UX Wireframing & Interactive Prototypes",
+          "Omnichannel Visual Identity & Brand Guidelines",
+          "Interactive Micro-Animations & Responsive Layouts",
+        ],
+      },
+      {
+        title: "Custom Web & Mobile Application Engineering",
+        tagline: "Sub-second speed, zero layout shift, enterprise scale.",
+        description:
+          "Bespoke platforms engineered on modern tech stacks — Next.js, React, Node.js, React Native, and Flutter. Architected for peak Core Web Vitals, bulletproof security, and seamless API integrations.",
+        deliverables: [
+          "Custom Next.js & Headless Architecture",
+          "Cross-Platform iOS & Android Mobile Apps",
+          "Scalable REST & GraphQL Microservices",
+          "Automated CI/CD & Cloud Infrastructure on AWS",
+        ],
+      },
+      {
+        title: "Full-Funnel Organic & Paid Performance",
+        tagline: "Dominate search engines and capture high-intent demand.",
+        description:
+          "Synchronized search engine optimization (SEO), Generative Engine Optimization (GEO), Google Search & Display Ads, and Meta Performance Marketing that capture demand at every stage of the buyer journey.",
+        deliverables: [
+          "Enterprise Technical SEO & Topical Maps",
+          "High-ROAS Google Ads & Meta PPC Campaigns",
+          "Generative Engine Optimization (ChatGPT & Gemini)",
+          "Audience Segmentation & Dynamic Retargeting Funnels",
+        ],
+      },
+      {
+        title: "Conversion Rate Optimization (CRO) & Funnel Architecture",
+        tagline: "Extract maximum revenue from existing traffic.",
+        description:
+          "We deploy multivariate A/B testing, user journey heatmapping, scroll depth analysis, and frictionless checkout optimization to double conversion rates without inflating ad spend.",
+        deliverables: [
+          "Multi-variant A/B Testing & Funnel Heatmapping",
+          "Frictionless High-Conversion Checkout Flows",
+          "WhatsApp & Automated CRM Lead Nurturing",
+          "Cart Abandonment & Churn Mitigation Funnels",
+        ],
+      },
+      {
+        title: "360° Data Analytics & Marketing Automation",
+        tagline: "Actionable intelligence, transparent multi-touch attribution.",
+        description:
+          "Custom Looker Studio dashboards, Google Tag Manager server-side tracking, GA4 audit compliance, and seamless CRM integrations (HubSpot, Salesforce, Zoho) for crystal-clear ROI visibility.",
+        deliverables: [
+          "Server-Side Google Tag Manager & GA4 Setup",
+          "Custom Looker Studio Real-Time Analytics",
+          "HubSpot & Salesforce CRM Pipeline Automation",
+          "First-Party Data Compliance & Cookie Consent",
+        ],
+      },
+    ],
+    frameworkTitle: "Our 4-Stage Digital Transformation Framework",
+    frameworkSubtitle:
+      "How we take ambitious brands from initial audit to sustainable market leadership in 90 days.",
+    frameworkSteps: [
+      {
+        stepNumber: "01",
+        name: "Discovery, Technical Audit & Competitor Benchmarking",
+        duration: "Weeks 1–2",
+        summary: "Deconstructing your existing digital footprint and uncovering high-leverage growth opportunities.",
+        description:
+          "We conduct deep-dive technical code audits, SEO backlink profiling, CRO heatmap analysis, and competitor positioning tear-downs to identify immediate revenue leaks and strategic whitespace.",
+        outputs: ["Technical Audit Report", "Competitor Matrix", "90-Day Digital Roadmap"],
+      },
+      {
+        stepNumber: "02",
+        name: "Strategic Blueprint & Design System Architecture",
+        duration: "Weeks 3–4",
+        summary: "Architecting the technical foundation, conversion funnels, and creative direction.",
+        description:
+          "Our designers establish your custom design system in Figma while our tech leads architect database schemas, API microservices, and tracking tags to ensure seamless execution.",
+        outputs: ["Figma High-Fidelity Prototypes", "API Specification", "Paid Media Architecture"],
+      },
+      {
+        stepNumber: "03",
+        name: "Agile Development, Creative Production & Channel Setup",
+        duration: "Weeks 5–8",
+        summary: "Rapid sprint development, landing page builds, and ad campaign staging.",
+        description:
+          "Engineers code sub-second web experiences, copywriters craft high-intent sales copy, and performance marketers build audience cohorts in Google and Meta Ads managers.",
+        outputs: ["Production Staging Build", "Ad Creatives & Copy", "Automated CRM Workflows"],
+      },
+      {
+        stepNumber: "04",
+        name: "Launch, Full-Funnel Scaling & Continuous Optimization",
+        duration: "Ongoing",
+        summary: "Live deployment, conversion rate testing, and aggressive budget scaling.",
+        description:
+          "Zero-downtime production deployment backed by automated monitoring, live Looker Studio reporting, daily bid optimization, and weekly multivariate A/B testing sprints.",
+        outputs: ["Live Web Platform", "24/7 Looker Studio Dashboard", "Weekly Growth Reports"],
+      },
+    ],
+    techStackTitle: "Enterprise-Grade Technology & Marketing Stack",
+    techStackSubtitle:
+      "Built on modern, scalable tools trusted by high-growth startups and global enterprises.",
+    techStackCategories: [
+      {
+        category: "Design & User Experience",
+        tools: ["Figma", "Adobe Creative Cloud", "Framer", "Lottie Animations", "After Effects"],
+      },
+      {
+        category: "Frontend & Mobile Engineering",
+        tools: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS", "Flutter", "React Native"],
+      },
+      {
+        category: "Backend & Cloud Infrastructure",
+        tools: ["Node.js", "MariaDB / MySQL", "PostgreSQL", "Amazon Web Services (AWS)", "Cloudflare Enterprise", "Docker"],
+      },
+      {
+        category: "Analytics & Growth Marketing",
+        tools: ["Google Analytics 4", "Looker Studio", "Google Search Console", "Ahrefs", "Semrush", "Meta Ads Manager"],
+      },
+    ],
+    comparisonTitle: "Why High-Growth Brands Choose GGM Technologies Over Traditional Agencies",
+    comparisonSubtitle:
+      "See the tangible difference between a unified growth partner and fragmented agency vendors.",
+    comparisonHeaders: ["Strategic Capability", "GGM Digital Agency", "Traditional Agencies", "Freelance Networks"],
+    comparisonRows: [
+      {
+        feature: "Multidisciplinary Alignment",
+        ggmApproach: "Engineers, UX designers, and marketers work synchronously in one agile squad.",
+        traditionalAgency: "Departments operate in isolated silos; design often conflicts with SEO and dev.",
+        freelancer: "Zero coordination; client must manually manage multiple conflicting contractors.",
+        highlight: true,
+      },
+      {
+        feature: "Engineering Quality & Speed",
+        ggmApproach: "Sub-second Next.js headless platforms with 95+ Core Web Vitals performance.",
+        traditionalAgency: "Bloated template sites built on slow, vulnerable legacy CMS page-builders.",
+        freelancer: "Varying code quality, zero testing automation, and frequent regressions.",
+        highlight: true,
+      },
+      {
+        feature: "Search & AI Optimization (GEO)",
+        ggmApproach: "Future-proof technical SEO, topical authority maps, and ChatGPT/Gemini optimization.",
+        traditionalAgency: "Basic keyword stuffing and generic meta tag checklists.",
+        freelancer: "Rarely covers technical SEO or modern AI search indexation.",
+        highlight: true,
+      },
+      {
+        feature: "Reporting & Attribution",
+        ggmApproach: "Live 24/7 custom Looker Studio dashboards with verified commercial attribution.",
+        traditionalAgency: "Monthly vanity PDF reports focusing on impressions rather than closed revenue.",
+        freelancer: "Infrequent or non-existent reporting without verified tracking.",
+        highlight: false,
+      },
+      {
+        feature: "Contractual Agility & IP Ownership",
+        ggmApproach: "100% intellectual property ownership with zero restrictive lock-in clauses.",
+        traditionalAgency: "Lengthy 12-month lock-in contracts with proprietary software hostage clauses.",
+        freelancer: "Risk of abandoned repositories and unresolved copyright disputes.",
+        highlight: false,
+      },
+    ],
+    industriesTitle: "Transforming Digital Commercial Performance Across Verticals",
+    industriesSubtitle:
+      "Bespoke digital strategies engineered for specific regulatory, transactional, and sales cycle nuances.",
+    industries: [
+      {
+        industry: "B2B SaaS & Tech Startups",
+        challenge: "High customer acquisition costs (CAC) and lengthy, complex B2B sales cycles.",
+        solution: "High-intent search capture, interactive product demos, and automated LinkedIn & email nurture funnels.",
+        impact: "4.2x increase in qualified demo bookings with a 38% reduction in net blended CAC.",
+      },
+      {
+        industry: "E-Commerce & High-Growth D2C",
+        challenge: "Cart abandonment, low returning customer rates, and rising Meta ad CPM costs.",
+        solution: "Sub-second headless storefronts, frictionless 1-click checkout, and dynamic multi-channel retargeting.",
+        impact: "62% lift in mobile conversion rate and 3.8x blended Return On Ad Spend (ROAS).",
+      },
+      {
+        industry: "Real Estate & Luxury Development",
+        challenge: "Poor lead qualification and cold drop-offs on high-ticket property inquiries.",
+        solution: "Immersive 3D architectural showcase sites paired with geo-fenced high-net-worth lead funnels.",
+        impact: "Over ₹45 Cr in verified property site visits attributed to unified digital campaigns.",
+      },
+      {
+        industry: "Healthcare & Professional Services",
+        challenge: "Strict compliance standards, low consumer trust, and fragmented local search visibility.",
+        solution: "HIPAA/compliance-vetted patient portals, local clinic SEO dominance, and reputation management.",
+        impact: "280% increase in verified patient appointment bookings across 14 regional centers.",
+      },
+    ],
+    faqsTitle: "Frequently Asked Questions About Our Digital Agency Services",
+    faqsSubtitle:
+      "Everything you need to know about our engagement models, deliverables, and ROI guarantees.",
+    faqs: [
+      {
+        question: "What makes GGM Technologies different from traditional digital marketing agencies?",
+        answer:
+          "Unlike fragmented agencies that outsource dev work or treat design and media buying as isolated silos, GGM Technologies is a unified full-service digital agency. Our engineers, UX designers, technical SEO specialists, and media buyers sit in the same room. This ensures that every ad campaign drives traffic to sub-second, conversion-optimized landing pages, and every web platform is architected from day one to dominate organic search and AI search engines.",
+      },
+      {
+        question: "What services are included in a full-service Digital Agency engagement?",
+        answer:
+          "Our digital agency retainers encompass complete digital growth: bespoke UI/UX design and design systems, custom Next.js web and mobile app development, full-funnel organic search (SEO & Generative Engine Optimization), paid media execution (Google Ads, Meta Ads, LinkedIn Ads), conversion rate optimization (CRO), automated CRM lead funnels, and real-time Looker Studio reporting.",
+      },
+      {
+        question: "How long does a digital transformation or agency engagement take to show results?",
+        answer:
+          "Paid acquisition channels (Google Ads and Meta Ads) begin capturing qualified leads and pipeline within the first 7 to 14 days of campaign launch. Full-scale web development projects typically ship in 4 to 8 weeks following our agile sprint methodology. Organic search dominance and topical authority compound aggressively between months 3 and 6, delivering sustainable, zero-marginal-cost customer acquisition.",
+      },
+      {
+        question: "Do you offer flexible retainer models or fixed-scope project delivery?",
+        answer:
+          "We offer both models depending on your strategic requirements. For complete digital transformation and ongoing customer acquisition, our monthly growth retainers provide a dedicated multidisciplinary squad (Project Lead, Senior Developer, Creative Designer, and Performance Marketer). For specific builds (such as new web applications or brand re-launches), we provide fixed-price milestone delivery with zero surprise overages.",
+      },
+      {
+        question: "Who owns the code, creative design assets, and ad account data?",
+        answer:
+          "You retain 100% intellectual property ownership. All Figma design files, Git code repositories, Google Ads / Meta Ads accounts, domain DNS records, and analytics tracking properties belong exclusively to your organization. We believe in earning client retention through quantifiable commercial performance, not artificial vendor lock-in.",
+      },
+      {
+        question: "How do you track ROI and report marketing performance?",
+        answer:
+          "We provide live, 24/7 custom Looker Studio dashboards tracking revenue, Cost Per Acquisition (CPA), Return On Ad Spend (ROAS), organic keyword rankings, and pipeline velocity. You receive weekly agile check-ins and monthly executive strategy reviews with transparent multi-touch attribution.",
+      },
+    ],
+    metaTitle: "Top Digital Agency in Delhi & Globally | 360° Growth & Creative Solutions — GGM Technologies",
+    metaDescription:
+      "Partner with GGM Technologies, a premier full-service digital agency. We deliver cutting-edge web development, performance marketing, SEO, and brand transformation.",
+    focusKeywords: ["digital agency", "full service digital agency", "digital marketing and web development agency", "creative digital agency", "top digital agency in delhi", "best digital agency india"],
+  },
 };
 
 // Service details alias pointers (guarantees 100% data availability for all slug variations)
@@ -2536,3 +2790,6 @@ SERVICE_DETAILS["mobile-app"] = SERVICE_DETAILS["mobile-app-development"];
 SERVICE_DETAILS["google-ads"] = SERVICE_DETAILS["google-adsense"];
 SERVICE_DETAILS["adsense"] = SERVICE_DETAILS["google-adsense"];
 SERVICE_DETAILS["pay-per-click-advertising"] = SERVICE_DETAILS["ppc"];
+SERVICE_DETAILS["digital-marketing-agency"] = SERVICE_DETAILS["digital-agency"];
+SERVICE_DETAILS["creative-agency"] = SERVICE_DETAILS["digital-agency"];
+SERVICE_DETAILS["digital"] = SERVICE_DETAILS["digital-agency"];

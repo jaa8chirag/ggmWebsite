@@ -52,6 +52,8 @@ const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
   "shopify-development": "/images/services/shopify-development.jpg",
   "wordpress-development": "/images/services/wordpress-development.jpg",
   "shopify-wordpress": "/images/services/shopify-development.jpg",
+  "digital-agency": "/images/services/digital-agency.jpg",
+  "digital-marketing-agency": "/images/services/digital-agency.jpg",
 };
 
 // Maps a service to the blog category covering it, for internal linking.
@@ -70,6 +72,8 @@ const SERVICE_BLOG_CATEGORY: Record<string, string> = {
   "shopify-development": "Web Development",
   "wordpress-development": "Web Development",
   "shopify-wordpress": "Web Development",
+  "digital-agency": "Web Development",
+  "digital-marketing-agency": "Web Development",
 };
 
 export async function generateMetadata({

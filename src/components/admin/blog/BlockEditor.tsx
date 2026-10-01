@@ -21,7 +21,8 @@ import {
 } from "lucide-react";
 import { labelClass, inputClass } from "@/components/admin/styles";
 import { formatInlineText } from "@/components/ui/FormattedText";
-import { parseArticleContent, ParsedBlock } from "@/lib/blogParser";
+import { parseArticleContent, parseFullArticle, ParsedBlock, ParsedArticle } from "@/lib/blogParser";
+import { HelpCircle } from "lucide-react";
 
 type BlockType = "h2" | "h3" | "paragraph" | "list";
 
@@ -56,7 +57,13 @@ function toRow(id: number, b?: InitialBlock): Row {
   };
 }
 
-export default function BlockEditor({ initial = [] }: { initial?: InitialBlock[] }) {
+export default function BlockEditor({
+  initial = [],
+  onImportFullArticle,
+}: {
+  initial?: InitialBlock[];
+  onImportFullArticle?: (article: ParsedArticle) => void;
+}) {
   const [rows, setRows] = useState<Row[]>(() =>
     initial.length ? initial.map((b, i) => toRow(i, b)) : [toRow(0)]
   );
@@ -78,16 +85,20 @@ export default function BlockEditor({ initial = [] }: { initial?: InitialBlock[]
     });
   };
 
-  // Real-time detection of blocks from pasted text and rich HTML
-  const detectedBlocks: ParsedBlock[] = useMemo(() => {
-    if (!pastedText.trim() && !pastedHtmlRef.current.trim()) return [];
-    return parseArticleContent(pastedText, pastedHtmlRef.current);
+  // Real-time detection of article from pasted text and rich HTML
+  const detectedArticle: ParsedArticle = useMemo(() => {
+    if (!pastedText.trim() && !pastedHtmlRef.current.trim()) {
+      return { title: "", slug: "", excerpt: "", category: "Web Development", blocks: [], faqs: [] };
+    }
+    return parseFullArticle(pastedText, pastedHtmlRef.current);
   }, [pastedText]);
 
+  const detectedBlocks = detectedArticle.blocks;
   const h2Count = detectedBlocks.filter((b) => b.type === "h2").length;
   const h3Count = detectedBlocks.filter((b) => b.type === "h3").length;
   const pCount = detectedBlocks.filter((b) => b.type === "paragraph").length;
   const listCount = detectedBlocks.filter((b) => b.type === "list").length;
+  const faqCount = detectedArticle.faqs.length;
 
   const parseQuickPaste = (mode: "replace" | "append" = "replace") => {
     const blocks = detectedBlocks.length > 0
@@ -105,7 +116,6 @@ export default function BlockEditor({ initial = [] }: { initial?: InitialBlock[]
     }));
 
     if (mode === "append") {
-      // If current rows only have 1 initial blank paragraph, replace it
       const isInitialBlank =
         rows.length === 1 && rows[0].type === "paragraph" && !rows[0].text && !rows[0].items;
       if (isInitialBlank) {
@@ -120,6 +130,13 @@ export default function BlockEditor({ initial = [] }: { initial?: InitialBlock[]
     setPastedText("");
     pastedHtmlRef.current = "";
     setShowQuickPaste(false);
+  };
+
+  const handleApplyFullArticle = () => {
+    if (onImportFullArticle && detectedArticle.title) {
+      onImportFullArticle(detectedArticle);
+    }
+    parseQuickPaste("replace");
   };
 
   const insertHelper = (rowId: number, prefix: string, suffix: string = prefix) => {
@@ -239,6 +256,25 @@ In 2026, AI search engines change how users find info.
                 </div>
               </div>
 
+              {/* Title and FAQ detection banner */}
+              {detectedArticle.title && (
+                <div className="rounded-lg border border-signal/30 bg-signal/10 p-2.5 flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="rounded bg-signal/25 px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-signal shrink-0">
+                      Title
+                    </span>
+                    <span className="font-display text-xs font-bold text-chalk truncate">
+                      {detectedArticle.title}
+                    </span>
+                  </div>
+                  {faqCount > 0 && (
+                    <span className="rounded bg-flow/20 px-2 py-0.5 font-mono text-[10px] font-bold text-flow flex items-center gap-1 shrink-0">
+                      <HelpCircle size={11} /> {faqCount} FAQs Ready
+                    </span>
+                  )}
+                </div>
+              )}
+
               {/* Preview of Headings that will populate Table of Contents */}
               {(h2Count > 0 || h3Count > 0) && (
                 <div className="border-t border-flow/15 pt-2">
@@ -284,7 +320,7 @@ In 2026, AI search engines change how users find info.
               Clear Text
             </button>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
                 onClick={() => {
@@ -309,10 +345,20 @@ In 2026, AI search engines change how users find info.
                 type="button"
                 disabled={detectedBlocks.length === 0}
                 onClick={() => parseQuickPaste("replace")}
-                className="rounded-lg bg-flow px-5 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-ink hover:bg-flow/90 transition-all shadow-sm disabled:opacity-40 cursor-pointer"
+                className="rounded-lg border border-flow/50 bg-flow/15 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-flow hover:bg-flow hover:text-ink transition-all disabled:opacity-40 cursor-pointer"
               >
-                Convert to Blocks ({detectedBlocks.length})
+                Blocks Only ({detectedBlocks.length})
               </button>
+              {onImportFullArticle && detectedArticle.title && (
+                <button
+                  type="button"
+                  onClick={handleApplyFullArticle}
+                  className="rounded-lg bg-signal px-5 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-chalk hover:bg-signal/90 transition-all shadow-md cursor-pointer flex items-center gap-1.5"
+                >
+                  <Sparkles size={13} />
+                  ⚡ Apply All to Blog
+                </button>
+              )}
             </div>
           </div>
         </div>
