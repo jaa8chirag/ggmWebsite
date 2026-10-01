@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Phone, Mail, User, MessageSquare, Briefcase, Loader2 } from "lucide-react";
+import { CheckCircle2, Phone, Mail, User, MessageSquare, Briefcase, HelpCircle, Loader2 } from "lucide-react";
 import Button from "@/components/ui/Button";
 import CountryCodeSelect from "@/components/ui/CountryCodeSelect";
 import { submitQuoteRequest } from "@/app/actions/quote";
@@ -13,6 +13,7 @@ interface FormValues {
   phone: string;
   email: string;
   service: string;
+  otherQuery: string;
   message: string;
 }
 
@@ -23,6 +24,7 @@ const initialValues: FormValues = {
   phone: "",
   email: "",
   service: "",
+  otherQuery: "",
   message: "",
 };
 
@@ -44,6 +46,10 @@ function validate(values: FormValues): FormErrors {
     errors.email = "Please provide an email address for project details.";
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
     errors.email = "That doesn't look like a valid email address.";
+  }
+
+  if (values.service === "other-query" && !values.otherQuery.trim()) {
+    errors.otherQuery = "Please specify what your query is regarding.";
   }
 
   return errors;
@@ -88,19 +94,34 @@ export default function ContactForm({
 
     setIsSubmitting(true);
     try {
+      const isOtherQuery = values.service === "other-query";
       const selectedService = services.find((s) => s.slug === values.service);
-      const serviceTitle = selectedService
-        ? `Start a Project - ${selectedService.title}`
-        : "Start a Project - General Inquiry";
+
+      let serviceTitle = "Start a Project - General Inquiry";
+      let serviceSlug = values.service || "general";
+
+      if (isOtherQuery) {
+        serviceSlug = "other-query";
+        serviceTitle = values.otherQuery.trim()
+          ? `Other Query: ${values.otherQuery.trim()}`
+          : "Other Query / Custom Inquiry";
+      } else if (selectedService) {
+        serviceTitle = `Start a Project - ${selectedService.title}`;
+      }
 
       const fullPhoneNumber = `${countryCode} ${values.phone.trim()}`;
+      const finalMessage =
+        isOtherQuery && values.otherQuery.trim()
+          ? `[Query Topic: ${values.otherQuery.trim()}]\n\n${values.message || ""}`.trim()
+          : values.message || "";
+
       const formData = new FormData();
       formData.set("name", values.name);
       formData.set("phone", fullPhoneNumber);
       formData.set("email", values.email);
-      formData.set("serviceSlug", values.service || "general");
+      formData.set("serviceSlug", serviceSlug);
       formData.set("serviceTitle", serviceTitle);
-      formData.set("message", values.message || "");
+      formData.set("message", finalMessage);
       formData.set("pageUrl", "/contact");
 
       const res = await submitQuoteRequest(formData);
@@ -131,9 +152,11 @@ export default function ContactForm({
           <p className="mt-2 font-body text-sm text-muted">
             Thank you, <span className="font-semibold text-chalk">{values.name}</span>. We have logged your request for{" "}
             <span className="font-semibold text-flow">
-              {services.find((s) => s.slug === values.service)?.title || "your digital growth"}
+              {values.service === "other-query"
+                ? values.otherQuery || "your custom query"
+                : services.find((s) => s.slug === values.service)?.title || "your digital growth"}
             </span>
-            . Our senior technical consultant will call you shortly on{" "}
+            . Our senior consultant will get in touch with you shortly on{" "}
             <span className="font-mono font-semibold text-chalk">{values.phone}</span>.
           </p>
         </div>
@@ -254,7 +277,7 @@ export default function ContactForm({
         )}
       </div>
 
-      {/* Service */}
+      {/* Service / Inquiry Selection */}
       <div>
         <label
           htmlFor="service"
@@ -267,7 +290,7 @@ export default function ContactForm({
           name="service"
           value={values.service}
           onChange={(e) => handleChange("service", e.target.value)}
-          className="mt-2 w-full rounded-xl border border-chalk/20 bg-surface px-4 py-3 font-body text-chalk focus:border-flow focus:ring-1 focus:ring-flow transition-all"
+          className="mt-2 w-full rounded-xl border border-chalk/20 bg-surface px-4 py-3 font-body text-chalk focus:border-flow focus:ring-1 focus:ring-flow transition-all cursor-pointer"
         >
           <option value="" className="bg-surface">
             Select a service or general discussion
@@ -277,7 +300,36 @@ export default function ContactForm({
               {service.title}
             </option>
           ))}
+          <option value="other-query" className="bg-surface font-semibold text-flow">
+            💬 Other Query / Custom Inquiry
+          </option>
         </select>
+
+        {/* Dynamic input when user chooses "Other Query" */}
+        {values.service === "other-query" && (
+          <div className="mt-3 animate-in fade-in slide-in-from-top-2 duration-200">
+            <label
+              htmlFor="otherQuery"
+              className="flex items-center gap-2 font-mono text-mono-label uppercase tracking-widest text-flow font-semibold"
+            >
+              <HelpCircle size={13} className="text-flow" /> Specify Your Query / Topic *
+            </label>
+            <input
+              id="otherQuery"
+              name="otherQuery"
+              type="text"
+              value={values.otherQuery}
+              onChange={(e) => handleChange("otherQuery", e.target.value)}
+              onBlur={() => handleBlur("otherQuery")}
+              aria-invalid={Boolean(touched.otherQuery && errors.otherQuery)}
+              className="mt-1.5 w-full rounded-xl border border-flow/40 bg-surface px-4 py-3 font-body text-chalk placeholder:text-muted/50 focus:border-flow focus:ring-1 focus:ring-flow transition-all"
+              placeholder="e.g. Partnership inquiry, Hiring / Job, Technical Support, Billing, Custom Quote..."
+            />
+            {touched.otherQuery && errors.otherQuery && (
+              <p className="mt-1.5 font-mono text-xs text-signal">{errors.otherQuery}</p>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Message */}
@@ -286,7 +338,10 @@ export default function ContactForm({
           htmlFor="message"
           className="flex items-center gap-2 font-mono text-mono-label uppercase tracking-widest text-muted"
         >
-          <MessageSquare size={13} className="text-flow" /> Tell Us About Your Project (Optional)
+          <MessageSquare size={13} className="text-flow" />{" "}
+          {values.service === "other-query"
+            ? "Tell Us More About Your Query (Optional)"
+            : "Tell Us About Your Project (Optional)"}
         </label>
         <textarea
           id="message"
@@ -297,7 +352,11 @@ export default function ContactForm({
           onBlur={() => handleBlur("message")}
           toolparamdescription="Detailed description of the user's project requirements, timeline, or goals."
           className="mt-2 w-full rounded-xl border border-chalk/20 bg-surface px-4 py-3 font-body text-chalk placeholder:text-muted/50 focus:border-flow focus:ring-1 focus:ring-flow transition-all"
-          placeholder="Briefly describe your goals, timeline, or current website URL..."
+          placeholder={
+            values.service === "other-query"
+              ? "Please share details about your query so our team can assist you accurately..."
+              : "Briefly describe your goals, timeline, or current website URL..."
+          }
         />
       </div>
 
