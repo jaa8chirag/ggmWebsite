@@ -1853,6 +1853,62 @@ export const DB_TESTIMONIALS: Testimonial[] = [
     "name": "Anjali Agarwal",
     "role": "Sales Manager",
     "published": true
+  },
+  {
+    "id": "testi_1004",
+    "quote": "GGM built our entire Next.js portal and revamped our Google Search campaigns. Organic inbound commercial inquiries shot up 240% in under 90 days.",
+    "name": "Vikramaditya Singhal",
+    "role": "Managing Director, Singhal Logistics",
+    "published": true
+  },
+  {
+    "id": "testi_1005",
+    "quote": "Their Shopify store architecture and Meta ad buying brought us from ₹3L to ₹28L in monthly recurring sales. Zero fluff, just hardcore execution.",
+    "name": "Pooja Malhotra",
+    "role": "Founder, Verve Lifestyle & Wellness",
+    "published": true
+  },
+  {
+    "id": "testi_1006",
+    "quote": "Technical SEO at GGM is on another level. They fixed our site architecture, solved indexing bottlenecks, and ranked us #1 for all high-intent enterprise keywords.",
+    "name": "Karan Verma",
+    "role": "VP of Marketing, FinEdge Global",
+    "published": true
+  },
+  {
+    "id": "testi_1007",
+    "quote": "The lead quality from GGM's B2B landing funnels is outstanding. Conversion rates jumped from 2.1% to 6.8% with zero extra ad spend.",
+    "name": "Devendra Rawat",
+    "role": "Director of Growth, Apex Meditech",
+    "published": true
+  },
+  {
+    "id": "testi_1008",
+    "quote": "Switching to GGM for our performance marketing gave us predictable ROAS across Google Shopping and Meta catalogs. Best agency partner we've had in 7 years.",
+    "name": "Meenakshi Sundaram",
+    "role": "E-Commerce Head, Chennai Silks Direct",
+    "published": true
+  },
+  {
+    "id": "testi_1009",
+    "quote": "Clean Next.js code, lighthouse 98 score, and rock-solid SEO schema out of the box. As a CTO, I was genuinely impressed with their engineering standards.",
+    "name": "Amitabh Sengupta",
+    "role": "Chief Technology Officer, CloudMatrix",
+    "published": true
+  },
+  {
+    "id": "testi_1010",
+    "quote": "They don't just dump junk leads on your CRM; their automated filtering and location-specific PPC ads delivered verified luxury home buyers.",
+    "name": "Sneha Kulkarni",
+    "role": "Head of Acquisition, RealSpace Realty",
+    "published": true
+  },
+  {
+    "id": "testi_1011",
+    "quote": "From website speed optimization to scaling Google PMax campaigns, GGM operates like an in-house SWAT team. True growth partners.",
+    "name": "Harshvardhan Goel",
+    "role": "Founder, UrbanTaste D2C",
+    "published": true
   }
 ];
 
