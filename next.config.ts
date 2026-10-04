@@ -19,6 +19,17 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.ggmtechnologies.com",
+          },
+        ],
+        destination: "https://ggmtechnologies.com/:path*",
+        permanent: true,
+      },
+      {
         source: "/sitemap_index.xml",
         destination: "/sitemap.xml",
         permanent: true,
