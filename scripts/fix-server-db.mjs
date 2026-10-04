@@ -69,6 +69,42 @@ async function main() {
     }
   }
 
+  // Create missing utility tables if not present
+  console.log("Ensuring supporting tables exist...");
+  await conn.query(`
+    CREATE TABLE IF NOT EXISTS \`MetricItem\` (
+      \`id\` varchar(191) NOT NULL PRIMARY KEY,
+      \`settingsId\` varchar(191) NOT NULL,
+      \`value\` varchar(191) NOT NULL,
+      \`suffix\` varchar(50) DEFAULT '+',
+      \`label\` varchar(255) NOT NULL,
+      \`order\` int NOT NULL DEFAULT 0,
+      \`createdAt\` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `);
+
+  await conn.query(`
+    CREATE TABLE IF NOT EXISTS \`AdminUser\` (
+      \`id\` varchar(191) NOT NULL PRIMARY KEY,
+      \`email\` varchar(191) NOT NULL UNIQUE,
+      \`passwordHash\` varchar(255) NOT NULL,
+      \`name\` varchar(191) DEFAULT 'Admin',
+      \`createdAt\` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+      \`updatedAt\` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `);
+
+  await conn.query(`
+    CREATE TABLE IF NOT EXISTS \`AdminSession\` (
+      \`id\` varchar(191) NOT NULL PRIMARY KEY,
+      \`token\` varchar(255) NOT NULL UNIQUE,
+      \`adminUserId\` varchar(191) NOT NULL,
+      \`expiresAt\` datetime(3) NOT NULL,
+      \`createdAt\` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `);
+  console.log("✓ Supporting tables verified!");
+
   await conn.end();
   console.log("All done!");
 }
