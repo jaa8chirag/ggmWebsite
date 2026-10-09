@@ -117,38 +117,78 @@ export default async function ProductPage({
             </div>
 
             {/* In-Depth Fulfillment & Quality Standards */}
-            <div className="mt-16 rounded-3xl border border-chalk/15 bg-surface/70 p-8 shadow-sm">
-              <h3 className="font-display text-xl font-bold text-chalk">
-                Strict Vetting &amp; Algorithmic Safety Guarantee
-              </h3>
-              <div className="mt-4 space-y-3 font-body text-sm text-muted leading-relaxed">
-                <p>
-                  Every domain in our publishing ecosystem is manually vetted by our senior SEO analysts using enterprise telemetry from Ahrefs, Semrush, and Moz. We maintain zero tolerance for private blog networks (PBNs), link farms, or domains with artificial traffic spikes.
-                </p>
-                <p>
-                  Before publishing, our content team conducts in-depth competitor gap analysis to identify optimal anchor text phrasing. This ensures that your link delivers maximum topical authority while strictly adhering to Google Search Essentials and avoiding over-optimization filters.
-                </p>
-              </div>
+            {(() => {
+              const isWebDev =
+                product.slug.includes("wordpress") ||
+                product.slug.includes("shopify") ||
+                product.slug.includes("nextjs") ||
+                product.category?.toLowerCase().includes("development") ||
+                product.category?.toLowerCase().includes("stack");
 
-              <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs text-chalk">
-                <div className="rounded-xl border border-chalk/10 bg-ink/60 p-3 text-center">
-                  <p className="text-flow font-bold">100%</p>
-                  <p className="text-[11px] text-muted mt-1">Manual Outreach</p>
+              return (
+                <div className="mt-16 rounded-3xl border border-chalk/15 bg-surface/70 p-8 shadow-sm">
+                  <h3 className="font-display text-xl font-bold text-chalk">
+                    {isWebDev
+                      ? "Engineering Excellence & Quality Guarantee"
+                      : "Strict Vetting & Algorithmic Safety Guarantee"}
+                  </h3>
+                  <div className="mt-4 space-y-3 font-body text-sm text-muted leading-relaxed">
+                    {isWebDev ? (
+                      <>
+                        <p>
+                          Every website and application we engineer undergoes comprehensive quality assurance: cross-browser testing across modern desktop and mobile browsers, 100% responsive audits, and rigorous Google PageSpeed &amp; Core Web Vitals optimization.
+                        </p>
+                        <p>
+                          Upon launch, we hand over 100% full administrative credentials, domain/hosting configuration, and clean documented source code. You retain complete ownership with zero lock-in contracts or recurring licensing fees.
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p>
+                          Every domain in our publishing ecosystem is manually vetted by our senior SEO analysts using enterprise telemetry from Ahrefs, Semrush, and Moz. We maintain zero tolerance for private blog networks (PBNs), link farms, or domains with artificial traffic spikes.
+                        </p>
+                        <p>
+                          Before publishing, our content team conducts in-depth competitor gap analysis to identify optimal anchor text phrasing. This ensures that your link delivers maximum topical authority while strictly adhering to Google Search Essentials and avoiding over-optimization filters.
+                        </p>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs text-chalk">
+                    <div className="rounded-xl border border-chalk/10 bg-ink/60 p-3 text-center">
+                      <p className="text-flow font-bold">100%</p>
+                      <p className="text-[11px] text-muted mt-1">
+                        {isWebDev ? "Code Ownership" : "Manual Outreach"}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-chalk/10 bg-ink/60 p-3 text-center">
+                      <p className="text-flow font-bold">
+                        {isWebDev ? "95+" : "< 1%"}
+                      </p>
+                      <p className="text-[11px] text-muted mt-1">
+                        {isWebDev ? "Speed Score" : "Spam Score"}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-chalk/10 bg-ink/60 p-3 text-center">
+                      <p className="text-flow font-bold">
+                        {isWebDev ? "Mobile First" : "Dofollow"}
+                      </p>
+                      <p className="text-[11px] text-muted mt-1">
+                        {isWebDev ? "100% Responsive" : "Contextual Link"}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-chalk/10 bg-ink/60 p-3 text-center">
+                      <p className="text-flow font-bold">
+                        {isWebDev ? "Included" : "365 Days"}
+                      </p>
+                      <p className="text-[11px] text-muted mt-1">
+                        {isWebDev ? "Free Support" : "Warranty"}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="rounded-xl border border-chalk/10 bg-ink/60 p-3 text-center">
-                  <p className="text-flow font-bold">&lt; 1%</p>
-                  <p className="text-[11px] text-muted mt-1">Spam Score</p>
-                </div>
-                <div className="rounded-xl border border-chalk/10 bg-ink/60 p-3 text-center">
-                  <p className="text-flow font-bold">Dofollow</p>
-                  <p className="text-[11px] text-muted mt-1">Contextual Link</p>
-                </div>
-                <div className="rounded-xl border border-chalk/10 bg-ink/60 p-3 text-center">
-                  <p className="text-flow font-bold">365 Days</p>
-                  <p className="text-[11px] text-muted mt-1">Warranty</p>
-                </div>
-              </div>
-            </div>
+              );
+            })()}
           </div>
 
           <div className="lg:sticky lg:top-32 lg:self-start">
@@ -173,7 +213,13 @@ export default async function ProductPage({
                   <span className="text-3xl font-bold text-chalk">Custom quote</span>
                 )}
               </div>
-              <p className="mt-1 font-mono text-[11px] text-muted">+ GST · One-time fee per placement</p>
+              <p className="mt-1 font-mono text-[11px] text-muted">
+                {product.slug.includes("wordpress") ||
+                product.slug.includes("shopify") ||
+                product.slug.includes("nextjs")
+                  ? "+ GST · Fixed one-time project fee"
+                  : "+ GST · One-time fee per placement"}
+              </p>
 
               <Button href="/contact" variant="signal" className="mt-6 w-full py-3.5 text-xs font-mono uppercase tracking-wider font-bold">
                 {product.price ? "Order This Package Now" : "Request Custom Quote"}
@@ -186,7 +232,9 @@ export default async function ProductPage({
                 </a>
                 <span>·</span>
                 <a
-                  href="https://wa.me/919002600880?text=Hi%20GGM%20Technologies,%20I%20want%20to%20order%20the%20backlink%20package."
+                  href={`https://wa.me/919002600880?text=${encodeURIComponent(
+                    `Hi GGM Technologies, I would like to order the ${product.name} (₹${product.price ? product.price.toLocaleString("en-IN") : "Custom Quote"}).`
+                  )}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-400 hover:underline"
@@ -212,7 +260,13 @@ export default async function ProductPage({
 
               {/* Trust Badge */}
               <div className="mt-6 border-t border-chalk/10 pt-4 text-center font-mono text-[11px] text-muted">
-                <p>🔒 100% White-Hat Google Compliance</p>
+                <p>
+                  {product.slug.includes("wordpress") ||
+                  product.slug.includes("shopify") ||
+                  product.slug.includes("nextjs")
+                    ? "🔒 100% Quality & Full Handover Guarantee"
+                    : "🔒 100% White-Hat Google Compliance"}
+                </p>
                 <p className="mt-1">📄 Official GST Tax Invoice Provided</p>
               </div>
             </div>

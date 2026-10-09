@@ -22,9 +22,9 @@ import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import Button from "@/components/ui/Button";
 import { buildMetadata } from "@/lib/seo";
 
-const title = "Off-Page SEO & Authority Link Building Services in Delhi | GGM Technologies";
+const title = "Website Development, Shopify & Growth Packages in Delhi | GGM Technologies";
 const description =
-  "Enterprise-grade off-page SEO, editorial guest posting, and high DA contextual backlinks. 100% manual outreach to real sites with 10k+ organic traffic. Zero PBNs, guaranteed indexation.";
+  "Fixed-price WordPress development (₹15k), Shopify eCommerce stores (₹25k), Next.js web applications (₹35k), and high DA SEO authority packages by GGM Technologies.";
 
 export const metadata: Metadata = buildMetadata({
   title,
@@ -36,10 +36,10 @@ export default async function ShopPage() {
   const products = await getProducts();
 
   const trustMetrics = [
-    { value: "DA 50–85+", label: "Vetted Domain Authority", sub: "Verified on Moz & Ahrefs DR 60+" },
-    { value: "> 10k/mo", label: "Real Organic Traffic", sub: "Zero dead sites or traffic-less blogs" },
-    { value: "100%", label: "Manual Editorial Outreach", sub: "Strictly zero PBNs or link farms" },
-    { value: "365 Days", label: "Replacement Guarantee", sub: "Permanent placement warranty" },
+    { value: "5–10 Days", label: "Rapid Turnaround", sub: "Production-ready, quick deployment" },
+    { value: "100%", label: "Code & Asset Ownership", sub: "Complete admin & source code handover" },
+    { value: "95+ Score", label: "Speed & Performance", sub: "Core Web Vitals & mobile-first builds" },
+    { value: "30–60 Days", label: "Post-Launch Warranty", sub: "Dedicated support & maintenance" },
   ];
 
   const qualityPillars = [
@@ -178,24 +178,23 @@ export default async function ShopPage() {
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-flow/40 bg-flow/10 px-3.5 py-1 font-mono text-xs font-bold uppercase tracking-wider text-flow">
               <ShieldCheck size={14} className="text-flow" />
-              Enterprise Off-Page SEO &amp; Authority Infrastructure
+              Fixed-Price Development &amp; Growth Solutions
             </span>
           </div>
 
           <h1 className="mt-5 max-w-4xl font-display text-3xl font-bold tracking-tight text-chalk sm:text-5xl lg:text-6xl leading-[1.1]">
-            High DA Backlinks &amp;{" "}
+            Web Development, Shopify &amp;{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-flow to-signal">
-              Editorial Guest Posting
-            </span>{" "}
-            Services
+              Digital Growth Packages
+            </span>
           </h1>
 
           <div className="mt-6 max-w-3xl space-y-4 font-body text-base text-muted leading-relaxed">
             <p>
-              In Google&apos;s modern search algorithm, technical performance and on-page content establish your eligibility to compete, but <strong className="text-chalk font-semibold">inbound domain authority dictates who wins the top 3 ranking positions</strong>. Without authentic, high-trust citations from respected industry publications, even the most beautifully designed websites remain trapped on page two and beyond.
+              Looking to launch or scale your digital presence? We provide transparent, fixed-price solutions: from custom <strong className="text-chalk font-semibold">WordPress websites (₹15,000)</strong> and high-converting <strong className="text-chalk font-semibold">Shopify eCommerce stores (₹25,000)</strong> to enterprise <strong className="text-chalk font-semibold">Next.js applications (₹35,000)</strong> and authoritative SEO backlinks.
             </p>
             <p>
-              GGM Technologies engineers white-hat, contextual link acquisition campaigns designed for long-term algorithmic dominance. We strictly reject automated software blasts, low-quality web directories, and high-risk Private Blog Networks (PBNs) that trigger search penalties. Instead, our off-page SEO team conducts 100% manual editorial outreach to verified digital publications with genuine organic search traffic, permanent dofollow placements, and contextual relevance to your business vertical.
+              Transparent deliverables, rapid delivery within 5–14 days, full code and credentials handover, and 100% white-hat standards with zero hidden agency costs.
             </p>
           </div>
 
@@ -227,10 +226,10 @@ export default async function ShopPage() {
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <span className="font-mono text-mono-label font-bold uppercase tracking-widest text-signal">
-                AUTHORITY PACKAGES
+                FIXED-PRICE PACKAGES
               </span>
               <h2 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-chalk">
-                Verified Off-Page Link Building Packages
+                Verified Development &amp; Growth Solutions
               </h2>
               <p className="mt-1 font-body text-sm text-muted">
                 Transparent specifications, clear deliverables, and zero hidden agency margins.
@@ -316,7 +315,13 @@ export default async function ShopPage() {
                             </span>
                           )}
                         </div>
-                        <span className="font-mono text-[10px] text-muted">+ GST · One-time fee</span>
+                        <span className="font-mono text-[10px] text-muted">
+                          {product.slug.includes("wordpress") ||
+                          product.slug.includes("shopify") ||
+                          product.slug.includes("nextjs")
+                            ? "+ GST · Fixed project fee"
+                            : "+ GST · One-time fee"}
+                        </span>
                       </div>
 
                       <Link

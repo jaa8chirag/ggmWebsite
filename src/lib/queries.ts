@@ -370,7 +370,9 @@ export const getWork = unstable_cache(
 
 export const getProducts = unstable_cache(
   async (): Promise<Product[]> => {
-    const products = await query<any>("SELECT * FROM `Product` ORDER BY `name` ASC");
+    const products = await query<any>(
+      "SELECT * FROM `Product` ORDER BY CASE WHEN slug = 'wordpress-website-development' THEN 1 WHEN slug = 'shopify-store-development' THEN 2 WHEN slug = 'nextjs-custom-web-development' THEN 3 ELSE 4 END ASC, `price` ASC, `name` ASC"
+    );
     if (!products || products.length === 0) return DB_PRODUCTS;
     return products.map((p) => ({
       id: p.id,
