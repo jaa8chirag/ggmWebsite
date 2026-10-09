@@ -16,6 +16,7 @@ export interface ProductFormValues {
   slug?: string;
   name?: string;
   category?: string;
+  priority?: number | null;
   price?: number | null;
   originalPrice?: number | null;
   description?: string;
@@ -107,16 +108,30 @@ export default function ProductForm({
           />
         </div>
 
-        <div className="mt-4">
-          <label className={labelClass} htmlFor="category">
-            Category
-          </label>
-          <input
-            id="category"
-            name="category"
-            defaultValue={values?.category ?? ""}
-            className={inputClass}
-          />
+        <div className="mt-4 grid grid-cols-2 gap-4">
+          <div>
+            <label className={labelClass} htmlFor="category">
+              Category
+            </label>
+            <input
+              id="category"
+              name="category"
+              defaultValue={values?.category ?? ""}
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label className={labelClass} htmlFor="priority">
+              Display Priority (1 = First, 2 = Second...)
+            </label>
+            <input
+              id="priority"
+              name="priority"
+              type="number"
+              defaultValue={values?.priority ?? 99}
+              className={inputClass}
+            />
+          </div>
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-4">

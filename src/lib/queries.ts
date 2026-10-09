@@ -370,16 +370,7 @@ export const getWork = unstable_cache(
 
 export async function getProducts(): Promise<Product[]> {
   const products = await query<any>(
-    `SELECT * FROM \`Product\` ORDER BY 
-      CASE 
-        WHEN slug = 'nextjs-custom-web-development' THEN 1
-        WHEN slug = 'shopify-store-development' THEN 2
-        WHEN slug = 'wordpress-website-development' THEN 3
-        WHEN slug = 'high-da-backlink' THEN 4
-        WHEN slug = 'guest-posting' THEN 5
-        WHEN slug = 'web-2-0-backlink' THEN 6
-        ELSE 7
-      END ASC, \`price\` DESC`
+    "SELECT * FROM `Product` ORDER BY COALESCE(`priority`, 99) ASC, `id` ASC"
   );
   const orderMap: Record<string, number> = {
     "nextjs-custom-web-development": 1,
@@ -390,11 +381,12 @@ export async function getProducts(): Promise<Product[]> {
     "web-2-0-backlink": 6,
   };
   const list = products && products.length > 0 ? products : DB_PRODUCTS;
-  const mapped = list.map((p) => ({
+  const mapped: Product[] = list.map((p) => ({
     id: p.id,
     slug: p.slug,
     name: p.name,
     category: p.category,
+    priority: p.priority != null ? Number(p.priority) : (orderMap[p.slug] ?? 99),
     price: p.price,
     originalPrice: p.originalPrice,
     description: p.description,
@@ -407,7 +399,7 @@ export async function getProducts(): Promise<Product[]> {
     ogImage: p.ogImage,
     canonicalOverride: p.canonicalOverride,
   }));
-  mapped.sort((a, b) => (orderMap[a.slug] || 99) - (orderMap[b.slug] || 99));
+  mapped.sort((a, b) => ((a.priority ?? 99) - (b.priority ?? 99)));
   return mapped;
 }
 

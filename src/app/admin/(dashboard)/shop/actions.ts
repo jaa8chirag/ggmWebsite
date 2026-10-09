@@ -15,6 +15,7 @@ function parseProductForm(formData: FormData) {
     slug: slugify(slugInput || name),
     name,
     category: str(formData, "category"),
+    priority: num(formData, "priority") ?? 99,
     price: num(formData, "price"),
     originalPrice: num(formData, "originalPrice"),
     description: str(formData, "description"),
@@ -32,13 +33,14 @@ export async function createProduct(formData: FormData) {
 
   await query(
     `INSERT INTO \`Product\` 
-     (\`id\`, \`slug\`, \`name\`, \`category\`, \`price\`, \`originalPrice\`, \`description\`, \`features\`, \`benefits\`, \`metaTitle\`, \`metaDescription\`, \`ogImage\`, \`canonicalOverride\`, \`noIndex\`, \`createdAt\`, \`updatedAt\`) 
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(3), CURRENT_TIMESTAMP(3))`,
+     (\`id\`, \`slug\`, \`name\`, \`category\`, \`priority\`, \`price\`, \`originalPrice\`, \`description\`, \`features\`, \`benefits\`, \`metaTitle\`, \`metaDescription\`, \`ogImage\`, \`canonicalOverride\`, \`noIndex\`, \`createdAt\`, \`updatedAt\`) 
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(3), CURRENT_TIMESTAMP(3))`,
     [
       id,
       data.slug,
       data.name,
       data.category,
+      data.priority,
       data.price,
       data.originalPrice,
       data.description,
@@ -76,13 +78,14 @@ export async function updateProduct(id: string, formData: FormData) {
   if (!existing) {
     await query(
       `INSERT INTO \`Product\` 
-       (\`id\`, \`slug\`, \`name\`, \`category\`, \`price\`, \`originalPrice\`, \`description\`, \`features\`, \`benefits\`, \`metaTitle\`, \`metaDescription\`, \`ogImage\`, \`canonicalOverride\`, \`noIndex\`, \`createdAt\`, \`updatedAt\`) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(3), CURRENT_TIMESTAMP(3))`,
+       (\`id\`, \`slug\`, \`name\`, \`category\`, \`priority\`, \`price\`, \`originalPrice\`, \`description\`, \`features\`, \`benefits\`, \`metaTitle\`, \`metaDescription\`, \`ogImage\`, \`canonicalOverride\`, \`noIndex\`, \`createdAt\`, \`updatedAt\`) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(3), CURRENT_TIMESTAMP(3))`,
       [
         targetId,
         data.slug,
         data.name,
         data.category,
+        data.priority,
         data.price,
         data.originalPrice,
         data.description,
@@ -98,7 +101,7 @@ export async function updateProduct(id: string, formData: FormData) {
   } else {
     await query(
       `UPDATE \`Product\` SET 
-       \`slug\` = ?, \`name\` = ?, \`category\` = ?, \`price\` = ?, \`originalPrice\` = ?, 
+       \`slug\` = ?, \`name\` = ?, \`category\` = ?, \`priority\` = ?, \`price\` = ?, \`originalPrice\` = ?, 
        \`description\` = ?, \`features\` = ?, \`benefits\` = ?, \`metaTitle\` = ?, 
        \`metaDescription\` = ?, \`ogImage\` = ?, \`canonicalOverride\` = ?, \`noIndex\` = ?
        WHERE \`id\` = ?`,
@@ -106,6 +109,7 @@ export async function updateProduct(id: string, formData: FormData) {
         data.slug,
         data.name,
         data.category,
+        data.priority,
         data.price,
         data.originalPrice,
         data.description,

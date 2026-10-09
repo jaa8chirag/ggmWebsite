@@ -118,6 +118,7 @@ export interface Product {
   slug: string;
   name: string;
   category: string;
+  priority?: number;
   price: number | null;
   originalPrice: number | null;
   description: string;
