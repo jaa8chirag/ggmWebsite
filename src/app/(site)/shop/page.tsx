@@ -26,6 +26,9 @@ const title = "Website Development, Shopify & Growth Packages in Delhi | GGM Tec
 const description =
   "Fixed-price WordPress development (₹15k), Shopify eCommerce stores (₹25k), Next.js web applications (₹35k), and high DA SEO authority packages by GGM Technologies.";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = buildMetadata({
   title,
   description,

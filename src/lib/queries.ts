@@ -368,52 +368,48 @@ export const getWork = unstable_cache(
   { tags: ["work"], revalidate: 3600 }
 );
 
-export const getProducts = unstable_cache(
-  async (): Promise<Product[]> => {
-    const products = await query<any>(
-      `SELECT * FROM \`Product\` ORDER BY 
-        CASE 
-          WHEN slug = 'nextjs-custom-web-development' THEN 1
-          WHEN slug = 'shopify-store-development' THEN 2
-          WHEN slug = 'wordpress-website-development' THEN 3
-          WHEN slug = 'high-da-backlink' THEN 4
-          WHEN slug = 'guest-posting' THEN 5
-          WHEN slug = 'web-2-0-backlink' THEN 6
-          ELSE 7
-        END ASC, \`price\` DESC`
-    );
-    const orderMap: Record<string, number> = {
-      "nextjs-custom-web-development": 1,
-      "shopify-store-development": 2,
-      "wordpress-website-development": 3,
-      "high-da-backlink": 4,
-      "guest-posting": 5,
-      "web-2-0-backlink": 6,
-    };
-    const list = products && products.length > 0 ? products : DB_PRODUCTS;
-    const mapped = list.map((p) => ({
-      id: p.id,
-      slug: p.slug,
-      name: p.name,
-      category: p.category,
-      price: p.price,
-      originalPrice: p.originalPrice,
-      description: p.description,
-      features: parseJson<string[]>(p.features, []),
-      benefits: parseJson<string[]>(p.benefits, []),
-      specs: [],
-      noIndex: Boolean(p.noIndex),
-      metaTitle: p.metaTitle,
-      metaDescription: p.metaDescription,
-      ogImage: p.ogImage,
-      canonicalOverride: p.canonicalOverride,
-    }));
-    mapped.sort((a, b) => (orderMap[a.slug] || 99) - (orderMap[b.slug] || 99));
-    return mapped;
-  },
-  ["getProducts"],
-  { tags: ["products"], revalidate: 3600 }
-);
+export async function getProducts(): Promise<Product[]> {
+  const products = await query<any>(
+    `SELECT * FROM \`Product\` ORDER BY 
+      CASE 
+        WHEN slug = 'nextjs-custom-web-development' THEN 1
+        WHEN slug = 'shopify-store-development' THEN 2
+        WHEN slug = 'wordpress-website-development' THEN 3
+        WHEN slug = 'high-da-backlink' THEN 4
+        WHEN slug = 'guest-posting' THEN 5
+        WHEN slug = 'web-2-0-backlink' THEN 6
+        ELSE 7
+      END ASC, \`price\` DESC`
+  );
+  const orderMap: Record<string, number> = {
+    "nextjs-custom-web-development": 1,
+    "shopify-store-development": 2,
+    "wordpress-website-development": 3,
+    "high-da-backlink": 4,
+    "guest-posting": 5,
+    "web-2-0-backlink": 6,
+  };
+  const list = products && products.length > 0 ? products : DB_PRODUCTS;
+  const mapped = list.map((p) => ({
+    id: p.id,
+    slug: p.slug,
+    name: p.name,
+    category: p.category,
+    price: p.price,
+    originalPrice: p.originalPrice,
+    description: p.description,
+    features: parseJson<string[]>(p.features, []),
+    benefits: parseJson<string[]>(p.benefits, []),
+    specs: [],
+    noIndex: Boolean(p.noIndex),
+    metaTitle: p.metaTitle,
+    metaDescription: p.metaDescription,
+    ogImage: p.ogImage,
+    canonicalOverride: p.canonicalOverride,
+  }));
+  mapped.sort((a, b) => (orderMap[a.slug] || 99) - (orderMap[b.slug] || 99));
+  return mapped;
+}
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   return unstable_cache(
