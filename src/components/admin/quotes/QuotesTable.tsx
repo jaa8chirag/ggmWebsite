@@ -24,21 +24,30 @@ interface QuotesTableProps {
 export default function QuotesTable({ initialQuotes }: QuotesTableProps) {
   const [quotes, setQuotes] = useState<QuoteRequest[]>(initialQuotes);
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [searchQuery, setSearchQuery] = useState("");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  const filteredQuotes = quotes.filter((q) => {
-    const matchesStatus = filterStatus === "ALL" || q.status === filterStatus;
-    const query = searchQuery.toLowerCase();
-    const matchesSearch =
-      searchQuery === "" ||
-      q.name.toLowerCase().includes(query) ||
-      q.phone.includes(searchQuery) ||
-      (q.email && q.email.toLowerCase().includes(query)) ||
-      (q.message && q.message.toLowerCase().includes(query)) ||
-      q.serviceTitle.toLowerCase().includes(query);
-    return matchesStatus && matchesSearch;
-  });
+  const filteredQuotes = React.useMemo(() => {
+    return quotes
+      .filter((q) => {
+        const matchesStatus = filterStatus === "ALL" || q.status === filterStatus;
+        const query = searchQuery.toLowerCase();
+        const matchesSearch =
+          searchQuery === "" ||
+          q.name.toLowerCase().includes(query) ||
+          q.phone.includes(searchQuery) ||
+          (q.email && q.email.toLowerCase().includes(query)) ||
+          (q.message && q.message.toLowerCase().includes(query)) ||
+          q.serviceTitle.toLowerCase().includes(query);
+        return matchesStatus && matchesSearch;
+      })
+      .sort((a, b) => {
+        const timeA = new Date(a.createdAt || 0).getTime();
+        const timeB = new Date(b.createdAt || 0).getTime();
+        return sortOrder === "oldest" ? timeA - timeB : timeB - timeA;
+      });
+  }, [quotes, filterStatus, searchQuery, sortOrder]);
 
   const handleStatusChange = async (id: string, newStatus: QuoteStatus) => {
     setUpdatingId(id);
@@ -120,22 +129,51 @@ export default function QuotesTable({ initialQuotes }: QuotesTableProps) {
           />
         </div>
 
-        {/* Filter Buttons */}
-        <div className="flex flex-wrap items-center gap-1.5">
-          {["ALL", "PENDING", "CONTACTED", "CONVERTED"].map((st) => (
+        {/* Filter Buttons & Sort Pills */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* Newest / Oldest Sort Pills */}
+          <div className="flex items-center gap-1 bg-surface border border-chalk/20 rounded-full p-1">
             <button
-              key={st}
               type="button"
-              onClick={() => setFilterStatus(st)}
-              className={`rounded-full px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
-                filterStatus === st
-                  ? "bg-flow text-white shadow-sm"
-                  : "border border-chalk/15 bg-surface text-muted hover:text-chalk"
+              onClick={() => setSortOrder("newest")}
+              className={`rounded-full px-3 py-1 font-mono text-xs font-bold transition-all cursor-pointer ${
+                sortOrder === "newest"
+                  ? "bg-flow text-ink shadow-sm"
+                  : "text-muted hover:text-chalk"
               }`}
             >
-              {st}
+              ⚡ Newest First
             </button>
-          ))}
+            <button
+              type="button"
+              onClick={() => setSortOrder("oldest")}
+              className={`rounded-full px-3 py-1 font-mono text-xs font-bold transition-all cursor-pointer ${
+                sortOrder === "oldest"
+                  ? "bg-flow text-ink shadow-sm"
+                  : "text-muted hover:text-chalk"
+              }`}
+            >
+              ⏳ Oldest First
+            </button>
+          </div>
+
+          {/* Status Filters */}
+          <div className="flex flex-wrap items-center gap-1.5">
+            {["ALL", "PENDING", "CONTACTED", "CONVERTED"].map((st) => (
+              <button
+                key={st}
+                type="button"
+                onClick={() => setFilterStatus(st)}
+                className={`rounded-full px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer ${
+                  filterStatus === st
+                    ? "bg-flow text-white shadow-sm font-bold"
+                    : "border border-chalk/15 bg-surface text-muted hover:text-chalk"
+                }`}
+              >
+                {st}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

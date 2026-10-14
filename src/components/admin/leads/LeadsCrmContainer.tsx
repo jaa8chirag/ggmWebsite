@@ -245,22 +245,38 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
 
         {/* Controls: Sort Filter (Newest / Oldest) & Search Box */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full xl:w-auto">
-          {/* Newest / Oldest Sort Filter */}
-          <div className="flex items-center gap-2 rounded-xl border border-chalk/20 bg-surface px-3 py-2 shrink-0">
-            <ArrowUpDown size={14} className="text-flow shrink-0" />
-            <span className="font-mono text-xs text-muted font-semibold shrink-0">Sort:</span>
-            <select
-              value={sortOrder}
-              onChange={(e) => {
-                setSortOrder(e.target.value as "newest" | "oldest" | "priority");
+          {/* Newest / Oldest Filter Pills */}
+          <div className="flex items-center gap-1 bg-surface border border-chalk/20 rounded-xl p-1 shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                setSortOrder("newest");
                 setCurrentPage(1);
               }}
-              className="bg-transparent font-mono text-xs font-bold text-chalk focus:outline-none cursor-pointer pr-1"
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-xs font-bold transition-all cursor-pointer ${
+                sortOrder === "newest"
+                  ? "bg-flow text-ink shadow-sm"
+                  : "text-muted hover:text-chalk"
+              }`}
+              title="Show newest leads first"
             >
-              <option value="newest" className="bg-ink text-chalk">⚡ Newest First (Latest)</option>
-              <option value="oldest" className="bg-ink text-chalk">⏳ Oldest First</option>
-              <option value="priority" className="bg-ink text-chalk">🎯 Pipeline Priority</option>
-            </select>
+              <span>⚡ Newest First</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSortOrder("oldest");
+                setCurrentPage(1);
+              }}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-xs font-bold transition-all cursor-pointer ${
+                sortOrder === "oldest"
+                  ? "bg-flow text-ink shadow-sm"
+                  : "text-muted hover:text-chalk"
+              }`}
+              title="Show oldest leads first"
+            >
+              <span>⏳ Oldest First</span>
+            </button>
           </div>
 
           {/* Search Box */}
@@ -295,10 +311,10 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                 <thead>
                   <tr className="border-b border-chalk/15 bg-ink/70 font-mono text-[0.7rem] uppercase tracking-wider text-muted">
                     <th className="py-3.5 px-4 font-semibold min-w-[220px]">Client Details</th>
-                    <th className="py-3.5 px-4 font-semibold min-w-[150px]">
-                      <div className="flex items-center gap-1.5">
-                        <Clock size={12} className="text-flow" />
-                        <span>Received At</span>
+                    <th className="py-3.5 px-4 font-semibold min-w-[160px]">
+                      <div className="flex items-center gap-1.5 text-flow">
+                        <Clock size={13} />
+                        <span className="text-chalk font-bold">Date &amp; Time</span>
                       </div>
                     </th>
                     <th className="py-3.5 px-4 font-semibold min-w-[140px]">Service</th>
