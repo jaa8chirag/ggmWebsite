@@ -6,6 +6,8 @@ import {
   Plus,
   Search,
   Calendar,
+  Clock,
+  ArrowUpDown,
   Phone,
   Copy,
   Check,
@@ -59,9 +61,47 @@ const STATUS_PRIORITY: Record<string, number> = {
 
 const ITEMS_PER_PAGE = 10;
 
+function formatLeadDateTime(dateStr?: string | Date | null): { date: string; time: string; relative: string } {
+  if (!dateStr) return { date: "—", time: "", relative: "" };
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return { date: "—", time: "", relative: "" };
+
+  const date = d.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  const time = d.toLocaleTimeString("en-IN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  const now = new Date();
+  const diffMs = now.getTime() - d.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  let relative = "";
+  if (diffDays === 0) {
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    if (diffHours < 1) {
+      const diffMins = Math.floor(diffMs / (1000 * 60));
+      relative = diffMins <= 1 ? "Just now" : `${diffMins}m ago`;
+    } else {
+      relative = `${diffHours}h ago`;
+    }
+  } else if (diffDays === 1) {
+    relative = "Yesterday";
+  } else if (diffDays < 7) {
+    relative = `${diffDays}d ago`;
+  }
+
+  return { date, time, relative };
+}
+
 export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmContainerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState<CrmLeadStatus | "ALL">("ALL");
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest" | "priority">("newest");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState<CrmLeadModel | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -76,7 +116,7 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
     } catch (err) {}
   };
 
-  // Filter & Sort logic (Status priority: NEW -> HOT_DEAL -> IN_DISCUSSION -> WON -> LOST, then newest first)
+  // Filter & Sort logic (Supports Newest First, Oldest First, or Pipeline Priority)
   const processedLeads = useMemo(() => {
     const filtered = initialLeads.filter((lead) => {
       const matchesFilter = selectedFilter === "ALL" || lead.status === selectedFilter;
@@ -94,16 +134,26 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
     });
 
     return filtered.sort((a, b) => {
-      const priorityA = STATUS_PRIORITY[a.status] ?? 99;
-      const priorityB = STATUS_PRIORITY[b.status] ?? 99;
-
-      if (priorityA !== priorityB) {
-        return priorityA - priorityB;
+      if (sortOrder === "priority") {
+        const priorityA = STATUS_PRIORITY[a.status] ?? 99;
+        const priorityB = STATUS_PRIORITY[b.status] ?? 99;
+        if (priorityA !== priorityB) {
+          return priorityA - priorityB;
+        }
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       }
 
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      const timeA = new Date(a.createdAt || 0).getTime();
+      const timeB = new Date(b.createdAt || 0).getTime();
+
+      if (sortOrder === "oldest") {
+        return timeA - timeB;
+      }
+
+      // Default: newest first
+      return timeB - timeA;
     });
-  }, [initialLeads, selectedFilter, searchQuery]);
+  }, [initialLeads, selectedFilter, searchQuery, sortOrder]);
 
   const totalPages = Math.max(1, Math.ceil(processedLeads.length / ITEMS_PER_PAGE));
   const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
@@ -193,19 +243,40 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
           })}
         </div>
 
-        {/* Search Box */}
-        <div className="relative w-full xl:w-80 min-w-[240px] shrink-0">
-          <Search size={15} className="absolute left-3.5 top-2.5 text-muted" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setCurrentPage(1);
-            }}
-            placeholder="Search leads by name, phone, email, service..."
-            className="w-full rounded-xl border border-chalk/20 bg-surface px-3.5 py-2 pl-9 font-body text-xs text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
-          />
+        {/* Controls: Sort Filter (Newest / Oldest) & Search Box */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full xl:w-auto">
+          {/* Newest / Oldest Sort Filter */}
+          <div className="flex items-center gap-2 rounded-xl border border-chalk/20 bg-surface px-3 py-2 shrink-0">
+            <ArrowUpDown size={14} className="text-flow shrink-0" />
+            <span className="font-mono text-xs text-muted font-semibold shrink-0">Sort:</span>
+            <select
+              value={sortOrder}
+              onChange={(e) => {
+                setSortOrder(e.target.value as "newest" | "oldest" | "priority");
+                setCurrentPage(1);
+              }}
+              className="bg-transparent font-mono text-xs font-bold text-chalk focus:outline-none cursor-pointer pr-1"
+            >
+              <option value="newest" className="bg-ink text-chalk">⚡ Newest First (Latest)</option>
+              <option value="oldest" className="bg-ink text-chalk">⏳ Oldest First</option>
+              <option value="priority" className="bg-ink text-chalk">🎯 Pipeline Priority</option>
+            </select>
+          </div>
+
+          {/* Search Box */}
+          <div className="relative w-full sm:w-72 xl:w-80 min-w-[220px] shrink-0">
+            <Search size={15} className="absolute left-3.5 top-2.5 text-muted" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
+              placeholder="Search leads by name, phone, email, service..."
+              className="w-full rounded-xl border border-chalk/20 bg-surface px-3.5 py-2 pl-9 font-body text-xs text-chalk placeholder-muted/50 focus:border-flow focus:outline-none"
+            />
+          </div>
         </div>
       </div>
 
@@ -220,10 +291,16 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
           </div>
 
             <div className="overflow-x-auto w-full [-webkit-overflow-scrolling:touch]">
-              <table className="w-full min-w-[840px] text-left font-body text-xs border-collapse">
+              <table className="w-full min-w-[960px] text-left font-body text-xs border-collapse">
                 <thead>
                   <tr className="border-b border-chalk/15 bg-ink/70 font-mono text-[0.7rem] uppercase tracking-wider text-muted">
                     <th className="py-3.5 px-4 font-semibold min-w-[220px]">Client Details</th>
+                    <th className="py-3.5 px-4 font-semibold min-w-[150px]">
+                      <div className="flex items-center gap-1.5">
+                        <Clock size={12} className="text-flow" />
+                        <span>Received At</span>
+                      </div>
+                    </th>
                     <th className="py-3.5 px-4 font-semibold min-w-[140px]">Service</th>
                     <th className="py-3.5 px-4 font-semibold min-w-[155px]">Pipeline Status</th>
                     <th className="py-3.5 px-4 font-semibold min-w-[140px]">Pricing & Advance</th>
@@ -304,8 +381,36 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
                               {lead.companyName && <span className="text-amber-400 font-semibold select-all">{lead.companyName}</span>}
                               {lead.location && <span className="text-cyan-400 select-all">📍 {lead.location}</span>}
                               <span className="rounded bg-chalk/10 px-1.5 py-0.2 text-flow">{lead.source}</span>
+                              <span className="rounded bg-ink/80 border border-chalk/15 px-1.5 py-0.2 text-[0.65rem] text-muted flex xl:hidden items-center gap-1">
+                                <Clock size={10} className="text-flow" />
+                                {new Date(lead.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+                              </span>
                             </div>
                           </div>
+                        </td>
+
+                        {/* Received Date & Time */}
+                        <td className="py-3.5 px-4 font-mono text-xs whitespace-nowrap">
+                          {(() => {
+                            const { date, time, relative } = formatLeadDateTime(lead.createdAt);
+                            return (
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-1.5 text-chalk font-semibold">
+                                  <Calendar size={13} className="text-flow shrink-0" />
+                                  <span>{date}</span>
+                                  {relative && (
+                                    <span className="rounded bg-flow/15 text-flow text-[0.65rem] px-1.5 py-0.2 font-bold tracking-tight">
+                                      {relative}
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-1.5 text-muted text-[0.7rem] pl-4.5">
+                                  <Clock size={11} className="text-muted/70 shrink-0" />
+                                  <span>{time}</span>
+                                </div>
+                              </div>
+                            );
+                          })()}
                         </td>
 
                         {/* Service Title */}

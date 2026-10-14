@@ -62,6 +62,44 @@ function formatToDateTimeLocal(dateVal?: string | Date | null): string {
   return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
+function formatFullDateTime(dateVal?: string | Date | null): string {
+  if (!dateVal) return "—";
+  const d = typeof dateVal === "string" ? new Date(dateVal) : dateVal;
+  if (isNaN(d.getTime())) return "—";
+
+  const date = d.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  const time = d.toLocaleTimeString("en-IN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+  return `${date} at ${time}`;
+}
+
+function getRelativeTime(dateVal?: string | Date | null): string {
+  if (!dateVal) return "";
+  const d = typeof dateVal === "string" ? new Date(dateVal) : dateVal;
+  if (isNaN(d.getTime())) return "";
+  const now = new Date();
+  const diffMs = now.getTime() - d.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) {
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    if (diffHours < 1) {
+      const diffMins = Math.floor(diffMs / (1000 * 60));
+      return diffMins <= 1 ? "Just now" : `${diffMins}m ago`;
+    }
+    return `${diffHours}h ago`;
+  } else if (diffDays === 1) {
+    return "Yesterday";
+  }
+  return `${diffDays}d ago`;
+}
+
 export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProps) {
   const router = useRouter();
   const [newNoteText, setNewNoteText] = useState("");
@@ -219,6 +257,8 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                   <span className="flex items-center gap-1"><Briefcase size={12} className="text-flow shrink-0" /> {serviceTitle || lead.serviceTitle}</span>
                   <span className="text-chalk/30 hidden sm:inline">•</span>
                   <span className="flex items-center gap-1"><Tag size={12} className="text-muted shrink-0" /> Source: <strong className="text-chalk">{source || lead.source}</strong></span>
+                  <span className="text-chalk/30 hidden sm:inline">•</span>
+                  <span className="flex items-center gap-1 text-flow"><Clock size={12} className="text-flow shrink-0" /> Received: <strong className="text-chalk">{formatFullDateTime(lead.createdAt)}</strong></span>
                 </p>
               </div>
             </div>
@@ -245,6 +285,24 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
             
             {/* LEFT COLUMN: Controls, Pricing & Payments (7 Cols) */}
             <div className="lg:col-span-7 space-y-6 lg:border-r lg:border-chalk/10 lg:pr-6">
+
+              {/* Lead Inquiry Received Date & Time Banner */}
+              <div className="flex flex-wrap items-center justify-between gap-2.5 rounded-2xl border border-flow/25 bg-flow/5 p-3.5 sm:px-4 font-mono text-xs">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-flow/15 text-flow border border-flow/30 shrink-0">
+                    <Calendar size={15} />
+                  </div>
+                  <div>
+                    <span className="text-[0.65rem] uppercase text-muted block font-semibold tracking-wider">Lead Received Date & Time</span>
+                    <span className="text-chalk font-bold text-xs sm:text-sm">{formatFullDateTime(lead.createdAt)}</span>
+                  </div>
+                </div>
+                {getRelativeTime(lead.createdAt) && (
+                  <span className="rounded-lg bg-surface border border-chalk/15 px-2.5 py-1 text-[0.7rem] font-bold text-flow">
+                    {getRelativeTime(lead.createdAt)}
+                  </span>
+                )}
+              </div>
 
               {/* Client Contact & Profile Details */}
               <div className="rounded-2xl border border-chalk/15 bg-ink/40 p-4 sm:p-5 space-y-4">
