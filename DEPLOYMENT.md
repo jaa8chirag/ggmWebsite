@@ -14,7 +14,7 @@ Yeh document new2secure VPS par **GGM Technologies (`ggmtechnologies.com`)** ke 
 - **Database:** MariaDB Server (Local on VPS, Port 3306)
 - **Live URL:** [https://ggmtechnologies.com](https://ggmtechnologies.com)
 - **Admin Panel:** [https://ggmtechnologies.com/admin](https://ggmtechnologies.com/admin)
-- **Server Project Path:** `/var/www/ggm-web`
+- **Server Project Path:** `/home/ggmtech/app`
 - **GitHub Repository:** [https://github.com/jaa8chirag/ggmWebsite.git](https://github.com/jaa8chirag/ggmWebsite.git)
 
 ---
@@ -33,7 +33,7 @@ git push origin main
 ### Step 2 (Server par):
 Server me login karke bas ye **1 single command** run karein:
 ```bash
-cd /var/www/ggm-web && git pull && npm run build && pm2 restart ggm-web
+cd /home/ggmtech/app && git pull && npm run build && pm2 restart ggm-web
 ```
 *Yeh command GitHub se naya code download karegi, production build generate karegi, aur zero-downtime ke saath site restart kar degi.*
 
@@ -131,7 +131,7 @@ pm2 save
 
 Server terminal me ye command ek baar chala dein:
 ```bash
-echo "alias update-site='cd /var/www/ggm-web && git pull && npm run build && pm2 restart ggm-web'" >> ~/.bashrc
+echo "alias update-site='cd /home/ggmtech/app && git pull && npm run build && pm2 restart ggm-web'" >> ~/.bashrc
 source ~/.bashrc
 ```
 

@@ -5,7 +5,7 @@ echo "=========================================="
 echo "🚀 Updating GGM Technologies on Production"
 echo "=========================================="
 
-cd /var/www/ggm-web
+cd /home/ggmtech/app
 
 echo "📥 1. Pulling latest code from GitHub..."
 git pull origin main
