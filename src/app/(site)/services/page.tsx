@@ -7,6 +7,7 @@ import Eyebrow from "@/components/ui/Eyebrow";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import TechStack from "@/components/common/TechStack";
 import ComingSoonServiceCard from "@/components/services/ComingSoonServiceCard";
+import CostEstimator from "@/components/home/CostEstimator";
 import { buildMetadata } from "@/lib/seo";
 
 const title = "Digital Marketing Services in Delhi | GGM Technologies";
@@ -177,6 +178,11 @@ export default async function ServicesPage() {
             iconType="cloud"
           />
         </div>
+      </div>
+
+      {/* Interactive Project Cost Estimator */}
+      <div className="mt-16 md:mt-24">
+        <CostEstimator />
       </div>
 
       {/* Comprehensive Tech Stack Section */}

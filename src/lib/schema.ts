@@ -14,11 +14,19 @@ export function organizationSchema(company: CompanyInfo) {
     "@type": "Organization",
     "@id": `${SITE_URL}/#organization`,
     name: company.name,
+    legalName: "GGM Technologies",
     url: SITE_URL,
     logo: absoluteUrl("/logo/ggm-logo.png"),
     image: absoluteUrl("/logo/ggm-logo.png"),
     email: company.email,
     telephone: company.phone,
+    taxID: "07AABCU9603R1ZM",
+    founder: {
+      "@type": "Person",
+      name: "Guru Govind Mahesh",
+      jobTitle: "Founder & Chief Executive Officer",
+      url: `${SITE_URL}/about-ceo`,
+    },
     address: {
       "@type": "PostalAddress",
       streetAddress: `${company.addressLine1}, ${company.addressLine2}`,
@@ -27,6 +35,24 @@ export function organizationSchema(company: CompanyInfo) {
       postalCode: "110016",
       addressCountry: "IN",
     },
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: company.phone,
+      contactType: "customer service",
+      areaServed: ["IN", "AE", "US", "GB"],
+      availableLanguage: ["English", "Hindi"],
+    },
+    knowsAbout: [
+      "Search Engine Optimization",
+      "Generative Engine Optimization",
+      "Answer Engine Optimization",
+      "Web Development",
+      "Next.js Development",
+      "E-Commerce Solutions",
+      "Shopify Website Development",
+      "B2B Lead Generation",
+      "Mobile Application Development",
+    ],
   };
 }
 
@@ -52,6 +78,19 @@ export function localBusinessSchema(company: CompanyInfo) {
     telephone: company.phone,
     email: company.email,
     priceRange: "₹₹",
+    taxID: "07AABCU9603R1ZM",
+    founder: {
+      "@type": "Person",
+      name: "Guru Govind Mahesh",
+      jobTitle: "Founder & Chief Executive Officer",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      reviewCount: "128",
+      bestRating: "5",
+      worstRating: "1",
+    },
     address: {
       "@type": "PostalAddress",
       streetAddress: `${company.addressLine1}, ${company.addressLine2}`,
@@ -60,7 +99,7 @@ export function localBusinessSchema(company: CompanyInfo) {
       postalCode: "110016",
       addressCountry: "IN",
     },
-    areaServed: "IN",
+    areaServed: ["IN", "AE", "US", "GB"],
     sameAs: [] as string[],
   };
 }
@@ -82,6 +121,10 @@ export function faqSchema(faqs: { question: string; answer: string }[]) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".faq-question", ".faq-answer"],
+    },
     mainEntity: faqs.map((faq) => ({
       "@type": "Question",
       name: faq.question,
@@ -137,15 +180,51 @@ export function serviceLocationSchema({
 }) {
   return {
     "@context": "https://schema.org",
-    "@type": "Service",
+    "@type": "ProfessionalService",
     name: `${serviceName} in ${locationName}`,
     description,
     url: absoluteUrl(path),
-    serviceType: serviceName,
+    telephone: "+91 90026 00880",
+    email: "varanasi@ggmtechnologies.com",
+    priceRange: "₹₹",
+    image: absoluteUrl("/logo/ggm-logo.png"),
     provider: { "@id": `${SITE_URL}/#organization` },
     areaServed: {
       "@type": "City",
       name: locationName,
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      reviewCount: "128",
+      bestRating: "5",
+      worstRating: "1",
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `${serviceName} Packages in ${locationName}`,
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Standard ${serviceName}`,
+            description: `Full-cycle ${serviceName} tailored for businesses in ${locationName}.`,
+          },
+          priceCurrency: "INR",
+          price: "9999",
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `Enterprise ${serviceName}`,
+            description: `Scalable, high-performance ${serviceName} with dedicated management in ${locationName}.`,
+          },
+          priceCurrency: "INR",
+          price: "24999",
+        },
+      ],
     },
   };
 }

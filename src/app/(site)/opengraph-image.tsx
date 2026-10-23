@@ -9,12 +9,23 @@ export const contentType = "image/png";
 export const dynamic = "force-dynamic";
 
 export default async function Image() {
-  const settings = await getSettings();
-  const logoData = await readFile(
-    join(process.cwd(), "public/logo/ggm-mark.png"),
-    "base64"
-  );
-  const logoSrc = `data:image/png;base64,${logoData}`;
+  let settings = null;
+  try {
+    settings = await getSettings();
+  } catch {
+    settings = null;
+  }
+
+  let logoSrc: string | null = null;
+  try {
+    const logoData = await readFile(
+      join(process.cwd(), "public/logo/ggm-mark.png"),
+      "base64"
+    );
+    logoSrc = `data:image/png;base64,${logoData}`;
+  } catch {
+    logoSrc = null;
+  }
 
   return new ImageResponse(
     (
@@ -30,7 +41,13 @@ export default async function Image() {
           padding: 80,
         }}
       >
-        <img src={logoSrc} width={240} height={90} alt="" />
+        {logoSrc ? (
+          <img src={logoSrc} width={240} height={90} alt="" />
+        ) : (
+          <div style={{ fontSize: 36, fontWeight: 700, color: "#0370ba" }}>
+            GGM TECHNOLOGIES
+          </div>
+        )}
         <div
           style={{
             marginTop: 44,
@@ -52,7 +69,7 @@ export default async function Image() {
             textTransform: "uppercase",
           }}
         >
-          {settings.eyebrow}
+          {settings?.eyebrow || "Digital Growth Agency"}
         </div>
       </div>
     ),

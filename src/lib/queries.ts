@@ -212,6 +212,25 @@ export async function getServiceLocation(
         );
       }
 
+      if (!sl && normalizedLocation.endsWith("-3")) {
+        const cleanLoc = normalizedLocation.slice(0, -2);
+        sl = await queryOne<any>(
+          `SELECT sl.*, 
+                  s.id as s_id, s.slug as s_slug, s.index as s_index, s.title as s_title, 
+                  s.promise as s_promise, s.description as s_description, s.bullets as s_bullets, 
+                  s.metaTitle as s_metaTitle, s.metaDescription as s_metaDescription, 
+                  s.ogImage as s_ogImage, s.canonicalOverride as s_canonicalOverride, s.noIndex as s_noIndex,
+                  l.id as l_id, l.slug as l_slug, l.name as l_name, l.region as l_region, l.isActive as l_isActive
+           FROM \`ServiceLocation\` sl
+           JOIN \`Service\` s ON sl.serviceId = s.id
+           JOIN \`Location\` l ON sl.locationId = l.id
+           WHERE sl.published = 1 
+             AND (s.id = ? OR s.slug = ? OR LOWER(s.slug) = ?) 
+             AND (l.slug = ? OR LOWER(l.slug) = ?)`,
+          [serviceObj?.id || "", sSlug, normalizedService, cleanLoc, cleanLoc]
+        );
+      }
+
       if (!sl) return null;
 
       const faqs = await query<any>("SELECT * FROM `ServiceFaq` WHERE `serviceId` = ? ORDER BY `order` ASC", [sl.s_id]);
@@ -251,7 +270,7 @@ export async function getServiceLocation(
         },
       };
     },
-    ["getServiceLocation"],
+    ["getServiceLocation", serviceSlug.toLowerCase(), locationSlug.toLowerCase()],
     { tags: ["services", "locations"], revalidate: 3600 }
   )(serviceSlug, locationSlug);
 }
@@ -268,6 +287,7 @@ export const getPublishedServiceLocations = unstable_cache(
     return rows.map((r) => ({
       id: r.id,
       published: Boolean(r.published),
+      updatedAt: r.updatedAt,
       service: { slug: r.serviceSlug },
       location: { slug: r.locationSlug },
     }));

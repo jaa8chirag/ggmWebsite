@@ -20,6 +20,7 @@ import {
 import { getCurrentAdmin } from "@/lib/auth";
 import { logoutAction } from "@/app/admin/actions";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import AdminContentWrapper from "@/components/admin/AdminContentWrapper";
 
 export default async function AdminDashboardLayout({
   children,
@@ -29,40 +30,15 @@ export default async function AdminDashboardLayout({
   const admin = await getCurrentAdmin();
   if (!admin) redirect("/admin/login");
 
-  const navGroups = [
-    {
-      label: "CMS Content",
-      links: [
-        { href: "/admin", label: "Overview", icon: LayoutDashboard },
-        { href: "/admin/leads", label: "Lead Management CRM", icon: Users },
-        { href: "/admin/quotes", label: "Quotes & Leads", icon: Zap },
-        { href: "/admin/services", label: "Services", icon: Boxes },
-        { href: "/admin/locations", label: "Locations", icon: MapPin },
-        { href: "/admin/blog", label: "Blog Posts", icon: FileText },
-        { href: "/admin/work", label: "Case Studies", icon: Briefcase },
-        { href: "/admin/shop", label: "Shop Products", icon: ShoppingBag },
-        { href: "/admin/testimonials", label: "Testimonials", icon: MessageSquareQuote },
-      ],
-    },
-    {
-      label: "Configuration & Governance",
-      links: [
-        { href: "/admin/legal", label: "Legal & Policies", icon: ShieldCheck },
-        { href: "/admin/seo-tools", label: "SEO & Ahrefs Hub", icon: Search },
-        { href: "/admin/settings", label: "Site Settings", icon: Settings },
-      ],
-    },
-  ];
-
   return (
-    <div className="flex min-h-screen flex-col lg:flex-row bg-ink text-chalk font-body">
+    <div className="flex min-h-screen lg:h-screen lg:overflow-hidden flex-col lg:flex-row bg-ink text-chalk font-body">
       {/* Responsive Admin Sidebar */}
       <AdminSidebar adminEmail={admin.email} />
 
-      {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto px-3.5 py-4 sm:px-6 sm:py-6 md:px-8 md:py-8 lg:px-10 lg:py-10 min-w-0">
-        <div className="mx-auto max-w-[1280px] w-full min-w-0">{children}</div>
-      </main>
+      {/* Main Content Area (Full Bleed for Leads CRM, Standard for others) */}
+      <AdminContentWrapper>
+        {children}
+      </AdminContentWrapper>
     </div>
   );
 }

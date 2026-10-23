@@ -97,22 +97,27 @@ export default function ServiceLocationsList({
         )}
       </div>
 
-      {/* Locations Pills Grid */}
+      {/* Locations Pills Grid - All links rendered in DOM for SEO crawlability */}
       <div className="mt-6 flex flex-wrap gap-2.5 sm:gap-3 transition-all duration-300">
-        {visibleLocations.map((sl) => (
-          <Link
-            key={sl.id}
-            href={`/services/${serviceSlug}/${sl.location.slug}`}
-            prefetch={false}
-            className="group flex items-center gap-1.5 rounded-full border border-chalk/20 bg-surface/40 px-3.5 py-2 font-mono text-xs uppercase tracking-widest text-muted transition-all duration-200 hover:border-flow hover:bg-surface hover:text-flow hover:shadow-sm"
-          >
-            <MapPin
-              size={12}
-              className="shrink-0 text-muted/70 transition-colors group-hover:text-flow"
-            />
-            <span>{sl.location.name}</span>
-          </Link>
-        ))}
+        {filteredLocations.map((sl, index) => {
+          const isHidden = !isSearching && !isExpanded && index >= initialLimit;
+          return (
+            <Link
+              key={sl.id}
+              href={`/services/${serviceSlug}/${sl.location.slug}`}
+              prefetch={false}
+              className={`group flex items-center gap-1.5 rounded-full border border-chalk/20 bg-surface/40 px-3.5 py-2 font-mono text-xs uppercase tracking-widest text-muted transition-all duration-200 hover:border-flow hover:bg-surface hover:text-flow hover:shadow-sm ${
+                isHidden ? "hidden" : ""
+              }`}
+            >
+              <MapPin
+                size={12}
+                className="shrink-0 text-muted/70 transition-colors group-hover:text-flow"
+              />
+              <span>{sl.location.name}</span>
+            </Link>
+          );
+        })}
       </div>
 
       {/* No Results Message */}

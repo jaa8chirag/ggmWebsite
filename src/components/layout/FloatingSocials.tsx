@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageCircle, Phone } from "lucide-react";
+import { MessageCircle, Phone, Calculator } from "lucide-react";
 
 interface FloatingSocialsProps {
   phoneHref?: string;
@@ -15,7 +15,16 @@ export default function FloatingSocials({
   const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent("Hello GGM Technologies! I would like to inquire about digital marketing & SEO services.")}`;
 
   return (
-    <aside aria-label="Quick contact links" className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-3">
+    <aside aria-label="Quick contact links" className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2.5">
+      {/* Quick Interactive Cost Estimator Trigger */}
+      <a
+        href="/services#cost-estimator"
+        aria-label="Calculate Project Cost"
+        className="group flex items-center gap-2 rounded-full bg-surface/95 border border-flow/50 px-3.5 py-2 font-mono text-xs font-bold text-flow shadow-2xl backdrop-blur-md transition-all hover:bg-flow hover:text-ink hover:scale-105 active:scale-95"
+      >
+        <Calculator size={15} className="text-flow group-hover:text-ink transition-colors" />
+        <span>Estimate Cost</span>
+      </a>
       {/* Call Button */}
       <a
         href={phoneHref}

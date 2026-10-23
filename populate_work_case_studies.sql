@@ -158,7 +158,7 @@ ON DUPLICATE KEY UPDATE
   `updatedAt` = NOW(3);
 
 INSERT INTO `casestudy` (`id`, `slug`, `client`, `category`, `summary`, `resultLabel`, `variant`, `order`, `createdAt`, `updatedAt`, `ogImage`, `canonicalOverride`, `noIndex`)
-VALUES ('work_1788963019486_y1io4', 'mukesh', 'Mr. Mukesh', 'Web Development · Oviz Consulting', 'Architected a full corporate advisory website for Oviz Consulting. Includes structured service verticals, consultant expertise highlights, and lead qualification workflows.', 'B2B Lead Pipeline Activated', 'interiors', 10, NOW(3), NOW(3), '/images/uploads/work/mukesh_1789056702765.jpg', 'https://oviz.ggmtechnologies.com/', 0)
+VALUES ('work_1788963019486_y1io4', 'mukesh', 'Mr. Mukesh', 'Web Development · Oviz Consulting', 'Architected a full corporate advisory website for Oviz Consulting. Includes structured service verticals, consultant expertise highlights, and lead qualification workflows.', 'B2B Lead Pipeline Activated', 'interiors', 10, NOW(3), NOW(3), '/images/uploads/work/mukesh_1789056702765.jpg', NULL, 0)
 ON DUPLICATE KEY UPDATE
   `client` = VALUES(`client`),
   `category` = VALUES(`category`),

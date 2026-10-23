@@ -17,6 +17,7 @@ interface BuildMetadataArgs {
   path: string;
   type?: "website" | "article";
   noIndex?: boolean;
+  keywords?: string[];
   overrides?: SeoOverrides;
 }
 
@@ -31,6 +32,7 @@ export function buildMetadata({
   path,
   type = "website",
   noIndex = false,
+  keywords,
   overrides,
 }: BuildMetadataArgs): Metadata {
   const finalTitle = overrides?.metaTitle || title;
@@ -54,6 +56,7 @@ export function buildMetadata({
   return {
     title: finalTitle,
     description: finalDescription,
+    keywords,
     alternates: { canonical },
     verification: Object.keys(verification).length > 0 ? verification : undefined,
     robots: finalNoIndex

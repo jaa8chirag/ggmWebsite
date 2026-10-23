@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Calculator } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import Eyebrow from "@/components/ui/Eyebrow";
@@ -265,6 +265,16 @@ export default function Services({ services }: { services: ServiceCardData[] }) 
           <p className="mt-2.5 sm:mt-3 font-body text-xs sm:text-sm text-muted leading-relaxed max-w-[240px] lg:max-w-xs">
             Our execution sequence to build and scale your brand. Each service connects seamlessly into the next.
           </p>
+
+          <div className="mt-3 sm:mt-4">
+            <Link
+              href="/services#cost-estimator"
+              className="inline-flex items-center gap-1.5 rounded-full border border-flow/40 bg-flow/10 px-3.5 py-1.5 font-mono text-[0.7rem] sm:text-xs font-bold uppercase tracking-wider text-flow hover:bg-flow hover:text-ink transition-all shadow-md shadow-flow/10"
+            >
+              <Calculator size={13} />
+              <span>Estimate Project Cost</span>
+            </Link>
+          </div>
 
           {/* Progress Indicator & Arrow Buttons for Tablet & Desktop */}
           <div className="mt-6 md:mt-8 space-y-3.5">

@@ -304,6 +304,28 @@ export default function LeadDetailDrawer({ lead, onClose }: LeadDetailDrawerProp
                 )}
               </div>
 
+              {/* Quick 1-Click Communication Actions */}
+              <div className="grid grid-cols-2 gap-2.5">
+                <a
+                  href={`https://wa.me/${(phone || lead.phone).replace(/[^0-9]/g, "").length === 10 ? `91${(phone || lead.phone).replace(/[^0-9]/g, "")}` : (phone || lead.phone).replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                    `Hello ${name || lead.name} ji! Thank you for contacting GGM Technologies regarding ${serviceTitle || lead.serviceTitle}. How can we assist you with your project today?`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500 border border-emerald-500/30 text-emerald-400 hover:text-ink px-4 py-2.5 font-mono text-xs font-bold transition-all shadow-sm"
+                >
+                  <MessageSquare size={15} />
+                  <span>Chat on WhatsApp</span>
+                </a>
+                <a
+                  href={`tel:${(phone || lead.phone).replace(/\s+/g, "")}`}
+                  className="flex items-center justify-center gap-2 rounded-xl bg-blue-500/15 hover:bg-blue-500 border border-blue-500/30 text-blue-400 hover:text-ink px-4 py-2.5 font-mono text-xs font-bold transition-all shadow-sm"
+                >
+                  <Phone size={15} />
+                  <span>Call Client</span>
+                </a>
+              </div>
+
               {/* Client Contact & Profile Details */}
               <div className="rounded-2xl border border-chalk/15 bg-ink/40 p-4 sm:p-5 space-y-4">
                 <div className="flex items-center justify-between">

@@ -13,13 +13,23 @@ export default async function Image({
   params: Promise<{ slug: string; location: string }>;
 }) {
   const { slug, location } = await params;
-  const sl = await getServiceLocation(slug, location);
+  let sl = null;
+  try {
+    sl = await getServiceLocation(slug, location);
+  } catch {
+    sl = null;
+  }
 
-  const logoData = await readFile(
-    join(process.cwd(), "public/logo/ggm-mark.png"),
-    "base64"
-  );
-  const logoSrc = `data:image/png;base64,${logoData}`;
+  let logoSrc: string | null = null;
+  try {
+    const logoData = await readFile(
+      join(process.cwd(), "public/logo/ggm-mark.png"),
+      "base64"
+    );
+    logoSrc = `data:image/png;base64,${logoData}`;
+  } catch {
+    logoSrc = null;
+  }
 
   return new ImageResponse(
     (
@@ -34,7 +44,13 @@ export default async function Image({
           padding: 80,
         }}
       >
-        <img src={logoSrc} width={160} height={60} alt="" />
+        {logoSrc ? (
+          <img src={logoSrc} width={160} height={60} alt="" />
+        ) : (
+          <div style={{ fontSize: 28, fontWeight: 700, color: "#0370ba" }}>
+            GGM TECHNOLOGIES
+          </div>
+        )}
         <div
           style={{
             fontSize: 52,

@@ -38,8 +38,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const serviceLocationRoutes: MetadataRoute.Sitemap = serviceLocations.map(
     (sl) => ({
       url: `${SITE_URL}/services/${sl.service.slug}/${sl.location.slug}`,
-      changeFrequency: "daily",
-      priority: 0.7,
+      lastModified: (sl as any).updatedAt ? new Date((sl as any).updatedAt) : new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
     })
   );
 

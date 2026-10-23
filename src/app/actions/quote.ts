@@ -19,6 +19,8 @@ export async function submitQuoteRequest(formData: FormData): Promise<QuoteActio
     const serviceSlug = (formData.get("serviceSlug") as string)?.trim() || "general";
     const serviceTitle = (formData.get("serviceTitle") as string)?.trim() || "General Consultation";
     const pageUrl = (formData.get("pageUrl") as string)?.trim() || "/";
+    const approxAmount = (formData.get("approxAmount") as string)?.trim() || null;
+    const source = (formData.get("source") as string)?.trim() || "WEBSITE";
 
     if (!name || name.length < 2) {
       return { success: false, error: "Please provide your full name." };
@@ -41,13 +43,13 @@ export async function submitQuoteRequest(formData: FormData): Promise<QuoteActio
     // Also auto-sync directly into CrmLead CRM table
     const leadId = `lead_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     const initialNotes = message
-      ? JSON.stringify([{ id: `note_1`, text: `Website Form Message: ${message}`, createdAt: new Date().toISOString(), author: "Website Form" }])
+      ? JSON.stringify([{ id: `note_1`, text: `Inquiry / Requirements: ${message}`, createdAt: new Date().toISOString(), author: "Website" }])
       : JSON.stringify([]);
 
     await query(
-      `INSERT INTO \`CrmLead\` (\`id\`, \`name\`, \`phone\`, \`email\`, \`serviceSlug\`, \`serviceTitle\`, \`source\`, \`status\`, \`timelineNotes\`, \`quoteRequestId\`, \`createdAt\`, \`updatedAt\`)
-       VALUES (?, ?, ?, ?, ?, ?, 'WEBSITE', 'NEW', ?, ?, NOW(3), NOW(3))`,
-      [leadId, name, phone, email, serviceSlug, serviceTitle, initialNotes, id]
+      `INSERT INTO \`CrmLead\` (\`id\`, \`name\`, \`phone\`, \`email\`, \`serviceSlug\`, \`serviceTitle\`, \`source\`, \`status\`, \`approxAmount\`, \`timelineNotes\`, \`quoteRequestId\`, \`createdAt\`, \`updatedAt\`)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'NEW', ?, ?, ?, NOW(3), NOW(3))`,
+      [leadId, name, phone, email, serviceSlug, serviceTitle, source, approxAmount, initialNotes, id]
     );
 
     revalidatePath("/admin");

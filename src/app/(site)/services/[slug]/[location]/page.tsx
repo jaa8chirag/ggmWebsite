@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import {
   Check,
   ArrowUpRight,
@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   XCircle,
   PhoneCall,
+  Calculator,
 } from "lucide-react";
 import { getServiceLocation, getPublishedPosts } from "@/lib/queries";
 import { query } from "@/lib/db";
@@ -26,6 +27,7 @@ import TechStack from "@/components/common/TechStack";
 import QuickQuoteCard from "@/components/services/QuickQuoteCard";
 import SeoScopeOfWorkSection from "@/components/services/SeoScopeOfWorkSection";
 import ServiceLocationsList from "@/components/services/ServiceLocationsList";
+import CostEstimator from "@/components/home/CostEstimator";
 import { SERVICE_DETAILS } from "@/data/serviceDetails";
 
 const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
@@ -86,19 +88,30 @@ export async function generateMetadata({
   if (!sl) return {};
 
   const { service, location: loc } = sl;
-  const details = SERVICE_DETAILS[slug] || SERVICE_DETAILS[service.slug];
+  const canonicalPath = `/services/${service.slug}/${loc.slug}`;
 
   const title =
     sl.metaTitle ||
-    `${service.title} in ${loc.name} | Top ${service.title} Company | GGM Technologies`;
+    `${service.title} in ${loc.name} | Best ${service.title} Agency & Company | GGM Technologies`;
   const description =
     sl.metaDescription ||
-    `Looking for premier ${service.title.toLowerCase()} in ${loc.name}? GGM Technologies delivers high-performance digital solutions in ${loc.name}, ${loc.region}.`;
+    `Top-rated ${service.title.toLowerCase()} in ${loc.name}, ${loc.region}. Custom digital solutions, transparent packages, verified ROI & expert team. Get a free proposal!`;
+
+  const keywords = [
+    `${service.title} in ${loc.name}`,
+    `best ${service.title} company in ${loc.name}`,
+    `top ${service.title} agency ${loc.name}`,
+    `${service.title} cost in ${loc.name}`,
+    `${service.title} packages ${loc.name}`,
+    `${service.title} near me`,
+    `${loc.name} ${service.title} services`,
+  ];
 
   return buildMetadata({
     title,
     description,
-    path: `/services/${slug}/${location}`,
+    path: canonicalPath,
+    keywords,
     overrides: sl,
   });
 }
@@ -109,6 +122,17 @@ export default async function ServiceLocationDetailPage({
   params: Promise<{ slug: string; location: string }>;
 }) {
   const { slug, location } = await params;
+
+  // Handle -3 legacy duplicate slugs from Google Search Console:
+  // 308 Permanent Redirect to clean canonical URL
+  if (location.endsWith("-3")) {
+    const cleanLocation = location.slice(0, -2);
+    const checkSl = await getServiceLocation(slug, cleanLocation);
+    if (checkSl) {
+      permanentRedirect(`/services/${checkSl.service.slug}/${cleanLocation}`);
+    }
+  }
+
   const sl = await getServiceLocation(slug, location);
   if (!sl) notFound();
 
@@ -233,10 +257,17 @@ export default async function ServiceLocationDetailPage({
                 </div>
               )}
 
-              <div className="mt-8 flex flex-wrap items-center gap-4">
+              <div className="mt-8 flex flex-wrap items-center gap-3.5 sm:gap-4">
                 <Button href="/contact" variant="signal">
                   Start Your Project in {loc.name}
                 </Button>
+                <a
+                  href="#cost-estimator"
+                  className="inline-flex items-center gap-2 rounded-full border border-flow/40 bg-flow/15 px-5 sm:px-6 py-3 font-mono text-xs font-bold uppercase tracking-wider text-flow shadow-lg shadow-flow/10 transition-all hover:bg-flow hover:text-ink active:scale-95 cursor-pointer"
+                >
+                  <Calculator size={15} />
+                  <span>Estimate Cost</span>
+                </a>
                 <a
                   href="tel:+919002600880"
                   className="inline-flex items-center gap-2 rounded-full border border-chalk/20 bg-surface/70 px-5 py-3 font-mono text-xs font-semibold uppercase tracking-wider text-chalk shadow-sm transition-all hover:border-flow hover:text-flow"
@@ -683,6 +714,17 @@ export default async function ServiceLocationDetailPage({
             </div>
           </section>
         )}
+
+        {/* =================================================================== */}
+        {/* INTERACTIVE COST ESTIMATOR FOR THIS SERVICE                         */}
+        {/* =================================================================== */}
+        <section className="border-t border-chalk/15">
+          <CostEstimator
+            initialServiceSlug={service.slug}
+            title={`Calculate Your ${service.title} Cost in ${loc.name}`}
+            subtitle={`Get an instant, customized investment estimate for ${service.title} in ${loc.name} with transparent deliverable options.`}
+          />
+        </section>
 
         {/* =================================================================== */}
         {/* 10. OTHER LOCATIONS WHERE WE WORK                                  */}

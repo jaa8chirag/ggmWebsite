@@ -15,6 +15,7 @@ import {
   XCircle,
   HelpCircle,
   PhoneCall,
+  Calculator,
 } from "lucide-react";
 import { getServiceBySlug, getServices, getPublishedPosts } from "@/lib/queries";
 import { query } from "@/lib/db";
@@ -30,6 +31,7 @@ import TechStack from "@/components/common/TechStack";
 import QuickQuoteCard from "@/components/services/QuickQuoteCard";
 import SeoScopeOfWorkSection from "@/components/services/SeoScopeOfWorkSection";
 import ServiceLocationsList from "@/components/services/ServiceLocationsList";
+import CostEstimator from "@/components/home/CostEstimator";
 import { SERVICE_DETAILS } from "@/data/serviceDetails";
 
 const DEFAULT_SERVICE_IMAGES: Record<string, string> = {
@@ -227,10 +229,17 @@ export default async function ServiceDetailPage({
                 </div>
               )}
 
-              <div className="mt-8 flex flex-wrap items-center gap-4">
+              <div className="mt-8 flex flex-wrap items-center gap-3.5 sm:gap-4">
                 <Button href="/contact" variant="signal">
                   Start Your Project
                 </Button>
+                <a
+                  href="#cost-estimator"
+                  className="inline-flex items-center gap-2 rounded-full border border-flow/40 bg-flow/15 px-5 sm:px-6 py-3 font-mono text-xs font-bold uppercase tracking-wider text-flow shadow-lg shadow-flow/10 transition-all hover:bg-flow hover:text-ink active:scale-95 cursor-pointer"
+                >
+                  <Calculator size={15} />
+                  <span>Estimate Cost</span>
+                </a>
                 <a
                   href="tel:+919002600880"
                   className="inline-flex items-center gap-2 rounded-full border border-chalk/20 bg-surface/70 px-5 py-3 font-mono text-xs font-semibold uppercase tracking-wider text-chalk shadow-sm transition-all hover:border-flow hover:text-flow"
@@ -677,6 +686,17 @@ export default async function ServiceDetailPage({
             </div>
           </section>
         )}
+
+        {/* =================================================================== */}
+        {/* INTERACTIVE COST ESTIMATOR FOR THIS SERVICE                         */}
+        {/* =================================================================== */}
+        <section className="border-t border-chalk/15">
+          <CostEstimator
+            initialServiceSlug={service.slug}
+            title={`Calculate Your ${service.title} Cost in 30 Seconds`}
+            subtitle={`Get an instant, customized investment estimate for ${service.title} with transparent deliverable options.`}
+          />
+        </section>
 
         {/* =================================================================== */}
         {/* 10. WHERE WE WORK (SERVICE LOCATIONS)                               */}
