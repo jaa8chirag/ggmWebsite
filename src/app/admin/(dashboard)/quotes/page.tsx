@@ -40,7 +40,7 @@ export default async function AdminQuotesPage() {
             <TrendingUp size={16} className="text-flow" />
           </div>
           <p className="mt-3 font-display text-3xl font-bold text-chalk">
-            {stats.total}
+            {stats?.total ?? 0}
           </p>
           <p className="mt-1 font-mono text-[10px] text-muted">All-time quote requests</p>
         </div>
@@ -54,7 +54,7 @@ export default async function AdminQuotesPage() {
             <Clock size={16} className="text-signal" />
           </div>
           <p className="mt-3 font-display text-3xl font-bold text-signal">
-            {stats.pending}
+            {stats?.pending ?? 0}
           </p>
           <p className="mt-1 font-mono text-[10px] text-signal/80">Needs 15-min call</p>
         </div>
@@ -68,7 +68,7 @@ export default async function AdminQuotesPage() {
             <MessageSquare size={16} className="text-flow" />
           </div>
           <p className="mt-3 font-display text-3xl font-bold text-flow">
-            {stats.contacted}
+            {stats?.contacted ?? 0}
           </p>
           <p className="mt-1 font-mono text-[10px] text-flow/80">In communication</p>
         </div>
@@ -82,14 +82,14 @@ export default async function AdminQuotesPage() {
             <CheckCircle2 size={16} className="text-emerald-400" />
           </div>
           <p className="mt-3 font-display text-3xl font-bold text-emerald-400">
-            {stats.converted}
+            {stats?.converted ?? 0}
           </p>
           <p className="mt-1 font-mono text-[10px] text-emerald-400/80">Successful clients</p>
         </div>
       </div>
 
       {/* Main Interactive Table */}
-      <QuotesTable initialQuotes={quotes} />
+      <QuotesTable initialQuotes={quotes || []} />
     </div>
   );
 }

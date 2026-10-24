@@ -191,14 +191,14 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
       }
 
       // Search query
-      const q = searchQuery.toLowerCase().trim();
+      const q = (searchQuery || "").toLowerCase().trim();
       const matchesSearch =
         !q ||
-        lead.name.toLowerCase().includes(q) ||
-        lead.phone.toLowerCase().includes(q) ||
-        (lead.companyName && lead.companyName.toLowerCase().includes(q)) ||
-        (lead.location && lead.location.toLowerCase().includes(q)) ||
-        lead.serviceTitle.toLowerCase().includes(q);
+        Boolean(lead.name && lead.name.toLowerCase().includes(q)) ||
+        Boolean(lead.phone && lead.phone.toLowerCase().includes(q)) ||
+        Boolean(lead.companyName && lead.companyName.toLowerCase().includes(q)) ||
+        Boolean(lead.location && lead.location.toLowerCase().includes(q)) ||
+        Boolean(lead.serviceTitle && lead.serviceTitle.toLowerCase().includes(q));
 
       return matchesFilter && matchesSearch;
     });
@@ -214,10 +214,15 @@ export default function LeadsCrmContainer({ initialLeads, stats }: LeadsCrmConta
   const followUpsDueCount = useMemo(() => {
     const now = new Date();
     const todayStr = now.toISOString().split("T")[0];
-    return leads.filter((l) => {
+    return (leads || []).filter((l) => {
       if (!l.nextFollowUp || l.status === "WON" || l.status === "LOST") return false;
-      const fDate = new Date(l.nextFollowUp).toISOString().split("T")[0];
-      return fDate <= todayStr;
+      try {
+        const d = new Date(l.nextFollowUp);
+        if (isNaN(d.getTime())) return false;
+        return d.toISOString().split("T")[0] <= todayStr;
+      } catch {
+        return false;
+      }
     }).length;
   }, [leads]);
 

@@ -28,23 +28,49 @@ export default function QuotesTable({ initialQuotes }: QuotesTableProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
+  const cleanPhoneForWhatsApp = (raw?: string | null) => {
+    if (!raw) return "";
+    const digits = String(raw).replace(/\D/g, "");
+    if (digits.length === 10) return `91${digits}`;
+    return digits;
+  };
+
+  const formatDate = (dateVal?: any) => {
+    if (!dateVal) return "—";
+    try {
+      const d = new Date(dateVal);
+      if (isNaN(d.getTime())) return "—";
+      return d.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }) + " " + d.toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return "—";
+    }
+  };
+
   const filteredQuotes = React.useMemo(() => {
-    return quotes
+    return (quotes || [])
       .filter((q) => {
+        if (!q) return false;
         const matchesStatus = filterStatus === "ALL" || q.status === filterStatus;
-        const query = searchQuery.toLowerCase();
+        const query = (searchQuery || "").toLowerCase();
         const matchesSearch =
-          searchQuery === "" ||
-          q.name.toLowerCase().includes(query) ||
-          q.phone.includes(searchQuery) ||
-          (q.email && q.email.toLowerCase().includes(query)) ||
-          (q.message && q.message.toLowerCase().includes(query)) ||
-          q.serviceTitle.toLowerCase().includes(query);
+          query === "" ||
+          Boolean(q.name && q.name.toLowerCase().includes(query)) ||
+          Boolean(q.phone && q.phone.includes(query)) ||
+          Boolean(q.email && q.email.toLowerCase().includes(query)) ||
+          Boolean(q.message && q.message.toLowerCase().includes(query)) ||
+          Boolean(q.serviceTitle && q.serviceTitle.toLowerCase().includes(query));
         return matchesStatus && matchesSearch;
       })
       .sort((a, b) => {
-        const timeA = new Date(a.createdAt || 0).getTime();
-        const timeB = new Date(b.createdAt || 0).getTime();
+        const timeA = a?.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const timeB = b?.createdAt ? new Date(b.createdAt).getTime() : 0;
         return sortOrder === "oldest" ? timeA - timeB : timeB - timeA;
       });
   }, [quotes, filterStatus, searchQuery, sortOrder]);
@@ -74,12 +100,6 @@ export default function QuotesTable({ initialQuotes }: QuotesTableProps) {
     } finally {
       setUpdatingId(null);
     }
-  };
-
-  const cleanPhoneForWhatsApp = (raw: string) => {
-    const digits = raw.replace(/\D/g, "");
-    if (digits.length === 10) return `91${digits}`;
-    return digits;
   };
 
   const getStatusBadge = (status: QuoteStatus) => {
@@ -200,13 +220,7 @@ export default function QuotesTable({ initialQuotes }: QuotesTableProps) {
                 </tr>
               ) : (
                 filteredQuotes.map((q) => {
-                  const dateStr = new Date(q.createdAt).toLocaleString("en-IN", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  });
+                  const dateStr = formatDate(q.createdAt);
 
                   return (
                     <tr
@@ -214,7 +228,7 @@ export default function QuotesTable({ initialQuotes }: QuotesTableProps) {
                       className="hover:bg-chalk/5 transition-colors duration-150"
                     >
                       {/* Date */}
-                      <td className="py-4 px-4 font-mono text-xs text-muted whitespace-nowrap">
+                      <td suppressHydrationWarning className="py-4 px-4 font-mono text-xs text-muted whitespace-nowrap">
                         {dateStr}
                       </td>
 
@@ -289,7 +303,7 @@ export default function QuotesTable({ initialQuotes }: QuotesTableProps) {
                               title={q.pageUrl}
                             >
                               <Globe size={10} />
-                              <span className="truncate">{q.pageUrl.replace(/^https?:\/\/[^\/]+/, "")}</span>
+                              <span className="truncate">{String(q.pageUrl).replace(/^https?:\/\/[^\/]+/, "") || q.pageUrl}</span>
                               <ExternalLink size={9} />
                             </a>
                           )}

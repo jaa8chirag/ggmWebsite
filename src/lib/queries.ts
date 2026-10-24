@@ -22,6 +22,7 @@ import type {
   LegalPage,
   CertificateDocument,
   QuoteRequest,
+  QuoteStatus,
   CrmLeadModel,
   CrmLeadStatus,
   LeadNote,
@@ -674,15 +675,17 @@ export async function getQuotes(status?: string): Promise<QuoteRequest[]> {
     sql += " ORDER BY `createdAt` DESC";
     const rows = await query<any>(sql, params);
     return (rows || []).map((r) => ({
-      id: r.id,
-      name: r.name,
-      phone: r.phone,
-      serviceSlug: r.serviceSlug,
-      serviceTitle: r.serviceTitle,
-      pageUrl: r.pageUrl,
-      status: r.status,
-      notes: r.notes || null,
-      createdAt: r.createdAt,
+      id: String(r.id || ""),
+      name: String(r.name || "Lead"),
+      phone: String(r.phone || ""),
+      email: r.email ? String(r.email) : null,
+      serviceSlug: String(r.serviceSlug || "general"),
+      serviceTitle: String(r.serviceTitle || "General Consultation"),
+      message: r.message ? String(r.message) : null,
+      pageUrl: String(r.pageUrl || "/"),
+      status: (r.status || "PENDING") as QuoteStatus,
+      notes: r.notes ? String(r.notes) : null,
+      createdAt: r.createdAt ? new Date(r.createdAt).toISOString() : new Date().toISOString(),
     }));
   } catch (err) {
     console.error("Error fetching quotes:", err);
@@ -710,6 +713,16 @@ export async function getQuoteStats(): Promise<{ total: number; pending: number;
 /**
  * Lead Management CRM Queries
  */
+function safeIsoDate(val: any): string | null {
+  if (!val) return null;
+  try {
+    const d = new Date(val);
+    return isNaN(d.getTime()) ? null : d.toISOString();
+  } catch {
+    return null;
+  }
+}
+
 export async function getLeads(statusFilter?: string): Promise<CrmLeadModel[]> {
   try {
     // 1. Sync unsynced QuoteRequests into CrmLead automatically
@@ -722,9 +735,9 @@ export async function getLeads(statusFilter?: string): Promise<CrmLeadModel[]> {
     if (unsyncedQuotes && unsyncedQuotes.length > 0) {
       for (const q of unsyncedQuotes) {
         const initialNotes = q.notes
-          ? [{ id: `note_init_${Date.now()}`, text: q.notes, createdAt: new Date(q.createdAt || Date.now()).toISOString(), author: "Website System" }]
+          ? [{ id: `note_init_${Date.now()}`, text: q.notes, createdAt: safeIsoDate(q.createdAt) || new Date().toISOString(), author: "Website System" }]
           : q.message
-          ? [{ id: `note_msg_${Date.now()}`, text: `Initial Inquiry: ${q.message}`, createdAt: new Date(q.createdAt || Date.now()).toISOString(), author: "Website Form" }]
+          ? [{ id: `note_msg_${Date.now()}`, text: `Initial Inquiry: ${q.message}`, createdAt: safeIsoDate(q.createdAt) || new Date().toISOString(), author: "Website Form" }]
           : [];
 
         let crmStatus: CrmLeadStatus = "NEW";
@@ -764,9 +777,9 @@ export async function getLeads(statusFilter?: string): Promise<CrmLeadModel[]> {
 
     const rows = await query<any>(sql, params);
     return (rows || []).map((r) => ({
-      id: r.id,
-      name: r.name,
-      phone: r.phone,
+      id: String(r.id || ""),
+      name: String(r.name || "Lead"),
+      phone: String(r.phone || ""),
       email: r.email || null,
       companyName: r.companyName || null,
       location: r.location || null,
@@ -780,12 +793,12 @@ export async function getLeads(statusFilter?: string): Promise<CrmLeadModel[]> {
       balanceDue: r.balanceDue ? String(r.balanceDue) : null,
       paymentStatus: r.paymentStatus || "PENDING",
       quotationSent: Boolean(r.quotationSent),
-      nextFollowUp: r.nextFollowUp ? new Date(r.nextFollowUp).toISOString() : null,
-      nextPaymentDate: r.nextPaymentDate ? new Date(r.nextPaymentDate).toISOString() : null,
+      nextFollowUp: safeIsoDate(r.nextFollowUp),
+      nextPaymentDate: safeIsoDate(r.nextPaymentDate),
       timelineNotes: parseJson<LeadNote[]>(r.timelineNotes, []),
       quoteRequestId: r.quoteRequestId || null,
-      createdAt: r.createdAt ? new Date(r.createdAt).toISOString() : new Date().toISOString(),
-      updatedAt: r.updatedAt ? new Date(r.updatedAt).toISOString() : new Date().toISOString(),
+      createdAt: safeIsoDate(r.createdAt) || new Date().toISOString(),
+      updatedAt: safeIsoDate(r.updatedAt) || new Date().toISOString(),
     }));
   } catch (err) {
     console.error("Error fetching CRM leads:", err);

@@ -15,5 +15,17 @@ export default async function AdminLeadsPage() {
     getLeadStats(),
   ]);
 
-  return <LeadsCrmContainer initialLeads={leads} stats={stats} />;
+  const fallbackStats = {
+    total: 0,
+    new: 0,
+    inDiscussion: 0,
+    hotDeals: 0,
+    won: 0,
+    lost: 0,
+    followUpsDueToday: 0,
+    totalPipelineValue: 0,
+    totalWonValue: 0,
+  };
+
+  return <LeadsCrmContainer initialLeads={leads || []} stats={stats || fallbackStats} />;
 }
