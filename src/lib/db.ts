@@ -89,6 +89,8 @@ async function ensureSchema() {
       "ALTER TABLE `SiteSettings` MODIFY `aboutImage` LONGTEXT",
       "ALTER TABLE `CertificateDocument` ADD COLUMN `imageUrl` LONGTEXT",
       "ALTER TABLE `CertificateDocument` MODIFY `imageUrl` LONGTEXT",
+      "CREATE TABLE IF NOT EXISTS `MetricItem` (`id` VARCHAR(191) NOT NULL PRIMARY KEY, `settingsId` VARCHAR(191) NOT NULL, `value` VARCHAR(191) NOT NULL, `label` VARCHAR(191) NOT NULL, `description` VARCHAR(255) NULL, `order` INT NOT NULL DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+      "CREATE TABLE IF NOT EXISTS `WhyChooseUs` (`id` VARCHAR(191) NOT NULL PRIMARY KEY, `settingsId` VARCHAR(191) NOT NULL, `title` VARCHAR(255) NOT NULL, `description` TEXT NOT NULL, `order` INT NOT NULL DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
       "UPDATE `Service` SET `slug` = 'website-development-services' WHERE `slug` IN ('website-development', 'web-development')",
       "UPDATE `Service` SET `slug` = 'e-commerce-Development' WHERE `slug` IN ('e-commerce', 'ecommerce', 'e-commerce-development')",
       "UPDATE `Service` SET `slug` = 'shopify-website-development' WHERE `slug` IN ('shopify-development', 'shopify', 'shopify-wordpress')",

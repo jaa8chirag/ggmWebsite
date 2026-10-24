@@ -525,8 +525,8 @@ export const getSettings = unstable_cache(
       companyStory: settings.companyStory ?? "",
       qualityCompliance: settings.qualityCompliance ?? "",
       clients: parseJson<string[]>(settings.clients, []),
-      whyChooseUs: whyChooseUs.map((w) => ({ title: w.title, description: w.description })),
-      metricItems: metricItems.map((m) => ({ value: m.value, suffix: m.suffix, label: m.label })),
+      whyChooseUs: whyChooseUs && whyChooseUs.length > 0 ? whyChooseUs.map((w: any) => ({ title: w.title, description: w.description })) : DB_SETTINGS.whyChooseUs,
+      metricItems: metricItems && metricItems.length > 0 ? metricItems.map((m: any) => ({ value: m.value, suffix: m.suffix || "", label: m.label })) : DB_SETTINGS.metricItems,
     };
   },
   ["getSettings"],

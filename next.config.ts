@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   compress: true,
+  deploymentId: process.env.NEXT_DEPLOYMENT_ID || "ggm-production-build",
   turbopack: {
     root: path.resolve(__dirname),
   },
